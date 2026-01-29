@@ -484,9 +484,353 @@ function calculateRC() {
     });
 }
 
+/**
+ * Calculate microstrip impedance
+ * Formula based on IPC-2141 standard
+ */
+function calculateMicrostrip() {
+    const width = parseFloat(document.getElementById('traceWidth').value);  // mm
+    const height = parseFloat(document.getElementById('dielectricHeight').value); // mm
+    const er = parseFloat(document.getElementById('dielectricConstant').value);
+
+    if (isNaN(width) || isNaN(height) || isNaN(er) || width <= 0 || height <= 0 || er <= 1) {
+        alert('请输入有效的参数！');
+        return;
+    }
+
+    // Calculate W/H ratio
+    const wh = width / height;
+
+    // Calculate effective dielectric constant
+    const erEff = (er + 1) / 2 + (er - 1) / 2 * (1 / Math.sqrt(1 + 12 / wh));
+
+    // Calculate impedance
+    let z0;
+    if (wh <= 1) {
+        z0 = 60 / Math.sqrt(erEff) * Math.log((8 / wh) + (wh / 4));
+    } else {
+        z0 = 120 * Math.PI / Math.sqrt(erEff) / (wh + 1.393 + 0.667 * Math.log(wh + 1.444));
+    }
+
+    // Display results
+    document.getElementById('impedanceResult').innerHTML = `
+        <h5>计算结果：</h5>
+        <p><strong>特征阻抗 Z₀：</strong>${z0.toFixed(2)} Ω</p>
+        <p><strong>有效介电常数 εᵣᵉᶠᶠ：</strong>${erEff.toFixed(3)}</p>
+        <p><strong>W/H比值：</strong>${wh.toFixed(3)}</p>
+    `;
+    document.getElementById('impedanceResult').style.display = 'block';
+}
+
+/**
+ * Calculate stripline impedance
+ */
+function calculateStripline() {
+    const width = parseFloat(document.getElementById('traceWidth').value);
+    const height = parseFloat(document.getElementById('dielectricHeight').value);
+    const er = parseFloat(document.getElementById('dielectricConstant').value);
+
+    if (isNaN(width) || isNaN(height) || isNaN(er) || width <= 0 || height <= 0 || er <= 1) {
+        alert('请输入有效的参数！');
+        return;
+    }
+
+    const wh = width / height;
+    const z0 = 60 / Math.sqrt(er) * Math.log(4 * height / (0.67 * Math.PI * width * (0.8 + (width / height))));
+
+    document.getElementById('impedanceResult').innerHTML = `
+        <h5>计算结果：</h5>
+        <p><strong>特征阻抗 Z₀：</strong>${z0.toFixed(2)} Ω</p>
+        <p><strong>介电常数 εᵣ：</strong>${er.toFixed(2)}</p>
+        <p class="note">注：带状线被完全包裹在介电材料中</p>
+    `;
+    document.getElementById('impedanceResult').style.display = 'block';
+}
+
+/**
+ * Calculate differential pair impedance
+ */
+function calculateDiffPair() {
+    const width = parseFloat(document.getElementById('traceWidth').value);
+    const spacing = parseFloat(document.getElementById('traceSpacing').value);
+    const height = parseFloat(document.getElementById('dielectricHeight').value);
+    const er = parseFloat(document.getElementById('dielectricConstant').value);
+
+    if (isNaN(width) || isNaN(spacing) || isNaN(height) || isNaN(er) ||
+        width <= 0 || spacing <= 0 || height <= 0 || er <= 1) {
+        alert('请输入有效的参数！');
+        return;
+    }
+
+    // Calculate single-ended impedance first
+    const wh = width / height;
+    const erEff = (er + 1) / 2 + (er - 1) / 2 * (1 / Math.sqrt(1 + 12 / wh));
+    let z0;
+    if (wh <= 1) {
+        z0 = 60 / Math.sqrt(erEff) * Math.log((8 / wh) + (wh / 4));
+    } else {
+        z0 = 120 * Math.PI / Math.sqrt(erEff) / (wh + 1.393 + 0.667 * Math.log(wh + 1.444));
+    }
+
+    // Calculate coupling coefficient
+    const sh = spacing / height;
+    const k = Math.exp(-Math.PI * sh);
+
+    // Differential impedance
+    const zDiff = 2 * z0 * (1 - k);
+
+    document.getElementById('impedanceResult').innerHTML = `
+        <h5>计算结果：</h5>
+        <p><strong>单端阻抗 Z₀：</strong>${z0.toFixed(2)} Ω</p>
+        <p><strong>差分阻抗 Zdiff：</strong>${zDiff.toFixed(2)} Ω</p>
+        <p><strong>耦合系数 k：</strong>${k.toFixed(4)}</p>
+        <p class="note">注：差分阻抗 = 2 × Z₀ × (1 - k)</p>
+    `;
+    document.getElementById('impedanceResult').style.display = 'block';
+}
+
+/**
+ * Calculate trace width based on IPC-2221 current carrying capacity
+ */
+function calculateTraceWidth() {
+    const current = parseFloat(document.getElementById('traceCurrent').value);  // A
+    const tempRise = parseFloat(document.getElementById('tempRise').value);    // °C
+    const copperWeight = parseFloat(document.getElementById('copperWeight').value); // oz
+    const isInternal = document.getElementById('layerType').value === 'internal';
+
+    if (isNaN(current) || isNaN(tempRise) || isNaN(copperWeight) ||
+        current <= 0 || tempRise <= 0 || copperWeight <= 0) {
+        alert('请输入有效的参数！');
+        return;
+    }
+
+    // IPC-2221 formula: A = (I / (k * ΔT^b))^(1/c)
+    // where A is cross-sectional area in mil²
+    const k = isInternal ? 0.024 : 0.048;
+    const b = 0.44;
+    const c = 0.725;
+
+    // Calculate cross-sectional area in mil²
+    const area = Math.pow(current / (k * Math.pow(tempRise, b)), 1 / c);
+
+    // Convert copper weight to thickness (1 oz = 1.4 mil)
+    const thickness = copperWeight * 1.4; // mil
+
+    // Calculate width in mil
+    const widthMil = area / thickness;
+
+    // Convert to mm
+    const widthMm = widthMil * 0.0254;
+
+    // Calculate voltage drop (approximate)
+    const resistivity = 1.724e-8; // Ω·m for copper at 20°C
+    const length = 100; // Assume 100mm trace for voltage drop calculation
+    const crossSectionM2 = widthMm * 1e-3 * (thickness * 0.0254 * 1e-3);
+    const resistance = resistivity * (length * 1e-3) / crossSectionM2;
+    const voltageDrop = current * resistance;
+
+    document.getElementById('traceWidthResult').innerHTML = `
+        <h5>计算结果：</h5>
+        <p><strong>最小走线宽度：</strong>${widthMm.toFixed(3)} mm (${widthMil.toFixed(1)} mil)</p>
+        <p><strong>铜箔厚度：</strong>${thickness.toFixed(2)} mil (${(thickness * 0.0254).toFixed(2)} mm)</p>
+        <p><strong>横截面积：</strong>${area.toFixed(2)} mil²</p>
+        <p><strong>压降（100mm）：</strong>${(voltageDrop * 1000).toFixed(2)} mV</p>
+        <p><strong>功耗（100mm）：</strong>${(voltageDrop * current * 1000).toFixed(2)} mW</p>
+        <p class="note">注：建议预留20-30%余量，实际宽度应大于计算值</p>
+    `;
+    document.getElementById('traceWidthResult').style.display = 'block';
+}
+
+/**
+ * Design LC low-pass filter
+ */
+function designLCFilter() {
+    const cutoffFreq = parseFloat(document.getElementById('cutoffFreq').value) * 1e3; // Convert kHz to Hz
+    const impedance = parseFloat(document.getElementById('filterImpedance').value);
+    const filterType = document.getElementById('filterType').value;
+
+    if (isNaN(cutoffFreq) || isNaN(impedance) || cutoffFreq <= 0 || impedance <= 0) {
+        alert('请输入有效的参数！');
+        return;
+    }
+
+    const omega = 2 * Math.PI * cutoffFreq;
+
+    let L, C, resultHTML;
+
+    switch(filterType) {
+        case 'lowpass':
+            // L-C low-pass filter (Π型)
+            L = impedance / omega;
+            C = 1 / (omega * impedance);
+            resultHTML = `
+                <h5>LC低通滤波器设计结果：</h5>
+                <p><strong>拓扑：</strong>Π型 (C-L-C)</p>
+                <p><strong>电感值 L：</strong>${(L * 1e6).toFixed(2)} μH</p>
+                <p><strong>电容值 C：</strong>${(C * 1e6).toFixed(2)} μF (每个)</p>
+                <p><strong>截止频率：</strong>${(cutoffFreq / 1e3).toFixed(2)} kHz</p>
+                <p><strong>阻抗：</strong>${impedance} Ω</p>
+                <p><strong>衰减：</strong>-40 dB/decade (二阶滤波器)</p>
+                <p class="note">实际应用：选择标准值 L=${selectStandardValue(L * 1e6, 'inductor')} μH, C=${selectStandardValue(C * 1e6, 'capacitor')} μF</p>
+            `;
+            break;
+
+        case 'highpass':
+            // C-L high-pass filter
+            C = 1 / (omega * impedance);
+            L = impedance / omega;
+            resultHTML = `
+                <h5>LC高通滤波器设计结果：</h5>
+                <p><strong>拓扑：</strong>T型 (L-C-L)</p>
+                <p><strong>电容值 C：</strong>${(C * 1e9).toFixed(2)} nF</p>
+                <p><strong>电感值 L：</strong>${(L * 1e6).toFixed(2)} μH (每个)</p>
+                <p><strong>截止频率：</strong>${(cutoffFreq / 1e3).toFixed(2)} kHz</p>
+                <p><strong>衰减：</strong>-40 dB/decade (二阶滤波器)</p>
+            `;
+            break;
+
+        case 'bandpass':
+            // Series resonant band-pass
+            const bandwidth = cutoffFreq * 0.1; // Assume 10% bandwidth
+            const Q = cutoffFreq / bandwidth;
+            L = impedance * Q / omega;
+            C = 1 / (omega * omega * L);
+            resultHTML = `
+                <h5>LC带通滤波器设计结果：</h5>
+                <p><strong>拓扑：</strong>串联谐振型</p>
+                <p><strong>电感值 L：</strong>${(L * 1e6).toFixed(2)} μH</p>
+                <p><strong>电容值 C：</strong>${(C * 1e9).toFixed(2)} nF</p>
+                <p><strong>中心频率：</strong>${(cutoffFreq / 1e3).toFixed(2)} kHz</p>
+                <p><strong>品质因数 Q：</strong>${Q.toFixed(1)}</p>
+                <p><strong>带宽（-3dB）：</strong>${(bandwidth / 1e3).toFixed(2)} kHz</p>
+            `;
+            break;
+    }
+
+    document.getElementById('filterResult').innerHTML = resultHTML;
+    document.getElementById('filterResult').style.display = 'block';
+}
+
+/**
+ * Select nearest standard component value
+ */
+function selectStandardValue(value, type) {
+    const e12Series = [1.0, 1.2, 1.5, 1.8, 2.2, 2.7, 3.3, 3.9, 4.7, 5.6, 6.8, 8.2];
+    const e24Series = [1.0, 1.1, 1.2, 1.3, 1.5, 1.6, 1.8, 2.0, 2.2, 2.4, 2.7, 3.0,
+                       3.3, 3.6, 3.9, 4.3, 4.7, 5.1, 5.6, 6.2, 6.8, 7.5, 8.2, 9.1];
+
+    const series = type === 'capacitor' ? e24Series : e12Series;
+
+    // Find order of magnitude
+    let magnitude = 0;
+    let normalizedValue = value;
+
+    while (normalizedValue >= 10) {
+        normalizedValue /= 10;
+        magnitude++;
+    }
+    while (normalizedValue < 1) {
+        normalizedValue *= 10;
+        magnitude--;
+    }
+
+    // Find closest standard value
+    let closest = series[0];
+    let minDiff = Math.abs(normalizedValue - closest);
+
+    for (let i = 1; i < series.length; i++) {
+        const diff = Math.abs(normalizedValue - series[i]);
+        if (diff < minDiff) {
+            minDiff = diff;
+            closest = series[i];
+        }
+    }
+
+    return (closest * Math.pow(10, magnitude)).toFixed(2);
+}
+
+/**
+ * Calculate via inductance
+ */
+function calculateViaInductance() {
+    const viaDiameter = parseFloat(document.getElementById('viaDiameter').value); // mm
+    const viaLength = parseFloat(document.getElementById('viaLength').value);     // mm
+    const padDiameter = parseFloat(document.getElementById('padDiameter').value); // mm
+
+    if (isNaN(viaDiameter) || isNaN(viaLength) || isNaN(padDiameter) ||
+        viaDiameter <= 0 || viaLength <= 0 || padDiameter <= viaDiameter) {
+        alert('请输入有效的参数！(焊盘直径必须大于过孔直径)');
+        return;
+    }
+
+    // Convert mm to inches for formula
+    const d = viaDiameter * 0.03937; // inches
+    const h = viaLength * 0.03937;   // inches
+
+    // Howard Johnson's formula for via inductance
+    const L = 5.08 * h * (Math.log(4 * h / d) + 1); // nH
+
+    // Calculate impedance at different frequencies
+    const freq1 = 100e6;  // 100 MHz
+    const freq2 = 1e9;    // 1 GHz
+    const freq3 = 10e9;   // 10 GHz
+
+    const z1 = 2 * Math.PI * freq1 * L * 1e-9;
+    const z2 = 2 * Math.PI * freq2 * L * 1e-9;
+    const z3 = 2 * Math.PI * freq3 * L * 1e-9;
+
+    document.getElementById('viaResult').innerHTML = `
+        <h5>计算结果：</h5>
+        <p><strong>过孔电感：</strong>${L.toFixed(3)} nH</p>
+        <p><strong>阻抗 @ 100MHz：</strong>${z1.toFixed(3)} Ω</p>
+        <p><strong>阻抗 @ 1GHz：</strong>${z2.toFixed(3)} Ω</p>
+        <p><strong>阻抗 @ 10GHz：</strong>${z3.toFixed(3)} Ω</p>
+        <p class="note">公式：L = 5.08 × h × (ln(4h/d) + 1) [nH]</p>
+        <p class="recommendation"><i class="fas fa-lightbulb"></i> 建议：高速信号尽量减少过孔数量，必要时使用盲孔或埋孔</p>
+    `;
+    document.getElementById('viaResult').style.display = 'block';
+}
+
 /* ============================================================================
    TOOL FUNCTIONS
    ============================================================================ */
+
+/**
+ * Switch between different impedance calculator types
+ */
+function switchImpedanceCalc(type) {
+    // Update tab states
+    const tabs = document.querySelectorAll('.calc-tab');
+    tabs.forEach((tab, index) => {
+        tab.classList.remove('active');
+    });
+    event.target.classList.add('active');
+
+    // Show/hide spacing input for differential pairs
+    const spacingInput = document.getElementById('spacingInput');
+    const calcButton = document.getElementById('calcImpedanceBtn');
+
+    if (type === 'diff') {
+        spacingInput.style.display = 'block';
+        calcButton.setAttribute('onclick', 'calculateDiffPair()');
+        calcButton.innerHTML = '<i class="fas fa-calculator"></i> 计算差分阻抗';
+    } else {
+        spacingInput.style.display = 'none';
+        if (type === 'microstrip') {
+            calcButton.setAttribute('onclick', 'calculateMicrostrip()');
+            calcButton.innerHTML = '<i class="fas fa-calculator"></i> 计算微带线阻抗';
+        } else if (type === 'stripline') {
+            calcButton.setAttribute('onclick', 'calculateStripline()');
+            calcButton.innerHTML = '<i class="fas fa-calculator"></i> 计算带状线阻抗';
+        }
+    }
+
+    // Clear previous results
+    const resultDiv = document.getElementById('impedanceResult');
+    if (resultDiv) {
+        resultDiv.style.display = 'none';
+    }
+}
 
 /**
  * Initialize tool button functionality
