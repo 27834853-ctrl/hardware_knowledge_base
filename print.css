@@ -1,0 +1,622 @@
+/**
+ * Print Stylesheet
+ * Hardware Engineer Knowledge Base
+ * Optimized for printing knowledge articles and reference cards
+ */
+
+@media print {
+    /* Page Setup */
+    @page {
+        size: A4;
+        margin: 2cm 1.5cm;
+    }
+
+    @page :first {
+        margin-top: 1cm;
+    }
+
+    /* Reset and Base Styles */
+    * {
+        background: transparent !important;
+        color: black !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    body {
+        font-family: 'Times New Roman', serif;
+        font-size: 12pt;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Hide UI Elements */
+    .navbar,
+    .nav-container,
+    .theme-toggle,
+    .back-to-top,
+    .footer,
+    .search-modal,
+    .search-box,
+    #searchBtn,
+    #themeToggle,
+    .nav-toggle,
+    button:not(.no-print-hide),
+    .download-btn,
+    .result-actions,
+    .notification {
+        display: none !important;
+    }
+
+    /* Hero Sections */
+    .hero,
+    .cases-hero,
+    .ref-hero,
+    .case-detail-hero {
+        background: none !important;
+        color: black !important;
+        padding: 20px 0 !important;
+        border-bottom: 3px solid black;
+        page-break-after: avoid;
+    }
+
+    .hero h1,
+    .cases-hero h1,
+    .ref-hero h1,
+    .case-detail-hero h1 {
+        color: black !important;
+        font-size: 24pt;
+        margin-bottom: 10px;
+    }
+
+    .hero p,
+    .cases-hero p,
+    .ref-hero p {
+        color: black !important;
+        font-size: 11pt;
+    }
+
+    /* Content Layout */
+    .container,
+    .content,
+    .ref-content,
+    .case-detail-content {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Sections */
+    section {
+        page-break-inside: avoid;
+        margin-bottom: 20px;
+    }
+
+    .content-section {
+        page-break-inside: auto;
+        margin-bottom: 30px;
+    }
+
+    .content-section h2 {
+        font-size: 18pt;
+        margin-top: 20px;
+        margin-bottom: 12px;
+        border-bottom: 2px solid black;
+        padding-bottom: 5px;
+        page-break-after: avoid;
+    }
+
+    .content-section h3 {
+        font-size: 14pt;
+        margin-top: 15px;
+        margin-bottom: 10px;
+        page-break-after: avoid;
+    }
+
+    .content-section h4 {
+        font-size: 12pt;
+        margin-top: 12px;
+        margin-bottom: 8px;
+        page-break-after: avoid;
+    }
+
+    /* Cards */
+    .card,
+    .tool-card,
+    .case-card,
+    .ref-card,
+    .content-card,
+    .feature-card {
+        border: 1px solid #333 !important;
+        border-radius: 0 !important;
+        padding: 15px !important;
+        margin-bottom: 20px !important;
+        page-break-inside: avoid;
+        background: white !important;
+    }
+
+    .card h3,
+    .tool-card h3,
+    .case-card h3,
+    .ref-card h3 {
+        font-size: 14pt;
+        margin-top: 0;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #666;
+        padding-bottom: 5px;
+    }
+
+    /* Icons and Images */
+    .icon,
+    .case-icon,
+    .ref-icon,
+    .path-icon {
+        display: none !important;
+    }
+
+    .case-image,
+    .image-placeholder {
+        border: 1px dashed #999;
+        padding: 20px;
+        text-align: center;
+        background: #f9f9f9 !important;
+    }
+
+    /* Lists */
+    ul, ol {
+        margin: 10px 0;
+        padding-left: 25px;
+    }
+
+    li {
+        margin-bottom: 5px;
+        page-break-inside: avoid;
+    }
+
+    .timeline-item,
+    .step-list li {
+        padding-left: 30px !important;
+        position: relative;
+        margin-bottom: 15px;
+    }
+
+    .timeline-item::before,
+    .step-list li::before {
+        position: absolute;
+        left: 0;
+        font-weight: bold;
+    }
+
+    /* Tables */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 15px 0;
+        page-break-inside: auto;
+        font-size: 10pt;
+    }
+
+    thead {
+        display: table-header-group;
+        font-weight: bold;
+    }
+
+    tbody {
+        display: table-row-group;
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+
+    th, td {
+        border: 1px solid #333;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background: #e0e0e0 !important;
+        font-weight: bold;
+    }
+
+    /* Formula Boxes */
+    .formula-box,
+    .code-block,
+    .highlight-box,
+    .note-box {
+        border: 1px solid #333;
+        padding: 10px;
+        margin: 10px 0;
+        page-break-inside: avoid;
+        background: #f5f5f5 !important;
+    }
+
+    .formula-box strong,
+    .highlight-box strong,
+    .note-box strong {
+        font-weight: bold;
+    }
+
+    .code-block {
+        font-family: 'Courier New', monospace;
+        font-size: 9pt;
+        white-space: pre-wrap;
+        background: white !important;
+        border: 1px solid #999;
+    }
+
+    /* Calculators */
+    .calculator-container {
+        page-break-inside: avoid;
+        border: 2px solid black;
+        padding: 15px;
+        margin: 20px 0;
+    }
+
+    .calculator-container h3 {
+        margin-top: 0;
+        font-size: 14pt;
+    }
+
+    .calculator-input,
+    .calculator-result {
+        margin: 10px 0;
+        padding: 10px;
+        border: 1px solid #666;
+    }
+
+    .calculator-input label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .calculator-result {
+        background: #f0f0f0 !important;
+    }
+
+    /* Grid Layouts */
+    .features-grid,
+    .tools-grid,
+    .cases-grid,
+    .ref-grid {
+        display: block !important;
+    }
+
+    .features-grid > *,
+    .tools-grid > *,
+    .cases-grid > *,
+    .ref-grid > * {
+        width: 100% !important;
+        margin-bottom: 20px;
+        page-break-inside: avoid;
+    }
+
+    /* Badges and Tags */
+    .badge,
+    .case-badge,
+    .difficulty-badge {
+        border: 1px solid black;
+        padding: 2px 8px;
+        font-size: 9pt;
+        display: inline-block;
+        margin-right: 5px;
+    }
+
+    /* Links */
+    a {
+        text-decoration: underline;
+        color: black !important;
+    }
+
+    a[href^="http"]:after {
+        content: " (" attr(href) ")";
+        font-size: 9pt;
+        font-style: italic;
+    }
+
+    a[href^="#"]:after {
+        content: "";
+    }
+
+    /* Page Breaks */
+    .page-break-before {
+        page-break-before: always;
+    }
+
+    .page-break-after {
+        page-break-after: always;
+    }
+
+    .avoid-break {
+        page-break-inside: avoid;
+    }
+
+    /* Learning Path */
+    .learning-path {
+        background: none !important;
+        padding: 20px 0;
+    }
+
+    .path-grid {
+        display: block !important;
+    }
+
+    .path-card {
+        border: 2px solid black;
+        padding: 15px;
+        margin-bottom: 20px;
+        page-break-inside: avoid;
+    }
+
+    .path-card h3 {
+        font-size: 14pt;
+        margin-bottom: 10px;
+    }
+
+    /* Knowledge Graph */
+    .knowledge-graph {
+        page-break-before: always;
+        border: 1px solid black;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .knowledge-graph svg {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Specifications */
+    .spec-grid,
+    .param-table {
+        display: table !important;
+        width: 100%;
+    }
+
+    .spec-item {
+        display: table-row;
+        page-break-inside: avoid;
+    }
+
+    .spec-label,
+    .spec-value {
+        display: table-cell;
+        padding: 5px;
+        border: 1px solid #999;
+    }
+
+    .spec-label {
+        font-weight: bold;
+        width: 40%;
+    }
+
+    /* Related Cases */
+    .related-cases,
+    .related-grid {
+        page-break-before: avoid;
+    }
+
+    .related-grid {
+        display: block !important;
+    }
+
+    .related-grid > * {
+        margin-bottom: 15px;
+        page-break-inside: avoid;
+    }
+
+    /* Case Meta Information */
+    .case-meta {
+        border-top: 1px solid #999;
+        border-bottom: 1px solid #999;
+        padding: 10px 0;
+        margin: 15px 0;
+    }
+
+    .meta-item {
+        display: inline-block;
+        margin-right: 15px;
+        font-size: 10pt;
+    }
+
+    /* Quick Reference */
+    .quick-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .quick-list li {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0;
+        border-bottom: 1px dotted #999;
+    }
+
+    .quick-list .label {
+        font-weight: normal;
+    }
+
+    .quick-list .value {
+        font-weight: bold;
+    }
+
+    /* Color Indicators (for resistor codes) */
+    .color-indicator {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        border: 1px solid black;
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+
+    /* Tabs (show all content) */
+    .tab-btn {
+        display: none !important;
+    }
+
+    .tab-panel {
+        display: block !important;
+        page-break-before: always;
+    }
+
+    .tab-panel:first-of-type {
+        page-break-before: avoid;
+    }
+
+    .tab-panel h2:first-child {
+        margin-top: 0;
+        padding-top: 20px;
+        border-top: 3px solid black;
+    }
+
+    /* Breadcrumbs */
+    .case-breadcrumb {
+        font-size: 10pt;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    /* Header for each page */
+    .print-header {
+        display: block;
+        text-align: center;
+        font-size: 10pt;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #999;
+        margin-bottom: 20px;
+    }
+
+    /* Footer for each page */
+    @page {
+        @bottom-right {
+            content: "Page " counter(page) " of " counter(pages);
+            font-size: 9pt;
+        }
+        @bottom-left {
+            content: "硬件工程师知识库 - https://27834853-ctrl.github.io/hardware_knowledge_base/";
+            font-size: 9pt;
+        }
+    }
+
+    /* Print-specific utilities */
+    .print-only {
+        display: block !important;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    /* Download Section */
+    .download-section {
+        border: 2px dashed #999;
+        padding: 15px;
+        text-align: center;
+        page-break-inside: avoid;
+    }
+
+    .download-section::before {
+        content: "📥 资料下载 (在线访问可下载)";
+        display: block;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    /* Improve readability */
+    p {
+        text-align: justify;
+        margin: 10px 0;
+        orphans: 3;
+        widows: 3;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    /* FAQ Section */
+    .faq-item {
+        page-break-inside: avoid;
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+
+    .faq-question {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    /* Case Studies */
+    .case-study {
+        page-break-before: always;
+        border: 2px solid black;
+        padding: 20px;
+        margin: 20px 0;
+    }
+
+    .case-study h2 {
+        margin-top: 0;
+    }
+
+    /* Optimization for Black & White Printing */
+    .gradient-bg,
+    .bg-primary,
+    .bg-accent {
+        background: white !important;
+        border: 1px solid black !important;
+    }
+
+    /* Ensure good contrast */
+    .text-light {
+        color: black !important;
+    }
+
+    /* Remove animations and transitions */
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    /* Compress vertical spacing for efficient paper use */
+    .hero,
+    .section {
+        padding: 10px 0 !important;
+    }
+
+    /* Make sure formulas are visible */
+    .MathJax,
+    .mjx-math {
+        font-size: 11pt !important;
+    }
+}
+
+/* Print utility classes that can be added to HTML */
+.print-page-break-before {
+    page-break-before: always;
+}
+
+.print-page-break-after {
+    page-break-after: always;
+}
+
+.print-avoid-break {
+    page-break-inside: avoid;
+}
+
+.print-only {
+    display: none;
+}
+
+@media print {
+    .print-only {
+        display: block !important;
+    }
+}

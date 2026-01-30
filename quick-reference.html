@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="硬件工程师快速参考卡片 - 常用公式、参数和设计规范速查">
+
+    <title>快速参考 - 硬件工程师知识库</title>
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Quick Reference Specific Styles */
+        .ref-hero {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 100px 0 60px;
+            text-align: center;
+        }
+
+        .ref-tabs {
+            display: flex;
+            gap: 10px;
+            max-width: 1200px;
+            margin: -30px auto 40px;
+            padding: 0 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 12px 30px;
+            background: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-md);
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+        }
+
+        .ref-content {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .ref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .ref-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s;
+            border-top: 4px solid var(--primary-color);
+        }
+
+        .ref-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .ref-card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .ref-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .ref-card h3 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .formula-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: var(--radius-md);
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .formula-box strong {
+            color: var(--primary-color);
+        }
+
+        .param-table {
+            width: 100%;
+            margin: 15px 0;
+            border-collapse: collapse;
+        }
+
+        .param-table th {
+            background: var(--bg-light);
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .param-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .param-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .note-box {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: var(--radius-md);
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .note-box strong {
+            color: #856404;
+        }
+
+        .quick-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .quick-list li {
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quick-list li:last-child {
+            border-bottom: none;
+        }
+
+        .quick-list .label {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .quick-list .value {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .color-indicator {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-block;
+            border: 2px solid #ddd;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.1);
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .ref-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tab-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+
+        @media print {
+            .navbar, .ref-hero, .search-box, .tab-btn, .footer, .back-to-top {
+                display: none !important;
+            }
+
+            .ref-tabs {
+                display: none !important;
+            }
+
+            .tab-panel {
+                display: block !important;
+                page-break-after: always;
+            }
+
+            .ref-card {
+                page-break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+
+            body {
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-microchip"></i>
+                <span>硬件工程师知识库</span>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> 首页</a></li>
+                <li><a href="cases.html" class="nav-link"><i class="fas fa-briefcase"></i> 案例库</a></li>
+                <li><a href="quick-reference.html" class="nav-link active"><i class="fas fa-bookmark"></i> 快速参考</a></li>
+                <li><a href="index.html#tools" class="nav-link"><i class="fas fa-calculator"></i> 工具箱</a></li>
+                <li><button id="themeToggle" class="theme-toggle"><i class="fas fa-moon"></i></button></li>
+            </ul>
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="ref-hero">
+        <h1><i class="fas fa-bookmark"></i> 快速参考卡片</h1>
+        <p>常用公式、参数和设计规范速查手册</p>
+        <p style="margin-top: 10px; font-size: 14px; opacity: 0.9;">
+            <i class="fas fa-print"></i> 可打印保存 | <i class="fas fa-search"></i> 快速搜索
+        </p>
+    </section>
+
+    <!-- Search Box -->
+    <div class="search-box">
+        <input type="text" id="refSearch" placeholder="搜索公式、参数或规范...">
+        <i class="fas fa-search"></i>
+    </div>
+
+    <!-- Tabs -->
+    <div class="ref-tabs">
+        <button class="tab-btn active" data-tab="pcb">PCB设计</button>
+        <button class="tab-btn" data-tab="impedance">阻抗计算</button>
+        <button class="tab-btn" data-tab="power">电源设计</button>
+        <button class="tab-btn" data-tab="signal">信号完整性</button>
+        <button class="tab-btn" data-tab="components">元器件参数</button>
+        <button class="tab-btn" data-tab="standards">设计标准</button>
+    </div>
+
+    <!-- Content -->
+    <div class="ref-content">
+        <!-- PCB Design Tab -->
+        <div class="tab-panel active" id="pcb">
+            <div class="ref-grid">
+                <!-- Trace Width -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-ruler"></i></div>
+                        <h3>走线宽度计算</h3>
+                    </div>
+                    <div class="formula-box">
+                        <strong>IPC-2221公式:</strong><br>
+                        I = k × ΔT^0.44 × (W × H)^0.725
+                    </div>
+                    <ul class="quick-list">
+                        <li><span class="label">1A @ 10°C温升</span> <span class="value">0.3mm (外层)</span></li>
+                        <li><span class="label">2A @ 10°C温升</span> <span class="value">0.8mm (外层)</span></li>
+                        <li><span class="label">5A @ 10°C温升</span> <span class="value">2.5mm (外层)</span></li>
+                        <li><span class="label">内层电流容量</span> <span class="value">外层的50%</span></li>
+                    </ul>
+                </div>
+
+                <!-- Via Parameters -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-circle-notch"></i></div>
+                        <h3>过孔参数</h3>
+                    </div>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>类型</th>
+                                <th>孔径</th>
+                                <th>外径</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>标准过孔</td>
+                                <td>0.3-0.5mm</td>
+                                <td>0.5-0.8mm</td>
+                            </tr>
+                            <tr>
+                                <td>小过孔</td>
+                                <td>0.2-0.3mm</td>
+                                <td>0.4-0.5mm</td>
+                            </tr>
+                            <tr>
+                                <td>盲埋孔</td>
+                                <td>0.1-0.2mm</td>
+                                <td>0.3-0.4mm</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="formula-box">
+                        <strong>过孔电感 (nH):</strong><br>
+                        L = 5.08h × [ln(4h/d) + 1]
+                    </div>
+                </div>
+
+                <!-- Clearance Rules -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-arrows-alt-h"></i></div>
+                        <h3>安全间距</h3>
+                    </div>
+                    <ul class="quick-list">
+                        <li><span class="label">线间距 (常规)</span> <span class="value">≥0.15mm</span></li>
+                        <li><span class="label">线间距 (高压)</span> <span class="value">≥0.5mm</span></li>
+                        <li><span class="label">线到焊盘</span> <span class="value">≥0.2mm</span></li>
+                        <li><span class="label">焊盘到焊盘</span> <span class="value">≥0.3mm</span></li>
+                        <li><span class="label">铜皮到板边</span> <span class="value">≥0.5mm</span></li>
+                    </ul>
+                    <div class="note-box">
+                        <strong>注意:</strong> 高压电路(>50V)需要根据工作电压增加安全间距
+                    </div>
+                </div>
+
+                <!-- PCB Stack-up -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-layer-group"></i></div>
+                        <h3>层叠结构推荐</h3>
+                    </div>
+                    <p><strong>4层板标准结构:</strong></p>
+                    <ul class="quick-list">
+                        <li><span class="label">第1层</span> <span class="value">信号层 (Top)</span></li>
+                        <li><span class="label">第2层</span> <span class="value">地平面 (GND)</span></li>
+                        <li><span class="label">第3层</span> <span class="value">电源平面 (VCC)</span></li>
+                        <li><span class="label">第4层</span> <span class="value">信号层 (Bottom)</span></li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>6层板标准结构:</strong></p>
+                    <ul class="quick-list">
+                        <li><span class="label">L1</span> <span class="value">信号层</span></li>
+                        <li><span class="label">L2</span> <span class="value">地平面</span></li>
+                        <li><span class="label">L3</span> <span class="value">信号层</span></li>
+                        <li><span class="label">L4</span> <span class="value">电源平面</span></li>
+                        <li><span class="label">L5</span> <span class="value">地平面</span></li>
+                        <li><span class="label">L6</span> <span class="value">信号层</span></li>
+                    </ul>
+                </div>
+
+                <!-- Drill Sizes -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-bullseye"></i></div>
+                        <h3>常用钻孔尺寸</h3>
+                    </div>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>元件</th>
+                                <th>引脚直径</th>
+                                <th>推荐孔径</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>0805贴片元件</td>
+                                <td>-</td>
+                                <td>不需要</td>
+                            </tr>
+                            <tr>
+                                <td>DIP插件IC</td>
+                                <td>0.4-0.6mm</td>
+                                <td>0.8-1.0mm</td>
+                            </tr>
+                            <tr>
+                                <td>插针/排针</td>
+                                <td>0.5-0.65mm</td>
+                                <td>1.0-1.2mm</td>
+                            </tr>
+                            <tr>
+                                <td>电解电容</td>
+                                <td>0.5-0.8mm</td>
+                                <td>1.0-1.5mm</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Component Spacing -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-th-large"></i></div>
+                        <h3>元件间距规范</h3>
+                    </div>
+                    <ul class="quick-list">
+                        <li><span class="label">贴片元件间距</span> <span class="value">≥0.5mm</span></li>
+                        <li><span class="label">插件元件间距</span> <span class="value">≥2mm</span></li>
+                        <li><span class="label">IC到IC</span> <span class="value">≥5mm</span></li>
+                        <li><span class="label">元件到板边</span> <span class="value">≥3mm</span></li>
+                        <li><span class="label">散热器周围</span> <span class="value">≥10mm</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Impedance Tab -->
+        <div class="tab-panel" id="impedance">
+            <div class="ref-grid">
+                <!-- Microstrip -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-wave-square"></i></div>
+                        <h3>微带线阻抗</h3>
+                    </div>
+                    <div class="formula-box">
+                        <strong>特征阻抗 (Ω):</strong><br>
+                        Z₀ = (87/√(εᵣ+1.41)) × ln(5.98h/(0.8w+t))
+                    </div>
+                    <p><strong>常用参数组合 (50Ω):</strong></p>
+                    <ul class="quick-list">
+                        <li><span class="label">FR-4, H=0.2mm</span> <span class="value">W≈0.36mm</span></li>
+                        <li><span class="label">FR-4, H=0.1mm</span> <span class="value">W≈0.18mm</span></li>
+                        <li><span class="label">FR-4, H=0.15mm</span> <span class="value">W≈0.27mm</span></li>
+                    </ul>
+                    <div class="note-box">
+                        <strong>注:</strong> εᵣ(FR-4) ≈ 4.3, H为介质厚度, W为走线宽度
+                    </div>
+                </div>
+
+                <!-- Stripline -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-grip-lines"></i></div>
+                        <h3>带状线阻抗</h3>
+                    </div>
+                    <div class="formula-box">
+                        <strong>特征阻抗 (Ω):</strong><br>
+                        Z₀ = (60/√εᵣ) × ln(4b/(0.67πw))
+                    </div>
+                    <p><strong>常用参数组合 (50Ω):</strong></p>
+                    <ul class="quick-list">
+                        <li><span class="label">FR-4, B=0.4mm</span> <span class="value">W≈0.18mm</span></li>
+                        <li><span class="label">FR-4, B=0.3mm</span> <span class="value">W≈0.13mm</span></li>
+                        <li><span class="label">FR-4, B=0.5mm</span> <span class="value">W≈0.23mm</span></li>
+                    </ul>
+                </div>
+
+                <!-- Differential Pair -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-equals"></i></div>
+                        <h3>差分对阻抗</h3>
+                    </div>
+                    <div class="formula-box">
+                        <strong>差分阻抗:</strong><br>
+                        Z_diff = 2 × Z₀ × (1 - 0.48 × e^(-0.96×S/H))
+                    </div>
+                    <p><strong>常用差分阻抗:</strong></p>
+                    <ul class="quick-list">
+                        <li><span class="label">USB 2.0</span> <span class="value">90Ω ±10%</span></li>
+                        <li><span class="label">USB 3.0/3.1</span> <span class="value">90Ω ±10%</span></li>
+                        <li><span class="label">HDMI</span> <span class="value">100Ω ±10%</span></li>
+                        <li><span class="label">Ethernet</span> <span class="value">100Ω ±10%</span></li>
+                        <li><span class="label">LVDS</span> <span class="value">100Ω ±10%</span></li>
+                        <li><span class="label">PCIe</span> <span class="value">85Ω ±15%</span></li>
+                    </ul>
+                </div>
+
+                <!-- Impedance Guidelines -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-list-check"></i></div>
+                        <h3>阻抗控制指南</h3>
+                    </div>
+                    <p><strong>何时需要阻抗控制:</strong></p>
+                    <ul class="quick-list">
+                        <li><span class="label">时钟频率</span> <span class="value">>50MHz</span></li>
+                        <li><span class="label">上升时间</span> <span class="value"><2ns</span></li>
+                        <li><span class="label">走线长度</span> <span class="value">>λ/6</span></li>
+                    </ul>
+                    <div class="note-box">
+                        <strong>经验法则:</strong> 如果信号传播时间 > 上升时间/6, 需要考虑传输线效应
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Power Design Tab -->
+        <div class="tab-panel" id="power">
+            <div class="ref-grid">
+                <!-- LDO Selection -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-bolt"></i></div>
+                        <h3>LDO选型参数</h3>
+                    </div>
+                    <ul class="quick-list">
+                        <li><span class="label">压差 (Dropout)</span> <span class="value">通常0.3-1V</span></li>
+                        <li><span class="label">输入电容</span> <span class="value">1-10μF</span></li>
+                        <li><span class="label">输出电容</span> <span class="value">10-47μF</span></li>
+                        <li><span class="label">PSRR</span> <span class="value">>60dB @1kHz</span></li>
+                    </ul>
+                    <div class="note-box">
+                        <strong>热设计:</strong> P_loss = (V_in - V_out) × I_out<br>
+                        确保结温不超过125°C
+                    </div>
+                </div>
+
+                <!-- Buck Converter -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-arrow-down"></i></div>
+                        <h3>Buck转换器设计</h3>
+                    </div>
+                    <div class="formula-box">
+                        <strong>占空比:</strong> D = V_out / V_in<br>
+                        <strong>电感值:</strong> L = (V_in-V_out) × D / (ΔI_L × f_sw)<br>
+                        <strong>输出电容:</strong> C_out = ΔI_L / (8 × f_sw × ΔV_out)
+                    </div>
+                    <ul class="quick-list">
+                        <li><span class="label">开关频率</span> <span class="value">100kHz-2MHz</span></li>
+                        <li><span class="label">电感纹波</span> <span class="value">20-40% I_out</span></li>
+                        <li><span class="label">输出纹波</span> <span class="value"><1% V_out</span></li>
+                    </ul>
+                </div>
+
+                <!-- Decoupling Capacitors -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-microchip"></i></div>
+                        <h3>去耦电容配置</h3>
+                    </div>
+                    <p><strong>标准配置方案:</strong></p>
+                    <ul class="quick-list">
+                        <li><span class="label">100nF陶瓷电容</span> <span class="value">每个电源引脚</span></li>
+                        <li><span class="label">10μF陶瓷电容</span> <span class="value">每个IC</span></li>
+                        <li><span class="label">100μF电解电容</span> <span class="value">电源入口</span></li>
+                    </ul>
+                    <div class="note-box">
+                        <strong>布局要求:</strong><br>
+                        • 100nF电容距IC引脚<5mm<br>
+                        • 过孔直接连接电源/地层<br>
+                        • 多个电容并联降低ESR
+                    </div>
+                </div>
+
+                <!-- Power Rail Resistance -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-ethernet"></i></div>
+                        <h3>电源走线设计</h3>
+                    </div>
+                    <div class="formula-box">
+                        <strong>走线电阻 (mΩ):</strong><br>
+                        R = ρ × L / (W × T)<br>
+                        <small>ρ(铜) = 0.017 Ω·mm²/m</small>
+                    </div>
+                    <ul class="quick-list">
+                        <li><span class="label">主电源线宽</span> <span class="value">≥1mm</span></li>
+                        <li><span class="label">高电流路径</span> <span class="value">多层并联</span></li>
+                        <li><span class="label">压降限制</span> <span class="value"><50mV</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signal Integrity Tab -->
+        <div class="tab-panel" id="signal">
+            <div class="ref-grid">
+                <!-- Rise Time vs Frequency -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-chart-line"></i></div>
+                        <h3>上升时间与频率</h3>
+                    </div>
+                    <div class="formula-box">
+                        <strong>有效带宽:</strong> f_knee = 0.35 / t_rise
+                    </div>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>上升时间</th>
+                                <th>有效带宽</th>
+                                <th>典型应用</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>10ns</td>
+                                <td>35MHz</td>
+                                <td>普通数字电路</td>
+                            </tr>
+                            <tr>
+                                <td>2ns</td>
+                                <td>175MHz</td>
+                                <td>高速MCU</td>
+                            </tr>
+                            <tr>
+                                <td>500ps</td>
+                                <td>700MHz</td>
+                                <td>DDR3/4</td>
+                            </tr>
+                            <tr>
+                                <td>100ps</td>
+                                <td>3.5GHz</td>
+                                <td>高速串行</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Termination -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-plug"></i></div>
+                        <h3>端接电阻配置</h3>
+                    </div>
+                    <p><strong>串联端接:</strong></p>
+                    <ul class="quick-list">
+                        <li><span class="label">阻值选择</span> <span class="value">R_s = Z₀ - Z_driver</span></li>
+                        <li><span class="label">位置</span> <span class="value">紧靠驱动端</span></li>
+                        <li><span class="label">典型值</span> <span class="value">22-33Ω</span></li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>并联端接:</strong></p>
+                    <ul class="quick-list">
+                        <li><span class="label">阻值选择</span> <span class="value">R_p = Z₀</span></li>
+                        <li><span class="label">位置</span> <span class="value">接收端</span></li>
+                        <li><span class="label">典型值</span> <span class="value">50Ω</span></li>
+                    </ul>
+                </div>
+
+                <!-- Crosstalk -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-broadcast-tower"></i></div>
+                        <h3>串扰控制</h3>
+                    </div>
+                    <p><strong>3W规则:</strong></p>
+                    <div class="note-box">
+                        线间距 ≥ 3 × 线宽<br>
+                        可将串扰降低至10%以下
+                    </div>
+                    <p><strong>平行走线长度限制:</strong></p>
+                    <ul class="quick-list">
+                        <li><span class="label">低速信号</span> <span class="value">无限制</span></li>
+                        <li><span class="label">时钟/高速</span> <span class="value"><1000mil</span></li>
+                        <li><span class="label">差分对内部</span> <span class="value">保持平行</span></li>
+                    </ul>
+                </div>
+
+                <!-- Length Matching -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-ruler-combined"></i></div>
+                        <h3>等长匹配要求</h3>
+                    </div>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>接口类型</th>
+                                <th>组内误差</th>
+                                <th>组间误差</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>DDR3 (1600MHz)</td>
+                                <td>±10mil</td>
+                                <td>±50mil</td>
+                            </tr>
+                            <tr>
+                                <td>DDR4 (2400MHz)</td>
+                                <td>±5mil</td>
+                                <td>±25mil</td>
+                            </tr>
+                            <tr>
+                                <td>USB 2.0差分对</td>
+                                <td>±2mil</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>HDMI差分对</td>
+                                <td>±5mil</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>PCIe差分对</td>
+                                <td>±5mil</td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Components Tab -->
+        <div class="tab-panel" id="components">
+            <div class="ref-grid">
+                <!-- Resistor Color Code -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-palette"></i></div>
+                        <h3>电阻色环对照</h3>
+                    </div>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>颜色</th>
+                                <th>数值</th>
+                                <th>倍数</th>
+                                <th>误差</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="color-indicator" style="background: #000;"></span>黑</td>
+                                <td>0</td>
+                                <td>×1</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td><span class="color-indicator" style="background: #8B4513;"></span>棕</td>
+                                <td>1</td>
+                                <td>×10</td>
+                                <td>±1%</td>
+                            </tr>
+                            <tr>
+                                <td><span class="color-indicator" style="background: #FF0000;"></span>红</td>
+                                <td>2</td>
+                                <td>×100</td>
+                                <td>±2%</td>
+                            </tr>
+                            <tr>
+                                <td><span class="color-indicator" style="background: #FFA500;"></span>橙</td>
+                                <td>3</td>
+                                <td>×1K</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td><span class="color-indicator" style="background: #FFFF00;"></span>黄</td>
+                                <td>4</td>
+                                <td>×10K</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td><span class="color-indicator" style="background: #008000;"></span>绿</td>
+                                <td>5</td>
+                                <td>×100K</td>
+                                <td>±0.5%</td>
+                            </tr>
+                            <tr>
+                                <td><span class="color-indicator" style="background: #0000FF;"></span>蓝</td>
+                                <td>6</td>
+                                <td>×1M</td>
+                                <td>±0.25%</td>
+                            </tr>
+                            <tr>
+                                <td><span class="color-indicator" style="background: #800080;"></span>紫</td>
+                                <td>7</td>
+                                <td>×10M</td>
+                                <td>±0.1%</td>
+                            </tr>
+                            <tr>
+                                <td><span class="color-indicator" style="background: #808080;"></span>灰</td>
+                                <td>8</td>
+                                <td>-</td>
+                                <td>±0.05%</td>
+                            </tr>
+                            <tr>
+                                <td><span class="color-indicator" style="background: #FFF;"></span>白</td>
+                                <td>9</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td><span class="color-indicator" style="background: #FFD700;"></span>金</td>
+                                <td>-</td>
+                                <td>×0.1</td>
+                                <td>±5%</td>
+                            </tr>
+                            <tr>
+                                <td><span class="color-indicator" style="background: #C0C0C0;"></span>银</td>
+                                <td>-</td>
+                                <td>×0.01</td>
+                                <td>±10%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Capacitor Types -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-battery-half"></i></div>
+                        <h3>电容类型选择</h3>
+                    </div>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>类型</th>
+                                <th>容值范围</th>
+                                <th>应用场景</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>陶瓷(MLCC)</td>
+                                <td>1pF-100μF</td>
+                                <td>去耦、高频</td>
+                            </tr>
+                            <tr>
+                                <td>钽电容</td>
+                                <td>0.1μF-1000μF</td>
+                                <td>低ESR电源</td>
+                            </tr>
+                            <tr>
+                                <td>电解电容</td>
+                                <td>1μF-10000μF</td>
+                                <td>大容量储能</td>
+                            </tr>
+                            <tr>
+                                <td>薄膜电容</td>
+                                <td>1nF-10μF</td>
+                                <td>精密耦合</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="note-box">
+                        <strong>X7R vs X5R:</strong> X7R温度稳定性更好, 适合精密电路
+                    </div>
+                </div>
+
+                <!-- SMD Package Sizes -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-th"></i></div>
+                        <h3>贴片封装尺寸</h3>
+                    </div>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>封装代码</th>
+                                <th>尺寸(mm)</th>
+                                <th>功率/容值</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>0201</td>
+                                <td>0.6×0.3</td>
+                                <td>1/20W, <10pF</td>
+                            </tr>
+                            <tr>
+                                <td>0402</td>
+                                <td>1.0×0.5</td>
+                                <td>1/16W, <100pF</td>
+                            </tr>
+                            <tr>
+                                <td>0603</td>
+                                <td>1.6×0.8</td>
+                                <td>1/10W, <1μF</td>
+                            </tr>
+                            <tr>
+                                <td>0805</td>
+                                <td>2.0×1.25</td>
+                                <td>1/8W, <10μF</td>
+                            </tr>
+                            <tr>
+                                <td>1206</td>
+                                <td>3.2×1.6</td>
+                                <td>1/4W, <47μF</td>
+                            </tr>
+                            <tr>
+                                <td>1210</td>
+                                <td>3.2×2.5</td>
+                                <td>1/2W, <100μF</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Diode Selection -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-arrows-alt-h"></i></div>
+                        <h3>二极管选型</h3>
+                    </div>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>类型</th>
+                                <th>正向压降</th>
+                                <th>应用</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>普通二极管</td>
+                                <td>0.7V</td>
+                                <td>整流、续流</td>
+                            </tr>
+                            <tr>
+                                <td>肖特基二极管</td>
+                                <td>0.3-0.5V</td>
+                                <td>高频、低压</td>
+                            </tr>
+                            <tr>
+                                <td>稳压二极管</td>
+                                <td>-</td>
+                                <td>电压基准</td>
+                            </tr>
+                            <tr>
+                                <td>TVS二极管</td>
+                                <td>-</td>
+                                <td>ESD保护</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Standards Tab -->
+        <div class="tab-panel" id="standards">
+            <div class="ref-grid">
+                <!-- Voltage Levels -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        <h3>常用逻辑电平</h3>
+                    </div>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>标准</th>
+                                <th>V_OH</th>
+                                <th>V_OL</th>
+                                <th>V_IH</th>
+                                <th>V_IL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>TTL</td>
+                                <td>>2.4V</td>
+                                <td><0.4V</td>
+                                <td>>2.0V</td>
+                                <td><0.8V</td>
+                            </tr>
+                            <tr>
+                                <td>CMOS 3.3V</td>
+                                <td>>2.4V</td>
+                                <td><0.4V</td>
+                                <td>>2.0V</td>
+                                <td><0.8V</td>
+                            </tr>
+                            <tr>
+                                <td>CMOS 5V</td>
+                                <td>>4.4V</td>
+                                <td><0.5V</td>
+                                <td>>3.5V</td>
+                                <td><1.5V</td>
+                            </tr>
+                            <tr>
+                                <td>LVTTL</td>
+                                <td>>2.4V</td>
+                                <td><0.4V</td>
+                                <td>>2.0V</td>
+                                <td><0.8V</td>
+                            </tr>
+                            <tr>
+                                <td>LVCMOS</td>
+                                <td>>0.9VDD</td>
+                                <td><0.1VDD</td>
+                                <td>>0.7VDD</td>
+                                <td><0.3VDD</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Communication Interfaces -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-network-wired"></i></div>
+                        <h3>通信接口标准</h3>
+                    </div>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>接口</th>
+                                <th>速率</th>
+                                <th>电平/阻抗</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>UART</td>
+                                <td>9600-115200 bps</td>
+                                <td>3.3V/5V TTL</td>
+                            </tr>
+                            <tr>
+                                <td>SPI</td>
+                                <td>最高50Mbps</td>
+                                <td>3.3V CMOS</td>
+                            </tr>
+                            <tr>
+                                <td>I²C</td>
+                                <td>100k/400k/3.4M</td>
+                                <td>开漏, 上拉</td>
+                            </tr>
+                            <tr>
+                                <td>CAN</td>
+                                <td>125k-1Mbps</td>
+                                <td>差分, 120Ω</td>
+                            </tr>
+                            <tr>
+                                <td>RS-485</td>
+                                <td>10Mbps</td>
+                                <td>差分, 120Ω</td>
+                            </tr>
+                            <tr>
+                                <td>USB 2.0</td>
+                                <td>480Mbps</td>
+                                <td>差分, 90Ω</td>
+                            </tr>
+                            <tr>
+                                <td>Ethernet</td>
+                                <td>10/100/1000M</td>
+                                <td>差分, 100Ω</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- IPC Standards -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-book"></i></div>
+                        <h3>IPC标准速查</h3>
+                    </div>
+                    <ul class="quick-list">
+                        <li><span class="label">IPC-2221</span> <span class="value">通用PCB设计</span></li>
+                        <li><span class="label">IPC-2141</span> <span class="value">受控阻抗</span></li>
+                        <li><span class="label">IPC-6012</span> <span class="value">刚性PCB质量</span></li>
+                        <li><span class="label">IPC-7351</span> <span class="value">SMT焊盘设计</span></li>
+                        <li><span class="label">IPC-A-610</span> <span class="value">电子组件可接受性</span></li>
+                    </ul>
+                </div>
+
+                <!-- EMC Requirements -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3>EMC设计要点</h3>
+                    </div>
+                    <p><strong>辐射发射限制:</strong></p>
+                    <ul class="quick-list">
+                        <li><span class="label">FCC Class A</span> <span class="value">工业环境</span></li>
+                        <li><span class="label">FCC Class B</span> <span class="value">居住环境</span></li>
+                        <li><span class="label">CE</span> <span class="value">欧盟标准</span></li>
+                    </ul>
+                    <div class="note-box">
+                        <strong>设计建议:</strong><br>
+                        • 多层板提供完整地平面<br>
+                        • 高速信号走微带/带状线<br>
+                        • I/O接口增加EMI滤波<br>
+                        • 使用铁氧体磁珠抑制高频噪声
+                    </div>
+                </div>
+
+                <!-- Temperature Ratings -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-thermometer-half"></i></div>
+                        <h3>温度等级标准</h3>
+                    </div>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>等级</th>
+                                <th>温度范围</th>
+                                <th>应用</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Commercial</td>
+                                <td>0°C to 70°C</td>
+                                <td>消费电子</td>
+                            </tr>
+                            <tr>
+                                <td>Industrial</td>
+                                <td>-40°C to 85°C</td>
+                                <td>工业设备</td>
+                            </tr>
+                            <tr>
+                                <td>Automotive</td>
+                                <td>-40°C to 125°C</td>
+                                <td>汽车电子</td>
+                            </tr>
+                            <tr>
+                                <td>Military</td>
+                                <td>-55°C to 125°C</td>
+                                <td>军工航天</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- File Formats -->
+                <div class="ref-card">
+                    <div class="ref-card-header">
+                        <div class="ref-icon"><i class="fas fa-file-archive"></i></div>
+                        <h3>常用文件格式</h3>
+                    </div>
+                    <ul class="quick-list">
+                        <li><span class="label">Gerber (RS-274X)</span> <span class="value">PCB制造</span></li>
+                        <li><span class="label">Excellon</span> <span class="value">钻孔文件</span></li>
+                        <li><span class="label">ODB++</span> <span class="value">智能数据</span></li>
+                        <li><span class="label">IPC-2581</span> <span class="value">通用标准</span></li>
+                        <li><span class="label">STEP (.stp)</span> <span class="value">3D模型</span></li>
+                        <li><span class="label">BOM (.csv/.xlsx)</span> <span class="value">物料清单</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 硬件工程师知识库. All rights reserved. | <a href="https://github.com/27834853-ctrl/hardware_knowledge_base" target="_blank" style="color: white;">GitHub</a></p>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="cases.js"></script>
+    <script>
+        // Tab switching
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabPanels = document.querySelectorAll('.tab-panel');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const targetTab = this.dataset.tab;
+
+                tabBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                tabPanels.forEach(panel => {
+                    panel.classList.remove('active');
+                    if (panel.id === targetTab) {
+                        panel.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.getElementById('refSearch');
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const allCards = document.querySelectorAll('.ref-card');
+
+            allCards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Print function
+        window.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                e.preventDefault();
+                window.print();
+            }
+        });
+    </script>
+</body>
+</html>
