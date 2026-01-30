@@ -4,7 +4,7 @@
  * Version: 2.2.3
  */
 
-const CACHE_NAME = 'hardware-kb-v2.3.0';
+const CACHE_NAME = 'hardware-kb-v2.3.2';
 const RUNTIME_CACHE = 'hardware-kb-runtime';
 
 // Files to cache immediately on install
@@ -18,9 +18,11 @@ const PRECACHE_URLS = [
     '/hardware_knowledge_base/offline.html',
     '/hardware_knowledge_base/styles.css',
     '/hardware_knowledge_base/print.css',
+    '/hardware_knowledge_base/mobile.css',
     '/hardware_knowledge_base/script.js',
     '/hardware_knowledge_base/cases.js',
     '/hardware_knowledge_base/search-optimizer.js',
+    '/hardware_knowledge_base/performance-monitor.js',
     '/hardware_knowledge_base/analytics.js',
     '/hardware_knowledge_base/feedback.js',
     '/hardware_knowledge_base/share.js',

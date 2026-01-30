@@ -7,6 +7,75 @@
 
 ---
 
+## [2.3.2] - 2026-01-30
+
+### 新增 (Added)
+- ✨ 移动端优化样式表 (mobile.css, 600+ 行)
+  - 触控友好的交互设计（最小 44x44px 点击目标）
+  - 响应式导航菜单
+  - 优化的移动端排版
+  - 浮动操作按钮布局优化
+  - iOS 安全区域适配
+  - 触摸反馈效果
+  - 移动端模态窗口优化
+  - 横屏方向适配
+  - PWA 安装横幅
+  - 底部导航栏选项
+- ✨ 性能监控面板 (performance-monitor.js, 600+ 行)
+  - Core Web Vitals 实时监控（FCP, LCP, FID, CLS）
+  - Navigation Timing 收集
+  - Paint Timing 分析
+  - Resource Timing 统计
+  - 长任务检测
+  - 内存使用监控
+  - 可视化性能面板
+  - 性能报告导出
+  - 自定义性能标记和测量
+
+### 改进 (Changed)
+- 🚀 移动端体验大幅提升
+- 📊 实时性能监控和报告
+- 💄 触控交互优化
+
+### 技术细节
+- **移动端优化**:
+  - Media Query 响应式设计
+  - Touch-friendly UI (44x44px 最小点击区域)
+  - iOS Safe Area Insets 支持
+  - GPU 加速动画
+  - 横屏/竖屏自适应
+  - PWA 安装提示
+- **性能监控**:
+  - PerformanceObserver API
+  - Navigation Timing API
+  - Resource Timing API
+  - Memory API (Chrome)
+  - 阈值预警系统
+  - 实时数据更新
+
+---
+
+## [2.3.1] - 2026-01-30
+
+### 新增 (Added)
+- ✨ API 文档页面 (api-docs.html, 1000+ 行)
+  - 完整的 JavaScript API 参考
+  - 代码语法高亮
+  - 一键复制代码
+  - 平滑滚动导航
+  - 深色模式支持
+- ✨ 离线页面 (offline.html)
+  - 网络状态实时检测
+  - 自动恢复机制
+  - 离线功能列表
+  - 美观的渐变设计
+
+### 改进 (Changed)
+- 🚀 Service Worker 版本升级到 v2.3.0
+- 💄 离线体验优化
+
+---
+
 ## [2.3.0] - 2026-01-30
 
 ### 新增 (Added)
