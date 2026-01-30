@@ -330,6 +330,336 @@
                     </div>
                 </div>
 
+                <!-- SPI Flash案例 -->
+                <div class="case-card" data-category="communication" data-difficulty="beginner">
+                    <div class="case-image">
+                        <div class="case-badge beginner">入门</div>
+                        <div class="case-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3>SPI Flash存储器接口</h3>
+                        <p class="case-description">W25Q128 Flash与MCU的SPI接口设计，支持四线SPI和双线SPI</p>
+                        <div class="case-tags">
+                            <span class="tag">SPI</span>
+                            <span class="tag">Flash</span>
+                            <span class="tag">存储</span>
+                        </div>
+                        <div class="case-meta">
+                            <span><i class="fas fa-layer-group"></i> 2层板</span>
+                            <span><i class="fas fa-clock"></i> 2-3小时</span>
+                            <span class="fas fa-user"></i> 820</span>
+                        </div>
+                        <div class="case-specs">
+                            <p><strong>芯片</strong>：W25Q128FV</p>
+                            <p><strong>容量</strong>：128Mbit (16MB)</p>
+                            <p><strong>速率</strong>：最高104MHz</p>
+                            <p><strong>电压</strong>：2.7-3.6V</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="viewCase('spi-flash')">
+                            <i class="fas fa-eye"></i> 查看详情
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LDO设计案例 -->
+                <div class="case-card" data-category="power" data-difficulty="beginner">
+                    <div class="case-image">
+                        <div class="case-badge beginner">入门</div>
+                        <div class="case-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3>LDO稳压电路设计 (5V→3.3V/1A)</h3>
+                        <p class="case-description">基于AMS1117-3.3的低压差线性稳压器设计，含热计算和PCB布局</p>
+                        <div class="case-tags">
+                            <span class="tag">LDO</span>
+                            <span class="tag">稳压</span>
+                            <span class="tag">电源</span>
+                        </div>
+                        <div class="case-meta">
+                            <span><i class="fas fa-layer-group"></i> 2层板</span>
+                            <span><i class="fas fa-clock"></i> 1-2小时</span>
+                            <span><i class="fas fa-user"></i> 1.1k</span>
+                        </div>
+                        <div class="case-specs">
+                            <p><strong>芯片</strong>：AMS1117-3.3</p>
+                            <p><strong>输入</strong>：4.5-12V</p>
+                            <p><strong>输出</strong>：3.3V/1A</p>
+                            <p><strong>压差</strong>：1.2V@1A</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="viewCase('ldo-design')">
+                            <i class="fas fa-eye"></i> 查看详情
+                        </button>
+                    </div>
+                </div>
+
+                <!-- USB 2.0接口 -->
+                <div class="case-card" data-category="highspeed" data-difficulty="intermediate">
+                    <div class="case-image">
+                        <div class="case-badge intermediate">中级</div>
+                        <div class="case-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3>USB 2.0差分信号设计</h3>
+                        <p class="case-description">USB 2.0高速差分对设计，90Ω±10%阻抗控制和等长匹配</p>
+                        <div class="case-tags">
+                            <span class="tag">USB</span>
+                            <span class="tag">差分</span>
+                            <span class="tag">高速</span>
+                        </div>
+                        <div class="case-meta">
+                            <span><i class="fas fa-layer-group"></i> 4层板</span>
+                            <span><i class="fas fa-clock"></i> 3-4小时</span>
+                            <span><i class="fas fa-user"></i> 1.8k</span>
+                        </div>
+                        <div class="case-specs">
+                            <p><strong>标准</strong>：USB 2.0 HS (480Mbps)</p>
+                            <p><strong>阻抗</strong>：90Ω±10%</p>
+                            <p><strong>等长</strong>：±5mil</p>
+                            <p><strong>线宽</strong>：6mil/6mil/12mil</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="viewCase('usb2-design')">
+                            <i class="fas fa-eye"></i> 查看详情
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 以太网PHY -->
+                <div class="case-card" data-category="communication" data-difficulty="intermediate">
+                    <div class="case-image">
+                        <div class="case-badge intermediate">中级</div>
+                        <div class="case-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3>千兆以太网PHY接口设计</h3>
+                        <p class="case-description">基于RTL8211的千兆以太网PHY设计，RGMII接口和RJ45连接</p>
+                        <div class="case-tags">
+                            <span class="tag">以太网</span>
+                            <span class="tag">PHY</span>
+                            <span class="tag">RGMII</span>
+                        </div>
+                        <div class="case-meta">
+                            <span><i class="fas fa-layer-group"></i> 4层板</span>
+                            <span><i class="fas fa-clock"></i> 5-6小时</span>
+                            <span><i class="fas fa-user"></i> 1.6k</span>
+                        </div>
+                        <div class="case-specs">
+                            <p><strong>芯片</strong>：RTL8211E</p>
+                            <p><strong>速率</strong>：10/100/1000Mbps</p>
+                            <p><strong>接口</strong>：RGMII</p>
+                            <p><strong>变压器</strong>：HR911105A</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="viewCase('ethernet-phy')">
+                            <i class="fas fa-eye"></i> 查看详情
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 温湿度传感器 -->
+                <div class="case-card" data-category="sensor" data-difficulty="beginner">
+                    <div class="case-image">
+                        <div class="case-badge beginner">入门</div>
+                        <div class="case-icon">
+                            <i class="fas fa-compass"></i>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3>DHT22温湿度传感器接口</h3>
+                        <p class="case-description">DHT22数字温湿度传感器的单总线接口设计和时序控制</p>
+                        <div class="case-tags">
+                            <span class="tag">传感器</span>
+                            <span class="tag">温湿度</span>
+                            <span class="tag">单总线</span>
+                        </div>
+                        <div class="case-meta">
+                            <span><i class="fas fa-layer-group"></i> 2层板</span>
+                            <span><i class="fas fa-clock"></i> 1小时</span>
+                            <span><i class="fas fa-user"></i> 580</span>
+                        </div>
+                        <div class="case-specs">
+                            <p><strong>芯片</strong>：DHT22 (AM2302)</p>
+                            <p><strong>精度</strong>：温度±0.5°C, 湿度±2%</p>
+                            <p><strong>接口</strong>：单总线</p>
+                            <p><strong>电压</strong>：3.3-5.5V</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="viewCase('dht22-sensor')">
+                            <i class="fas fa-eye"></i> 查看详情
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ADC采集电路 -->
+                <div class="case-card" data-category="sensor" data-difficulty="intermediate">
+                    <div class="case-image">
+                        <div class="case-badge intermediate">中级</div>
+                        <div class="case-icon">
+                            <i class="fas fa-compass"></i>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3>12位ADC数据采集系统</h3>
+                        <p class="case-description">基于ADS1015的12位ADC采集电路，I2C接口和多通道采样</p>
+                        <div class="case-tags">
+                            <span class="tag">ADC</span>
+                            <span class="tag">采集</span>
+                            <span class="tag">I2C</span>
+                        </div>
+                        <div class="case-meta">
+                            <span><i class="fas fa-layer-group"></i> 2层板</span>
+                            <span><i class="fas fa-clock"></i> 2-3小时</span>
+                            <span><i class="fas fa-user"></i> 720</span>
+                        </div>
+                        <div class="case-specs">
+                            <p><strong>芯片</strong>：ADS1015</p>
+                            <p><strong>分辨率</strong>：12位</p>
+                            <p><strong>采样率</strong>：3300SPS</p>
+                            <p><strong>通道</strong>：4路单端/2路差分</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="viewCase('adc-sampling')">
+                            <i class="fas fa-eye"></i> 查看详情
+                        </button>
+                    </div>
+                </div>
+
+                <!-- UART转RS485 -->
+                <div class="case-card" data-category="communication" data-difficulty="beginner">
+                    <div class="case-image">
+                        <div class="case-badge beginner">入门</div>
+                        <div class="case-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3>UART转RS485通信接口</h3>
+                        <p class="case-description">基于MAX485的UART转RS485电路，支持半双工通信和自动收发控制</p>
+                        <div class="case-tags">
+                            <span class="tag">UART</span>
+                            <span class="tag">RS485</span>
+                            <span class="tag">通信</span>
+                        </div>
+                        <div class="case-meta">
+                            <span><i class="fas fa-layer-group"></i> 2层板</span>
+                            <span><i class="fas fa-clock"></i> 1-2小时</span>
+                            <span><i class="fas fa-user"></i> 890</span>
+                        </div>
+                        <div class="case-specs">
+                            <p><strong>芯片</strong>：MAX485</p>
+                            <p><strong>速率</strong>：最高2.5Mbps</p>
+                            <p><strong>距离</strong>：最长1200m</p>
+                            <p><strong>节点</strong>：最多32个</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="viewCase('uart-rs485')">
+                            <i class="fas fa-eye"></i> 查看详情
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LoRa无线模块 -->
+                <div class="case-card" data-category="rf" data-difficulty="intermediate">
+                    <div class="case-image">
+                        <div class="case-badge intermediate">中级</div>
+                        <div class="case-icon">
+                            <i class="fas fa-broadcast-tower"></i>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3>LoRa无线通信模块设计</h3>
+                        <p class="case-description">基于SX1278的LoRa模块设计，433MHz频段，匹配网络和天线设计</p>
+                        <div class="case-tags">
+                            <span class="tag">LoRa</span>
+                            <span class="tag">无线</span>
+                            <span class="tag">RF</span>
+                        </div>
+                        <div class="case-meta">
+                            <span><i class="fas fa-layer-group"></i> 4层板</span>
+                            <span><i class="fas fa-clock"></i> 6-8小时</span>
+                            <span><i class="fas fa-user"></i> 1.3k</span>
+                        </div>
+                        <div class="case-specs">
+                            <p><strong>芯片</strong>：SX1278</p>
+                            <p><strong>频段</strong>：433MHz</p>
+                            <p><strong>距离</strong>：最长15km</p>
+                            <p><strong>速率</strong>：0.3-37.5kbps</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="viewCase('lora-module')">
+                            <i class="fas fa-eye"></i> 查看详情
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ESP32开发板 -->
+                <div class="case-card" data-category="mcu" data-difficulty="intermediate">
+                    <div class="case-image">
+                        <div class="case-badge intermediate">中级</div>
+                        <div class="case-icon">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3>ESP32-WROOM物联网开发板</h3>
+                        <p class="case-description">ESP32-WROOM-32模组开发板设计，集成WiFi/BT，USB转串口和电源管理</p>
+                        <div class="case-tags">
+                            <span class="tag">ESP32</span>
+                            <span class="tag">WiFi</span>
+                            <span class="tag">IoT</span>
+                        </div>
+                        <div class="case-meta">
+                            <span><i class="fas fa-layer-group"></i> 2层板</span>
+                            <span><i class="fas fa-clock"></i> 4-5小时</span>
+                            <span><i class="fas fa-user"></i> 2.1k</span>
+                        </div>
+                        <div class="case-specs">
+                            <p><strong>模组</strong>：ESP32-WROOM-32</p>
+                            <p><strong>无线</strong>：WiFi 802.11 b/g/n + BT 4.2</p>
+                            <p><strong>IO</strong>：36个GPIO</p>
+                            <p><strong>Flash</strong>：4MB</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="viewCase('esp32-devboard')">
+                            <i class="fas fa-eye"></i> 查看详情
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 锂电池充电管理 -->
+                <div class="case-card" data-category="power" data-difficulty="intermediate">
+                    <div class="case-image">
+                        <div class="case-badge intermediate">中级</div>
+                        <div class="case-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3>单节锂电池充电管理电路</h3>
+                        <p class="case-description">基于TP4056的锂电池充电电路，含过充过放保护和电量指示</p>
+                        <div class="case-tags">
+                            <span class="tag">锂电池</span>
+                            <span class="tag">充电</span>
+                            <span class="tag">电源</span>
+                        </div>
+                        <div class="case-meta">
+                            <span><i class="fas fa-layer-group"></i> 2层板</span>
+                            <span><i class="fas fa-clock"></i> 2-3小时</span>
+                            <span><i class="fas fa-user"></i> 1.4k</span>
+                        </div>
+                        <div class="case-specs">
+                            <p><strong>芯片</strong>：TP4056 + DW01</p>
+                            <p><strong>电流</strong>：可调0.5-1A</p>
+                            <p><strong>精度</strong>：充电电压±1%</p>
+                            <p><strong>保护</strong>：过充/过放/过流/短路</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="viewCase('battery-charger')">
+                            <i class="fas fa-eye"></i> 查看详情
+                        </button>
+                    </div>
+                </div>
+
                 <!-- 更多案例待添加 -->
                 <div class="case-card coming-soon">
                     <div class="case-image">
