@@ -1466,7 +1466,7 @@ console.log(
     'color: #4CAF50; font-size: 12px;'
 );
 console.log(
-    '%cGitHub: https://github.com/your-repo\nLicense: CC BY-SA 4.0',
+    '%cGitHub: https://github.com/27834853-ctrl/hardware_knowledge_base\nLicense: MIT',
     'color: #757575; font-size: 11px;'
 );
 
