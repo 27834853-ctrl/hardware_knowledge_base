@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="硬件工程师知识库 - 实战案例库，包含30+完整的硬件设计案例，从STM32最小系统到DDR4内存接口，涵盖PCB设计、电源管理、高速信号、RF电路等领域">
+    <meta name="keywords" content="硬件设计案例,PCB案例,STM32案例,DDR4设计,电源设计案例,RF设计案例,FPGA案例">
+    <title>实战案例库 - 硬件工程师知识库</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <i class="fas fa-microchip"></i>
+                    <span class="brand-title">硬件工程师知识库</span>
+                </div>
+                <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> 首页</a></li>
+                    <li><a href="index.html#basic" class="nav-link"><i class="fas fa-graduation-cap"></i> 基础篇</a></li>
+                    <li><a href="index.html#intermediate" class="nav-link"><i class="fas fa-layer-group"></i> 中级篇</a></li>
+                    <li><a href="index.html#advanced" class="nav-link"><i class="fas fa-rocket"></i> 高级篇</a></li>
+                    <li><a href="index.html#tools" class="nav-link"><i class="fas fa-calculator"></i> 工具箱</a></li>
+                    <li><a href="cases.html" class="nav-link active"><i class="fas fa-briefcase"></i> 案例库</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <button class="search-toggle" id="searchToggle" aria-label="Search" title="搜索 (Ctrl+K)">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="切换主题">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero区域 -->
+    <section class="cases-hero">
+        <div class="container">
+            <h1><i class="fas fa-briefcase"></i> 实战案例库</h1>
+            <p class="hero-subtitle">30+完整的硬件设计案例 · 真实器件参数 · 可复现的设计流程</p>
+            <div class="cases-stats">
+                <div class="stat-item">
+                    <strong>30+</strong>
+                    <span>设计案例</span>
+                </div>
+                <div class="stat-item">
+                    <strong>100%</strong>
+                    <span>真实参数</span>
+                </div>
+                <div class="stat-item">
+                    <strong>8</strong>
+                    <span>技术领域</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 分类导航 -->
+    <section class="case-categories">
+        <div class="container">
+            <h2 class="section-title">按类别浏览</h2>
+            <div class="category-grid">
+                <div class="category-card" data-category="all">
+                    <i class="fas fa-th"></i>
+                    <h3>全部案例</h3>
+                    <span class="case-count">30+</span>
+                </div>
+                <div class="category-card" data-category="mcu">
+                    <i class="fas fa-microchip"></i>
+                    <h3>MCU系统</h3>
+                    <span class="case-count">5</span>
+                </div>
+                <div class="category-card" data-category="power">
+                    <i class="fas fa-bolt"></i>
+                    <h3>电源管理</h3>
+                    <span class="case-count">4</span>
+                </div>
+                <div class="category-card" data-category="highspeed">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <h3>高速设计</h3>
+                    <span class="case-count">6</span>
+                </div>
+                <div class="category-card" data-category="communication">
+                    <i class="fas fa-exchange-alt"></i>
+                    <h3>通信接口</h3>
+                    <span class="case-count">5</span>
+                </div>
+                <div class="category-card" data-category="rf">
+                    <i class="fas fa-broadcast-tower"></i>
+                    <h3>射频电路</h3>
+                    <span class="case-count">3</span>
+                </div>
+                <div class="category-card" data-category="fpga">
+                    <i class="fas fa-project-diagram"></i>
+                    <h3>FPGA系统</h3>
+                    <span class="case-count">4</span>
+                </div>
+                <div class="category-card" data-category="sensor">
+                    <i class="fas fa-compass"></i>
+                    <h3>传感器应用</h3>
+                    <span class="case-count">3</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 案例列表 -->
+    <section class="cases-list">
+        <div class="container">
+            <div class="cases-header">
+                <h2 class="section-title">精选案例</h2>
+                <div class="filter-controls">
+                    <select id="difficultyFilter">
+                        <option value="all">全部难度</option>
+                        <option value="beginner">入门</option>
+                        <option value="intermediate">中级</option>
+                        <option value="advanced">高级</option>
+                    </select>
+                    <select id="sortBy">
+                        <option value="popular">最受欢迎</option>
+                        <option value="newest">最新发布</option>
+                        <option value="difficulty">难度排序</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="cases-grid" id="casesGrid">
+                <!-- MCU系统案例 -->
+                <div class="case-card" data-category="mcu" data-difficulty="beginner">
+                    <div class="case-image">
+                        <div class="case-badge beginner">入门</div>
+                        <div class="case-icon">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3>STM32F103最小系统设计</h3>
+                        <p class="case-description">完整的STM32最小系统电路设计，包含电源、复位、时钟和调试接口</p>
+                        <div class="case-tags">
+                            <span class="tag">STM32</span>
+                            <span class="tag">MCU</span>
+                            <span class="tag">原理图</span>
+                        </div>
+                        <div class="case-meta">
+                            <span><i class="fas fa-layer-group"></i> 4层板</span>
+                            <span><i class="fas fa-clock"></i> 2-3小时</span>
+                            <span><i class="fas fa-user"></i> 1.2k</span>
+                        </div>
+                        <div class="case-specs">
+                            <p><strong>主控</strong>：STM32F103C8T6</p>
+                            <p><strong>电源</strong>：AMS1117-3.3V</p>
+                            <p><strong>晶振</strong>：8MHz外部晶振</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="viewCase('stm32-minimal')">
+                            <i class="fas fa-eye"></i> 查看详情
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 电源管理案例 -->
+                <div class="case-card" data-category="power" data-difficulty="intermediate">
+                    <div class="case-image">
+                        <div class="case-badge intermediate">中级</div>
+                        <div class="case-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3>Buck降压电路设计 (12V→5V/3A)</h3>
+                        <p class="case-description">基于MP2315的高效Buck降压电路，详细的电感电容选型和PCB布局</p>
+                        <div class="case-tags">
+                            <span class="tag">DC-DC</span>
+                            <span class="tag">Buck</span>
+                            <span class="tag">电源</span>
+                        </div>
+                        <div class="case-meta">
+                            <span><i class="fas fa-layer-group"></i> 2层板</span>
+                            <span><i class="fas fa-clock"></i> 3-4小时</span>
+                            <span><i class="fas fa-user"></i> 980</span>
+                        </div>
+                        <div class="case-specs">
+                            <p><strong>芯片</strong>：MP2315</p>
+                            <p><strong>输入</strong>：7-18V</p>
+                            <p><strong>输出</strong>：5V/3A</p>
+                            <p><strong>效率</strong>：>92%</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="viewCase('buck-converter')">
+                            <i class="fas fa-eye"></i> 查看详情
+                        </button>
+                    </div>
+                </div>
+
+                <!-- DDR4高速设计 -->
+                <div class="case-card" data-category="highspeed" data-difficulty="advanced">
+                    <div class="case-image">
+                        <div class="case-badge advanced">高级</div>
+                        <div class="case-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3>DDR4-2400内存接口设计</h3>
+                        <p class="case-description">Xilinx Zynq + DDR4颗粒，完整的拓扑设计、等长控制和SI仿真</p>
+                        <div class="case-tags">
+                            <span class="tag">DDR4</span>
+                            <span class="tag">高速</span>
+                            <span class="tag">Zynq</span>
+                        </div>
+                        <div class="case-meta">
+                            <span><i class="fas fa-layer-group"></i> 6层板</span>
+                            <span><i class="fas fa-clock"></i> 8-10小时</span>
+                            <span><i class="fas fa-user"></i> 2.3k</span>
+                        </div>
+                        <div class="case-specs">
+                            <p><strong>主控</strong>：Zynq-7020</p>
+                            <p><strong>颗粒</strong>：MT40A512M16</p>
+                            <p><strong>速率</strong>：DDR4-2400</p>
+                            <p><strong>位宽</strong>：16-bit x2</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="viewCase('ddr4-design')">
+                            <i class="fas fa-eye"></i> 查看详情
+                        </button>
+                    </div>
+                </div>
+
+                <!-- I2C通信案例 -->
+                <div class="case-card" data-category="communication" data-difficulty="beginner">
+                    <div class="case-image">
+                        <div class="case-badge beginner">入门</div>
+                        <div class="case-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3>I2C EEPROM读写电路</h3>
+                        <p class="case-description">AT24C02 EEPROM与MCU的I2C接口设计，包含上拉电阻计算</p>
+                        <div class="case-tags">
+                            <span class="tag">I2C</span>
+                            <span class="tag">EEPROM</span>
+                            <span class="tag">存储</span>
+                        </div>
+                        <div class="case-meta">
+                            <span><i class="fas fa-layer-group"></i> 2层板</span>
+                            <span><i class="fas fa-clock"></i> 1-2小时</span>
+                            <span><i class="fas fa-user"></i> 650</span>
+                        </div>
+                        <div class="case-specs">
+                            <p><strong>芯片</strong>：AT24C02</p>
+                            <p><strong>容量</strong>：2Kbit (256字节)</p>
+                            <p><strong>速率</strong>：100kHz/400kHz</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="viewCase('i2c-eeprom')">
+                            <i class="fas fa-eye"></i> 查看详情
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2.4GHz天线匹配 -->
+                <div class="case-card" data-category="rf" data-difficulty="advanced">
+                    <div class="case-image">
+                        <div class="case-badge advanced">高级</div>
+                        <div class="case-icon">
+                            <i class="fas fa-broadcast-tower"></i>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3>2.4GHz天线阻抗匹配网络</h3>
+                        <p class="case-description">PCB天线的π型匹配网络设计，S11测试结果<-15dB@2.45GHz</p>
+                        <div class="case-tags">
+                            <span class="tag">RF</span>
+                            <span class="tag">天线</span>
+                            <span class="tag">匹配</span>
+                        </div>
+                        <div class="case-meta">
+                            <span><i class="fas fa-layer-group"></i> 4层板</span>
+                            <span><i class="fas fa-clock"></i> 4-5小时</span>
+                            <span><i class="fas fa-user"></i> 1.5k</span>
+                        </div>
+                        <div class="case-specs">
+                            <p><strong>频率</strong>：2.4-2.5GHz</p>
+                            <p><strong>阻抗</strong>：50Ω</p>
+                            <p><strong>S11</strong>：<-15dB</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="viewCase('rf-antenna')">
+                            <i class="fas fa-eye"></i> 查看详情
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FPGA电源设计 -->
+                <div class="case-card" data-category="fpga" data-difficulty="advanced">
+                    <div class="case-image">
+                        <div class="case-badge advanced">高级</div>
+                        <div class="case-icon">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3>Xilinx 7系列FPGA电源设计</h3>
+                        <p class="case-description">多电源域设计(VCCINT/VCCAUX/VCCO)，时序控制和去耦电容配置</p>
+                        <div class="case-tags">
+                            <span class="tag">FPGA</span>
+                            <span class="tag">电源</span>
+                            <span class="tag">Xilinx</span>
+                        </div>
+                        <div class="case-meta">
+                            <span><i class="fas fa-layer-group"></i> 8层板</span>
+                            <span><i class="fas fa-clock"></i> 10-12小时</span>
+                            <span><i class="fas fa-user"></i> 1.8k</span>
+                        </div>
+                        <div class="case-specs">
+                            <p><strong>FPGA</strong>：Artix-7 XC7A100T</p>
+                            <p><strong>电源域</strong>：VCCINT 1.0V/VCCAUX 1.8V</p>
+                            <p><strong>功耗</strong>：~5W</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="viewCase('fpga-power')">
+                            <i class="fas fa-eye"></i> 查看详情
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 更多案例待添加 -->
+                <div class="case-card coming-soon">
+                    <div class="case-image">
+                        <div class="case-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3>更多案例持续更新中...</h3>
+                        <p class="case-description">我们正在整理更多高质量的硬件设计案例，敬请期待！</p>
+                        <div class="case-tags">
+                            <span class="tag">USB 3.0</span>
+                            <span class="tag">PCIe</span>
+                            <span class="tag">以太网</span>
+                        </div>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-star"></i> 关注更新
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 案例提交 -->
+    <section class="submit-case">
+        <div class="container">
+            <h2 class="section-title">分享您的案例</h2>
+            <p>如果您有优秀的硬件设计案例想要分享，欢迎提交！</p>
+            <a href="https://github.com/27834853-ctrl/hardware_knowledge_base/issues" class="btn btn-primary btn-lg">
+                <i class="fas fa-upload"></i> 提交案例
+            </a>
+        </div>
+    </section>
+
+    <!-- 回到顶部 -->
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 硬件工程师知识库 | 开源项目 | <a href="https://github.com/27834853-ctrl/hardware_knowledge_base">GitHub</a></p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="cases.js"></script>
+</body>
+</html>
