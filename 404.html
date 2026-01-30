@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>404 - 页面未找到 | 硬件工程师知识库</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 600px;
+            z-index: 10;
+            position: relative;
+        }
+
+        .error-code {
+            font-size: 120px;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 20px;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: glitch 1s linear infinite;
+        }
+
+        @keyframes glitch {
+            2%, 64% {
+                transform: translate(2px, 0) skew(0deg);
+            }
+            4%, 60% {
+                transform: translate(-2px, 0) skew(0deg);
+            }
+            62% {
+                transform: translate(0, 0) skew(5deg);
+            }
+        }
+
+        .error-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .error-message {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .suggestions {
+            margin-top: 50px;
+            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            text-align: left;
+        }
+
+        .suggestions h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .suggestions ul {
+            list-style: none;
+        }
+
+        .suggestions li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .suggestions li:last-child {
+            border-bottom: none;
+        }
+
+        .suggestions a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .suggestions a:hover {
+            padding-left: 10px;
+            opacity: 0.8;
+        }
+
+        /* Circuit background animation */
+        .circuit {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .circuit-line {
+            stroke: white;
+            stroke-width: 2;
+            fill: none;
+            animation: dash 20s linear infinite;
+        }
+
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -1000;
+            }
+        }
+
+        .icon {
+            font-size: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 80px;
+            }
+
+            .error-title {
+                font-size: 24px;
+            }
+
+            .error-message {
+                font-size: 16px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Circuit Background -->
+    <svg class="circuit" xmlns="http://www.w3.org/2000/svg">
+        <path class="circuit-line" d="M0,50 L200,50 L200,150 L400,150" stroke-dasharray="5,5" stroke-dashoffset="0"/>
+        <path class="circuit-line" d="M0,200 L300,200 L300,100 L500,100" stroke-dasharray="5,5" stroke-dashoffset="100"/>
+        <path class="circuit-line" d="M100,0 L100,300 L400,300 L400,400" stroke-dasharray="5,5" stroke-dashoffset="200"/>
+    </svg>
+
+    <div class="container">
+        <div class="error-code">404</div>
+        <h1 class="error-title">🔍 页面未找到</h1>
+        <p class="error-message">
+            抱歉，您访问的页面不存在或已被移除。<br>
+            可能是URL输入错误，或者页面已经被重新组织。
+        </p>
+
+        <div class="button-group">
+            <a href="index.html" class="btn btn-primary">
+                <span class="icon">🏠</span>
+                返回首页
+            </a>
+            <button onclick="history.back()" class="btn btn-secondary">
+                <span class="icon">⬅️</span>
+                返回上一页
+            </button>
+        </div>
+
+        <div class="suggestions">
+            <h3>
+                <span class="icon">💡</span>
+                热门页面推荐
+            </h3>
+            <ul>
+                <li>
+                    <a href="index.html">
+                        <span>🏠</span>
+                        <span>首页 - 完整的硬件知识体系</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="cases.html">
+                        <span>💼</span>
+                        <span>案例库 - 16+实战硬件设计案例</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="quick-reference.html">
+                        <span>📚</span>
+                        <span>快速参考 - 30+常用公式和参数</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="index.html#tools">
+                        <span>🧮</span>
+                        <span>工具箱 - 4个专业计算器</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/27834853-ctrl/hardware_knowledge_base" target="_blank">
+                        <span>⭐</span>
+                        <span>GitHub - 给项目一个Star</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <p style="margin-top: 30px; opacity: 0.8; font-size: 14px;">
+            或者按 <kbd style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px;">Ctrl+K</kbd> 使用搜索功能
+        </p>
+    </div>
+
+    <script>
+        // Auto redirect timer (optional)
+        let countdown = 10;
+        const autoRedirect = false; // Set to true to enable auto redirect
+
+        if (autoRedirect) {
+            const timer = setInterval(() => {
+                countdown--;
+                if (countdown <= 0) {
+                    window.location.href = 'index.html';
+                    clearInterval(timer);
+                }
+            }, 1000);
+        }
+
+        // Track 404 errors (if analytics is set up)
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'exception', {
+                'description': '404_error',
+                'fatal': false,
+                'page_path': window.location.pathname
+            });
+        }
+
+        // Log to console
+        console.log('%c404 Error', 'color: #ff5252; font-size: 20px; font-weight: bold;');
+        console.log('%cRequested URL:', 'color: #999;', window.location.href);
+        console.log('%cReferrer:', 'color: #999;', document.referrer || 'Direct access');
+    </script>
+</body>
+</html>

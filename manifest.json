@@ -1,0 +1,90 @@
+{
+  "name": "硬件工程师知识库",
+  "short_name": "硬件知识库",
+  "description": "免费开放的硬件工程师知识库 - 从基础到高级的完整硬件知识体系，包含60+工程公式、4个专业计算器、30+实战案例",
+  "start_url": "/hardware_knowledge_base/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#673ab7",
+  "orientation": "any",
+  "scope": "/hardware_knowledge_base/",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "categories": ["education", "productivity", "reference"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%23673ab7'/><text x='50%' y='50%' dominant-baseline='central' text-anchor='middle' font-size='120' fill='white'>🔧</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%23673ab7'/><text x='50%' y='50%' dominant-baseline='central' text-anchor='middle' font-size='320' fill='white'>🔧</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1280 720'><rect width='1280' height='720' fill='%23f5f5f5'/><text x='50%' y='50%' dominant-baseline='central' text-anchor='middle' font-size='48' fill='%23333'>硬件工程师知识库</text></svg>",
+      "sizes": "1280x720",
+      "type": "image/svg+xml",
+      "form_factor": "wide",
+      "label": "主页截图"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "案例库",
+      "short_name": "案例",
+      "description": "浏览硬件设计案例",
+      "url": "/hardware_knowledge_base/cases.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><text y='.9em' font-size='72'>💼</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "快速参考",
+      "short_name": "参考",
+      "description": "查看快速参考卡片",
+      "url": "/hardware_knowledge_base/quick-reference.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><text y='.9em' font-size='72'>📚</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "计算器",
+      "short_name": "工具",
+      "description": "使用专业计算器",
+      "url": "/hardware_knowledge_base/index.html#tools",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><text y='.9em' font-size='72'>🧮</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "share_target": {
+    "action": "/hardware_knowledge_base/",
+    "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}
