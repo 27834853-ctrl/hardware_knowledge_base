@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API 文档 - 硬件工程师知识库</title>
+    <meta name="description" content="硬件工程师知识库 JavaScript API 文档，包含搜索、分析、反馈等模块的完整接口说明">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        .api-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .api-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .api-header h1 {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .api-header p {
+            font-size: 18px;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .api-nav {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 40px;
+            position: sticky;
+            top: 80px;
+            z-index: 100;
+        }
+
+        .api-nav h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .api-nav-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .api-nav-link {
+            padding: 12px 16px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .api-nav-link:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .api-section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 40px;
+        }
+
+        .api-section h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .api-section h2 i {
+            font-size: 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .api-section > p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .api-method {
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .api-method h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .api-method-signature {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin-bottom: 16px;
+        }
+
+        .api-method-signature .keyword {
+            color: #ff79c6;
+        }
+
+        .api-method-signature .function {
+            color: #50fa7b;
+        }
+
+        .api-method-signature .param {
+            color: #f1fa8c;
+        }
+
+        .api-method-signature .type {
+            color: #8be9fd;
+        }
+
+        .api-method-description {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .api-params {
+            margin-top: 20px;
+        }
+
+        .api-params h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .api-param {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .api-param-name {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .api-param-type {
+            font-family: 'Consolas', 'Monaco', monospace;
+            color: #999;
+            font-size: 13px;
+        }
+
+        .api-param-required {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #f44336;
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .api-param-optional {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #4caf50;
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .api-param-description {
+            color: #666;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .api-returns {
+            margin-top: 20px;
+        }
+
+        .api-returns h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .api-example {
+            margin-top: 20px;
+        }
+
+        .api-example h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .api-code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .api-code-copy {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 6px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .api-code-copy:hover {
+            background: #764ba2;
+        }
+
+        .api-note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .api-note i {
+            color: #ffc107;
+            margin-right: 8px;
+        }
+
+        .api-note p {
+            margin: 0;
+            color: #856404;
+        }
+
+        .api-warning {
+            background: #f8d7da;
+            border-left: 4px solid #f44336;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .api-warning i {
+            color: #f44336;
+            margin-right: 8px;
+        }
+
+        .api-warning p {
+            margin: 0;
+            color: #721c24;
+        }
+
+        .api-info {
+            background: #d1ecf1;
+            border-left: 4px solid #0dcaf0;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .api-info i {
+            color: #0dcaf0;
+            margin-right: 8px;
+        }
+
+        .api-info p {
+            margin: 0;
+            color: #0c5460;
+        }
+
+        /* Dark mode */
+        [data-theme="dark"] .api-section,
+        [data-theme="dark"] .api-nav {
+            background: #2a2a2a;
+        }
+
+        [data-theme="dark"] .api-section h2,
+        [data-theme="dark"] .api-method h3,
+        [data-theme="dark"] .api-params h4,
+        [data-theme="dark"] .api-returns h4,
+        [data-theme="dark"] .api-example h4 {
+            color: #fff;
+        }
+
+        [data-theme="dark"] .api-section > p,
+        [data-theme="dark"] .api-method-description,
+        [data-theme="dark"] .api-param-description {
+            color: #ccc;
+        }
+
+        [data-theme="dark"] .api-method {
+            background: #1e1e1e;
+            border-left-color: #764ba2;
+        }
+
+        [data-theme="dark"] .api-param {
+            background: #1e1e1e;
+            border-color: #3a3a3a;
+        }
+
+        [data-theme="dark"] .api-nav-link {
+            background: #1e1e1e;
+            color: #ccc;
+        }
+
+        [data-theme="dark"] .api-nav-link:hover {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .api-header h1 {
+                font-size: 36px;
+            }
+
+            .api-section,
+            .api-nav {
+                padding: 24px;
+            }
+
+            .api-nav {
+                position: static;
+            }
+
+            .api-nav-links {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-microchip"></i>
+                硬件工程师知识库
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fas fa-home"></i> 首页</a></li>
+                <li><a href="cases.html"><i class="fas fa-folder-open"></i> 案例库</a></li>
+                <li><a href="quick-reference.html"><i class="fas fa-bookmark"></i> 快速参考</a></li>
+                <li><a href="api-docs.html" class="active"><i class="fas fa-code"></i> API 文档</a></li>
+            </ul>
+            <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="api-container">
+        <!-- Header -->
+        <div class="api-header">
+            <h1>API 文档</h1>
+            <p>完整的 JavaScript API 参考文档，帮助你扩展和定制硬件工程师知识库</p>
+        </div>
+
+        <!-- Quick Navigation -->
+        <div class="api-nav">
+            <h2><i class="fas fa-compass"></i> 快速导航</h2>
+            <div class="api-nav-links">
+                <a href="#search-optimizer" class="api-nav-link">
+                    <i class="fas fa-search"></i> SearchOptimizer
+                </a>
+                <a href="#analytics" class="api-nav-link">
+                    <i class="fas fa-chart-line"></i> Analytics
+                </a>
+                <a href="#sw-api" class="api-nav-link">
+                    <i class="fas fa-cog"></i> Service Worker
+                </a>
+                <a href="#share" class="api-nav-link">
+                    <i class="fas fa-share-alt"></i> Share
+                </a>
+                <a href="#feedback" class="api-nav-link">
+                    <i class="fas fa-comment"></i> Feedback
+                </a>
+            </div>
+        </div>
+
+        <!-- SearchOptimizer API -->
+        <div class="api-section" id="search-optimizer">
+            <h2><i class="fas fa-search"></i> SearchOptimizer API</h2>
+            <p>优化的搜索引擎 API，提供快速、智能的搜索功能，支持模糊匹配、结果缓存和相关度排序。</p>
+
+            <!-- search() -->
+            <div class="api-method">
+                <h3>SearchOptimizer.search(query)</h3>
+                <div class="api-method-signature">
+<span class="keyword">function</span> <span class="function">search</span>(<span class="param">query</span>: <span class="type">string</span>): <span class="type">Array&lt;SearchResult&gt;</span>
+                </div>
+                <div class="api-method-description">
+                    执行优化的搜索查询，返回相关度排序的结果数组。
+                </div>
+
+                <div class="api-params">
+                    <h4>参数</h4>
+                    <div class="api-param">
+                        <span class="api-param-name">query</span>
+                        <span class="api-param-type">string</span>
+                        <span class="api-param-required">必需</span>
+                        <div class="api-param-description">搜索查询字符串，至少 2 个字符</div>
+                    </div>
+                </div>
+
+                <div class="api-returns">
+                    <h4>返回值</h4>
+                    <div class="api-param">
+                        <span class="api-param-type">Array&lt;SearchResult&gt;</span>
+                        <div class="api-param-description">
+                            搜索结果数组，每个结果包含：
+                            <ul>
+                                <li><code>id</code>: 文档 ID</li>
+                                <li><code>type</code>: 文档类型（formula/case/section）</li>
+                                <li><code>title</code>: 文档标题</li>
+                                <li><code>content</code>: 文档内容</li>
+                                <li><code>category</code>: 分类</li>
+                                <li><code>tags</code>: 标签数组</li>
+                                <li><code>score</code>: 相关度评分</li>
+                                <li><code>relevance</code>: 相关性分数</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="api-example">
+                    <h4>示例</h4>
+                    <div class="api-code">
+                        <button class="api-code-copy" onclick="copyCode(this)">复制</button>
+<pre>// 执行搜索
+const results = SearchOptimizer.search('PCB 阻抗');
+
+// 处理结果
+results.forEach(result => {
+    console.log(`标题: ${result.title}`);
+    console.log(`类型: ${result.type}`);
+    console.log(`评分: ${result.score}`);
+});</pre>
+                    </div>
+                </div>
+
+                <div class="api-note">
+                    <i class="fas fa-info-circle"></i>
+                    <p>搜索结果会自动缓存 1 小时，重复查询将直接从缓存返回。</p>
+                </div>
+            </div>
+
+            <!-- highlight() -->
+            <div class="api-method">
+                <h3>SearchOptimizer.highlight(text, queryWords, maxLength)</h3>
+                <div class="api-method-signature">
+<span class="keyword">function</span> <span class="function">highlight</span>(
+    <span class="param">text</span>: <span class="type">string</span>,
+    <span class="param">queryWords</span>: <span class="type">Array&lt;string&gt;</span>,
+    <span class="param">maxLength</span>: <span class="type">number</span> = <span class="type">200</span>
+): <span class="type">string</span>
+                </div>
+                <div class="api-method-description">
+                    高亮文本中的搜索词，返回带有 &lt;mark&gt; 标签的 HTML 字符串。
+                </div>
+
+                <div class="api-params">
+                    <h4>参数</h4>
+                    <div class="api-param">
+                        <span class="api-param-name">text</span>
+                        <span class="api-param-type">string</span>
+                        <span class="api-param-required">必需</span>
+                        <div class="api-param-description">要处理的文本</div>
+                    </div>
+                    <div class="api-param">
+                        <span class="api-param-name">queryWords</span>
+                        <span class="api-param-type">Array&lt;string&gt;</span>
+                        <span class="api-param-required">必需</span>
+                        <div class="api-param-description">要高亮的关键词数组</div>
+                    </div>
+                    <div class="api-param">
+                        <span class="api-param-name">maxLength</span>
+                        <span class="api-param-type">number</span>
+                        <span class="api-param-optional">可选</span>
+                        <div class="api-param-description">最大文本长度，默认 200</div>
+                    </div>
+                </div>
+
+                <div class="api-example">
+                    <h4>示例</h4>
+                    <div class="api-code">
+                        <button class="api-code-copy" onclick="copyCode(this)">复制</button>
+<pre>const text = 'PCB 阻抗匹配对信号完整性至关重要';
+const highlighted = SearchOptimizer.highlight(text, ['PCB', '阻抗']);
+
+// 结果: "&lt;mark&gt;PCB&lt;/mark&gt; &lt;mark&gt;阻抗&lt;/mark&gt;匹配对信号完整性至关重要"</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- rebuild() -->
+            <div class="api-method">
+                <h3>SearchOptimizer.rebuild()</h3>
+                <div class="api-method-signature">
+<span class="keyword">function</span> <span class="function">rebuild</span>(): <span class="type">void</span>
+                </div>
+                <div class="api-method-description">
+                    清除缓存并重建搜索索引。当页面内容更新后应调用此方法。
+                </div>
+
+                <div class="api-example">
+                    <h4>示例</h4>
+                    <div class="api-code">
+                        <button class="api-code-copy" onclick="copyCode(this)">复制</button>
+<pre>// 动态添加内容后重建索引
+document.querySelector('.content').innerHTML += newContent;
+SearchOptimizer.rebuild();</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- getStats() -->
+            <div class="api-method">
+                <h3>SearchOptimizer.getStats()</h3>
+                <div class="api-method-signature">
+<span class="keyword">function</span> <span class="function">getStats</span>(): <span class="type">SearchStats</span>
+                </div>
+                <div class="api-method-description">
+                    获取搜索引擎统计信息。
+                </div>
+
+                <div class="api-returns">
+                    <h4>返回值</h4>
+                    <div class="api-param">
+                        <span class="api-param-type">SearchStats</span>
+                        <div class="api-param-description">
+                            包含以下字段：
+                            <ul>
+                                <li><code>documents</code>: 索引的文档数量</li>
+                                <li><code>indexSize</code>: 索引大小</li>
+                                <li><code>cacheSize</code>: 缓存条目数</li>
+                                <li><code>lastUpdated</code>: 最后更新时间</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="api-example">
+                    <h4>示例</h4>
+                    <div class="api-code">
+                        <button class="api-code-copy" onclick="copyCode(this)">复制</button>
+<pre>const stats = SearchOptimizer.getStats();
+console.log(`索引文档: ${stats.documents}`);
+console.log(`最后更新: ${stats.lastUpdated}`);</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics API -->
+        <div class="api-section" id="analytics">
+            <h2><i class="fas fa-chart-line"></i> Analytics API</h2>
+            <p>网站分析 API，提供事件追踪、页面浏览统计等功能，支持 Google Analytics 和百度统计。</p>
+
+            <!-- track() -->
+            <div class="api-method">
+                <h3>Analytics.track(category, action, label, value)</h3>
+                <div class="api-method-signature">
+<span class="keyword">function</span> <span class="function">track</span>(
+    <span class="param">category</span>: <span class="type">string</span>,
+    <span class="param">action</span>: <span class="type">string</span>,
+    <span class="param">label</span>: <span class="type">string</span>,
+    <span class="param">value</span>: <span class="type">number</span>
+): <span class="type">void</span>
+                </div>
+                <div class="api-method-description">
+                    追踪自定义事件到 Google Analytics 和百度统计。
+                </div>
+
+                <div class="api-params">
+                    <h4>参数</h4>
+                    <div class="api-param">
+                        <span class="api-param-name">category</span>
+                        <span class="api-param-type">string</span>
+                        <span class="api-param-required">必需</span>
+                        <div class="api-param-description">事件分类（如 'Video', 'Navigation'）</div>
+                    </div>
+                    <div class="api-param">
+                        <span class="api-param-name">action</span>
+                        <span class="api-param-type">string</span>
+                        <span class="api-param-required">必需</span>
+                        <div class="api-param-description">事件动作（如 'Play', 'Click'）</div>
+                    </div>
+                    <div class="api-param">
+                        <span class="api-param-name">label</span>
+                        <span class="api-param-type">string</span>
+                        <span class="api-param-optional">可选</span>
+                        <div class="api-param-description">事件标签（如视频名称）</div>
+                    </div>
+                    <div class="api-param">
+                        <span class="api-param-name">value</span>
+                        <span class="api-param-type">number</span>
+                        <span class="api-param-optional">可选</span>
+                        <div class="api-param-description">事件值（如播放时长）</div>
+                    </div>
+                </div>
+
+                <div class="api-example">
+                    <h4>示例</h4>
+                    <div class="api-code">
+                        <button class="api-code-copy" onclick="copyCode(this)">复制</button>
+<pre>// 追踪按钮点击
+Analytics.track('Button', 'Click', 'Download PDF');
+
+// 追踪视频播放
+Analytics.track('Video', 'Play', 'Tutorial 1', 120);
+
+// 追踪下载
+Analytics.track('Download', 'Click', 'datasheet.pdf');</pre>
+                    </div>
+                </div>
+
+                <div class="api-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>如果用户拒绝 Cookie 或启用了 DNT，此方法将不会发送数据。</p>
+                </div>
+            </div>
+
+            <!-- trackPageView() -->
+            <div class="api-method">
+                <h3>Analytics.trackPageView(path)</h3>
+                <div class="api-method-signature">
+<span class="keyword">function</span> <span class="function">trackPageView</span>(<span class="param">path</span>: <span class="type">string</span>): <span class="type">void</span>
+                </div>
+                <div class="api-method-description">
+                    手动追踪页面浏览，用于单页应用路由变化。
+                </div>
+
+                <div class="api-example">
+                    <h4>示例</h4>
+                    <div class="api-code">
+                        <button class="api-code-copy" onclick="copyCode(this)">复制</button>
+<pre>// SPA 路由变化时追踪
+router.on('change', (path) => {
+    Analytics.trackPageView(path);
+});</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- isEnabled() -->
+            <div class="api-method">
+                <h3>Analytics.isEnabled()</h3>
+                <div class="api-method-signature">
+<span class="keyword">function</span> <span class="function">isEnabled</span>(): <span class="type">boolean</span>
+                </div>
+                <div class="api-method-description">
+                    检查分析追踪是否已启用（考虑 DNT 和 Cookie 同意）。
+                </div>
+
+                <div class="api-example">
+                    <h4>示例</h4>
+                    <div class="api-code">
+                        <button class="api-code-copy" onclick="copyCode(this)">复制</button>
+<pre>if (Analytics.isEnabled()) {
+    console.log('分析已启用');
+} else {
+    console.log('分析已禁用');
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Service Worker API -->
+        <div class="api-section" id="sw-api">
+            <h2><i class="fas fa-cog"></i> Service Worker API</h2>
+            <p>Service Worker 调试和管理 API，用于检查更新、清除缓存等操作。</p>
+
+            <!-- checkUpdate() -->
+            <div class="api-method">
+                <h3>swAPI.checkUpdate()</h3>
+                <div class="api-method-signature">
+<span class="keyword">async function</span> <span class="function">checkUpdate</span>(): <span class="type">Promise&lt;boolean&gt;</span>
+                </div>
+                <div class="api-method-description">
+                    手动检查 Service Worker 更新。
+                </div>
+
+                <div class="api-example">
+                    <h4>示例</h4>
+                    <div class="api-code">
+                        <button class="api-code-copy" onclick="copyCode(this)">复制</button>
+<pre>const hasUpdate = await window.swAPI.checkUpdate();
+if (hasUpdate) {
+    console.log('有新版本可用');
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- clearCache() -->
+            <div class="api-method">
+                <h3>swAPI.clearCache()</h3>
+                <div class="api-method-signature">
+<span class="keyword">async function</span> <span class="function">clearCache</span>(): <span class="type">Promise&lt;void&gt;</span>
+                </div>
+                <div class="api-method-description">
+                    清除所有 Service Worker 缓存。
+                </div>
+
+                <div class="api-example">
+                    <h4>示例</h4>
+                    <div class="api-code">
+                        <button class="api-code-copy" onclick="copyCode(this)">复制</button>
+<pre>await window.swAPI.clearCache();
+console.log('缓存已清除');</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- getVersion() -->
+            <div class="api-method">
+                <h3>swAPI.getVersion()</h3>
+                <div class="api-method-signature">
+<span class="keyword">function</span> <span class="function">getVersion</span>(): <span class="type">string</span>
+                </div>
+                <div class="api-method-description">
+                    获取当前 Service Worker 版本。
+                </div>
+
+                <div class="api-example">
+                    <h4>示例</h4>
+                    <div class="api-code">
+                        <button class="api-code-copy" onclick="copyCode(this)">复制</button>
+<pre>const version = window.swAPI.getVersion();
+console.log(`SW 版本: ${version}`);</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Share Functions -->
+        <div class="api-section" id="share">
+            <h2><i class="fas fa-share-alt"></i> Share Functions</h2>
+            <p>社交分享功能，支持多个平台和原生分享 API。</p>
+
+            <!-- handleNativeShare() -->
+            <div class="api-method">
+                <h3>handleNativeShare()</h3>
+                <div class="api-method-signature">
+<span class="keyword">async function</span> <span class="function">handleNativeShare</span>(): <span class="type">Promise&lt;void&gt;</span>
+                </div>
+                <div class="api-method-description">
+                    使用浏览器原生分享 API 分享当前页面。
+                </div>
+
+                <div class="api-example">
+                    <h4>示例</h4>
+                    <div class="api-code">
+                        <button class="api-code-copy" onclick="copyCode(this)">复制</button>
+<pre>// 调用原生分享
+await window.handleNativeShare();</pre>
+                    </div>
+                </div>
+
+                <div class="api-info">
+                    <i class="fas fa-info-circle"></i>
+                    <p>仅在支持 Web Share API 的浏览器中可用（主要是移动浏览器）。</p>
+                </div>
+            </div>
+
+            <!-- handleShare() -->
+            <div class="api-method">
+                <h3>handleShare(platform)</h3>
+                <div class="api-method-signature">
+<span class="keyword">function</span> <span class="function">handleShare</span>(<span class="param">platform</span>: <span class="type">string</span>): <span class="type">void</span>
+                </div>
+                <div class="api-method-description">
+                    分享到指定的社交平台。
+                </div>
+
+                <div class="api-params">
+                    <h4>参数</h4>
+                    <div class="api-param">
+                        <span class="api-param-name">platform</span>
+                        <span class="api-param-type">string</span>
+                        <span class="api-param-required">必需</span>
+                        <div class="api-param-description">
+                            平台标识符：'weibo', 'wechat', 'qq', 'twitter', 'facebook', 'linkedin', 'telegram', 'email', 'copy'
+                        </div>
+                    </div>
+                </div>
+
+                <div class="api-example">
+                    <h4>示例</h4>
+                    <div class="api-code">
+                        <button class="api-code-copy" onclick="copyCode(this)">复制</button>
+<pre>// 分享到微博
+window.handleShare('weibo');
+
+// 分享到 Twitter
+window.handleShare('twitter');
+
+// 复制链接
+window.handleShare('copy');</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Functions -->
+        <div class="api-section" id="feedback">
+            <h2><i class="fas fa-comment"></i> Feedback Functions</h2>
+            <p>用户反馈功能，用于收集用户意见和报告问题。</p>
+
+            <!-- selectFeedbackType() -->
+            <div class="api-method">
+                <h3>selectFeedbackType(type)</h3>
+                <div class="api-method-signature">
+<span class="keyword">function</span> <span class="function">selectFeedbackType</span>(<span class="param">type</span>: <span class="type">string</span>): <span class="type">void</span>
+                </div>
+                <div class="api-method-description">
+                    选择反馈类型并显示对应的表单。
+                </div>
+
+                <div class="api-params">
+                    <h4>参数</h4>
+                    <div class="api-param">
+                        <span class="api-param-name">type</span>
+                        <span class="api-param-type">string</span>
+                        <span class="api-param-required">必需</span>
+                        <div class="api-param-description">
+                            反馈类型：'bug', 'feature', 'content', 'other'
+                        </div>
+                    </div>
+                </div>
+
+                <div class="api-example">
+                    <h4>示例</h4>
+                    <div class="api-code">
+                        <button class="api-code-copy" onclick="copyCode(this)">复制</button>
+<pre>// 显示错误报告表单
+window.selectFeedbackType('bug');</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- submitFeedback() -->
+            <div class="api-method">
+                <h3>submitFeedback(type)</h3>
+                <div class="api-method-signature">
+<span class="keyword">function</span> <span class="function">submitFeedback</span>(<span class="param">type</span>: <span class="type">string</span>): <span class="type">void</span>
+                </div>
+                <div class="api-method-description">
+                    提交反馈并创建 GitHub Issue 链接。
+                </div>
+
+                <div class="api-example">
+                    <h4>示例</h4>
+                    <div class="api-code">
+                        <button class="api-code-copy" onclick="copyCode(this)">复制</button>
+<pre>// 提交反馈
+window.submitFeedback('bug');</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cookie Consent -->
+        <div class="api-section">
+            <h2><i class="fas fa-cookie-bite"></i> Cookie Consent Functions</h2>
+            <p>Cookie 同意管理功能。</p>
+
+            <div class="api-method">
+                <h3>acceptCookies()</h3>
+                <div class="api-method-signature">
+<span class="keyword">function</span> <span class="function">acceptCookies</span>(): <span class="type">void</span>
+                </div>
+                <div class="api-method-description">
+                    接受 Cookie 并启用所有追踪功能。
+                </div>
+            </div>
+
+            <div class="api-method">
+                <h3>rejectCookies()</h3>
+                <div class="api-method-signature">
+<span class="keyword">function</span> <span class="function">rejectCookies</span>(): <span class="type">void</span>
+                </div>
+                <div class="api-method-description">
+                    拒绝 Cookie 并禁用追踪功能。
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>关于</h3>
+                <p>免费开放的硬件工程师知识库</p>
+            </div>
+            <div class="footer-section">
+                <h3>链接</h3>
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="cases.html">案例库</a></li>
+                    <li><a href="quick-reference.html">快速参考</a></li>
+                    <li><a href="api-docs.html">API 文档</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>资源</h3>
+                <ul>
+                    <li><a href="CHANGELOG.md" target="_blank">更新日志</a></li>
+                    <li><a href="CONTRIBUTING.md" target="_blank">贡献指南</a></li>
+                    <li><a href="CONTRIBUTORS.md" target="_blank">贡献者</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 硬件工程师知识库. All Rights Reserved. | <a href="LICENSE" target="_blank">MIT License</a> | <a href="https://github.com/27834853-ctrl/hardware_knowledge_base" target="_blank"><i class="fab fa-github"></i> GitHub</a></p>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="script.js"></script>
+    <script src="search-optimizer.js"></script>
+    <script src="sw-register.js"></script>
+    <script src="share.js"></script>
+    <script src="analytics.js"></script>
+    <script src="feedback.js"></script>
+
+    <script>
+        // Copy code functionality
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling;
+            const code = codeBlock.textContent;
+
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '已复制!';
+                button.style.background = '#4caf50';
+
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#667eea';
+                }, 2000);
+            });
+        }
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('.api-nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

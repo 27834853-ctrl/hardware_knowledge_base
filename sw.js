@@ -4,7 +4,7 @@
  * Version: 2.2.3
  */
 
-const CACHE_NAME = 'hardware-kb-v2.2.3';
+const CACHE_NAME = 'hardware-kb-v2.3.0';
 const RUNTIME_CACHE = 'hardware-kb-runtime';
 
 // Files to cache immediately on install
@@ -13,11 +13,18 @@ const PRECACHE_URLS = [
     '/hardware_knowledge_base/index.html',
     '/hardware_knowledge_base/cases.html',
     '/hardware_knowledge_base/quick-reference.html',
+    '/hardware_knowledge_base/api-docs.html',
     '/hardware_knowledge_base/404.html',
+    '/hardware_knowledge_base/offline.html',
     '/hardware_knowledge_base/styles.css',
     '/hardware_knowledge_base/print.css',
     '/hardware_knowledge_base/script.js',
     '/hardware_knowledge_base/cases.js',
+    '/hardware_knowledge_base/search-optimizer.js',
+    '/hardware_knowledge_base/analytics.js',
+    '/hardware_knowledge_base/feedback.js',
+    '/hardware_knowledge_base/share.js',
+    '/hardware_knowledge_base/sw-register.js',
     '/hardware_knowledge_base/manifest.json'
 ];
 
@@ -136,8 +143,13 @@ async function networkFirst(request) {
             return cachedResponse;
         }
 
-        // If HTML request and no cache, return 404 page
+        // If HTML request and no cache, return offline page
         if (request.mode === 'navigate') {
+            const offlineResponse = await cache.match('/hardware_knowledge_base/offline.html');
+            if (offlineResponse) {
+                return offlineResponse;
+            }
+            // Fallback to 404 page
             const fallbackResponse = await cache.match('/hardware_knowledge_base/404.html');
             if (fallbackResponse) {
                 return fallbackResponse;
