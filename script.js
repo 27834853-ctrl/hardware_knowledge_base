@@ -522,6 +522,19 @@ function calculateMicrostrip() {
         <p><strong>有效介电常数 εᵣᵉᶠᶠ：</strong>${erEff.toFixed(3)}</p>
         <p><strong>W/H比值：</strong>${wh.toFixed(3)}</p>
     `;
+
+    // Add export/copy/share buttons
+    const params = {
+        '走线宽度': width + ' mm',
+        '介质厚度': height + ' mm',
+        '介电常数': er
+    };
+    const results = {
+        '特征阻抗 Z₀': z0.toFixed(2) + ' Ω',
+        '有效介电常数 εᵣᵉᶠᶠ': erEff.toFixed(3),
+        'W/H比值': wh.toFixed(3)
+    };
+    addResultActions('impedanceResult', '微带线阻抗计算器', params, results);
     document.getElementById('impedanceResult').style.display = 'block';
 }
 
@@ -642,6 +655,22 @@ function calculateTraceWidth() {
         <p class="note">注：建议预留20-30%余量，实际宽度应大于计算值</p>
     `;
     document.getElementById('traceWidthResult').style.display = 'block';
+
+    // Add export/copy/share buttons
+    const params = {
+        '电流': current + ' A',
+        '温升': tempRise + ' °C',
+        '铜箔厚度': copperWeight + ' oz',
+        '层类型': isInternal ? '内层' : '外层'
+    };
+    const results = {
+        '最小走线宽度': widthMm.toFixed(3) + ' mm (' + widthMil.toFixed(1) + ' mil)',
+        '铜箔厚度': thickness.toFixed(2) + ' mil',
+        '横截面积': area.toFixed(2) + ' mil²',
+        '压降(100mm)': (voltageDrop * 1000).toFixed(2) + ' mV',
+        '功耗(100mm)': (voltageDrop * current * 1000).toFixed(2) + ' mW'
+    };
+    addResultActions('traceWidthResult', '走线宽度计算器', params, results);
 }
 
 /**
@@ -712,6 +741,37 @@ function designLCFilter() {
 
     document.getElementById('filterResult').innerHTML = resultHTML;
     document.getElementById('filterResult').style.display = 'block';
+
+    // Add export/copy/share buttons
+    const params = {
+        '截止频率': (cutoffFreq / 1e3).toFixed(2) + ' kHz',
+        '系统阻抗': impedance + ' Ω',
+        '滤波器类型': filterType === 'lowpass' ? '低通' : filterType === 'highpass' ? '高通' : '带通'
+    };
+    let results = {};
+    if (filterType === 'lowpass') {
+        results = {
+            '电感值 L': (L * 1e6).toFixed(2) + ' μH',
+            '电容值 C': (C * 1e6).toFixed(2) + ' μF',
+            '标准电感': selectStandardValue(L * 1e6, 'inductor') + ' μH',
+            '标准电容': selectStandardValue(C * 1e6, 'capacitor') + ' μF'
+        };
+    } else if (filterType === 'highpass') {
+        results = {
+            '电容值 C': (C * 1e9).toFixed(2) + ' nF',
+            '电感值 L': (L * 1e6).toFixed(2) + ' μH'
+        };
+    } else {
+        const bandwidth = cutoffFreq * 0.1;
+        const Q = cutoffFreq / bandwidth;
+        results = {
+            '电感值 L': (L * 1e6).toFixed(2) + ' μH',
+            '电容值 C': (C * 1e9).toFixed(2) + ' nF',
+            '品质因数 Q': Q.toFixed(1),
+            '带宽(-3dB)': (bandwidth / 1e3).toFixed(2) + ' kHz'
+        };
+    }
+    addResultActions('filterResult', 'LC滤波器设计工具', params, results);
 }
 
 /**
@@ -792,6 +852,20 @@ function calculateViaInductance() {
         <p class="recommendation"><i class="fas fa-lightbulb"></i> 建议：高速信号尽量减少过孔数量，必要时使用盲孔或埋孔</p>
     `;
     document.getElementById('viaResult').style.display = 'block';
+
+    // Add export/copy/share buttons
+    const params = {
+        '过孔直径': viaDiameter + ' mm',
+        '过孔长度': viaLength + ' mm',
+        '焊盘直径': padDiameter + ' mm'
+    };
+    const results = {
+        '过孔电感': L.toFixed(3) + ' nH',
+        '阻抗 @ 100MHz': z1.toFixed(3) + ' Ω',
+        '阻抗 @ 1GHz': z2.toFixed(3) + ' Ω',
+        '阻抗 @ 10GHz': z3.toFixed(3) + ' Ω'
+    };
+    addResultActions('viaResult', 'Via电感计算器', params, results);
 }
 
 /* ============================================================================
@@ -1433,5 +1507,195 @@ function initKnowledgeGraph() {
             this.style.transform = 'scale(1)';
         });
     });
+}
+
+/* ============================================================================
+   EXPORT, COPY AND SHARE FUNCTIONALITY
+   ============================================================================ */
+
+/**
+ * Export calculation results to text file
+ */
+function exportResults(calculatorName, params, results) {
+    const timestamp = new Date().toLocaleString('zh-CN');
+    const lines = [
+        '硬件工程师知识库 - ' + calculatorName,
+        '计算时间：' + timestamp,
+        '源地址：https://27834853-ctrl.github.io/hardware_knowledge_base/',
+        '',
+        '='.repeat(60),
+        '',
+        '输入参数：'
+    ];
+
+    for (const key in params) {
+        lines.push('  ' + key + ': ' + params[key]);
+    }
+
+    lines.push('');
+    lines.push('计算结果：');
+
+    for (const key in results) {
+        lines.push('  ' + key + ': ' + results[key]);
+    }
+
+    lines.push('');
+    lines.push('='.repeat(60));
+    lines.push('');
+    lines.push('本计算结果仅供参考，实际设计请遵循相关标准规范。');
+    lines.push('参考标准：IEEE、IPC-2221、IPC-2141等');
+
+    const content = lines.join('\n');
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = calculatorName + '_' + Date.now() + '.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+
+    showNotification('导出成功！文件已保存到下载目录。', 'success');
+}
+
+/**
+ * Copy results to clipboard
+ */
+function copyResults(calculatorName, params, results) {
+    const lines = [calculatorName, '', '输入参数：'];
+
+    for (const key in params) {
+        lines.push(key + ': ' + params[key]);
+    }
+
+    lines.push('');
+    lines.push('计算结果：');
+
+    for (const key in results) {
+        lines.push(key + ': ' + results[key]);
+    }
+
+    const content = lines.join('\n');
+
+    navigator.clipboard.writeText(content).then(function() {
+        showNotification('已复制到剪贴板！', 'success');
+    }).catch(function() {
+        showNotification('复制失败，请手动复制。', 'error');
+    });
+}
+
+/**
+ * Share calculation results
+ */
+function shareResults(calculatorType, params) {
+    const baseUrl = window.location.origin + window.location.pathname;
+    const urlParams = new URLSearchParams();
+    urlParams.set('calc', calculatorType);
+
+    for (const key in params) {
+        urlParams.set(key, params[key]);
+    }
+
+    const shareUrl = baseUrl + '?' + urlParams.toString();
+
+    navigator.clipboard.writeText(shareUrl).then(function() {
+        showNotification('分享链接已复制到剪贴板！', 'success');
+    }).catch(function() {
+        prompt('分享链接：', shareUrl);
+    });
+}
+
+/**
+ * Show notification message
+ */
+function showNotification(message, type) {
+    type = type || 'info';
+
+    let container = document.getElementById('notificationContainer');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'notificationContainer';
+        container.style.cssText = 'position: fixed; top: 80px; right: 20px; z-index: 10000; max-width: 350px;';
+        document.body.appendChild(container);
+    }
+
+    const notification = document.createElement('div');
+    notification.className = 'notification notification-' + type;
+
+    const bgColor = type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3';
+    notification.style.cssText = 'background: white; padding: 15px 20px; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 12px; animation: slideIn 0.3s ease; border-left: 4px solid ' + bgColor + ';';
+
+    const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+    const iconColor = bgColor;
+
+    notification.innerHTML = '<span style="font-size: 1.2rem; font-weight: bold; color: ' + iconColor + ';">' + icon + '</span><span style="flex: 1; color: #333;">' + message + '</span>';
+
+    container.appendChild(notification);
+
+    setTimeout(function() {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(function() {
+            if (container.contains(notification)) {
+                container.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+/**
+ * Add action buttons to result area
+ */
+function addResultActions(resultElementId, calculatorName, params, results) {
+    const resultElement = document.getElementById(resultElementId);
+    if (!resultElement) return;
+
+    let actionsDiv = resultElement.querySelector('.result-actions');
+    if (!actionsDiv) {
+        actionsDiv = document.createElement('div');
+        actionsDiv.className = 'result-actions';
+        actionsDiv.style.cssText = 'display: flex; gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0; flex-wrap: wrap;';
+        resultElement.appendChild(actionsDiv);
+    }
+
+    actionsDiv.innerHTML = '';
+
+    // Export button
+    const exportBtn = document.createElement('button');
+    exportBtn.className = 'btn-action';
+    exportBtn.innerHTML = '<i class="fas fa-download"></i> 导出';
+    exportBtn.style.cssText = 'padding: 8px 16px; background: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem; transition: background 0.3s; display: flex; align-items: center; gap: 6px;';
+    exportBtn.onmouseover = function() { this.style.background = '#45a049'; };
+    exportBtn.onmouseout = function() { this.style.background = '#4CAF50'; };
+    exportBtn.onclick = function() { exportResults(calculatorName, params, results); };
+    actionsDiv.appendChild(exportBtn);
+
+    // Copy button
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'btn-action';
+    copyBtn.innerHTML = '<i class="fas fa-copy"></i> 复制';
+    copyBtn.style.cssText = 'padding: 8px 16px; background: #2196F3; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem; transition: background 0.3s; display: flex; align-items: center; gap: 6px;';
+    copyBtn.onmouseover = function() { this.style.background = '#1976D2'; };
+    copyBtn.onmouseout = function() { this.style.background = '#2196F3'; };
+    copyBtn.onclick = function() { copyResults(calculatorName, params, results); };
+    actionsDiv.appendChild(copyBtn);
+
+    // Share button
+    const shareBtn = document.createElement('button');
+    shareBtn.className = 'btn-action';
+    shareBtn.innerHTML = '<i class="fas fa-share-alt"></i> 分享';
+    shareBtn.style.cssText = 'padding: 8px 16px; background: #FF9800; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem; transition: background 0.3s; display: flex; align-items: center; gap: 6px;';
+    shareBtn.onmouseover = function() { this.style.background = '#F57C00'; };
+    shareBtn.onmouseout = function() { this.style.background = '#FF9800'; };
+    shareBtn.onclick = function() { shareResults('impedance', params); };
+    actionsDiv.appendChild(shareBtn);
+}
+
+// Add animation styles
+if (!document.getElementById('notificationStyles')) {
+    const style = document.createElement('style');
+    style.id = 'notificationStyles';
+    style.textContent = '@keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } } @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(400px); opacity: 0; } }';
+    document.head.appendChild(style);
 }
 

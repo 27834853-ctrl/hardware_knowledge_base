@@ -3,8 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="免费开放的硬件工程师知识库 - 从基础到进阶的完整硬件知识体系">
-    <meta name="keywords" content="硬件设计,PCB设计,电路分析,信号完整性,EMC,FPGA,高速电路">
+    <meta name="description" content="免费开放的硬件工程师知识库 - 从基础到进阶的完整硬件知识体系，包含60+工程公式、4个专业计算器、25+实际案例，涵盖PCB设计、信号完整性、高速电路、FPGA、RF等领域">
+    <meta name="keywords" content="硬件设计,PCB设计,电路分析,信号完整性,EMC,FPGA,高速电路,DDR设计,RF电路,阻抗计算,走线宽度计算器,电源管理,通信接口,I2C,SPI,UART">
+    <meta name="author" content="27834853-ctrl">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="zh-CN">
+    <meta name="revisit-after" content="7 days">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://27834853-ctrl.github.io/hardware_knowledge_base/">
+    <meta property="og:title" content="硬件工程师知识库 - 完整的硬件设计学习平台">
+    <meta property="og:description" content="免费开放的硬件工程师知识库，包含60+工程公式、4个专业计算器、25+实际案例，从基础到高级的完整学习路径">
+    <meta property="og:image" content="https://27834853-ctrl.github.io/hardware_knowledge_base/preview.png">
+    <meta property="og:site_name" content="硬件工程师知识库">
+    <meta property="og:locale" content="zh_CN">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://27834853-ctrl.github.io/hardware_knowledge_base/">
+    <meta name="twitter:title" content="硬件工程师知识库 - 完整的硬件设计学习平台">
+    <meta name="twitter:description" content="免费开放的硬件工程师知识库，包含60+工程公式、4个专业计算器、25+实际案例">
+    <meta name="twitter:image" content="https://27834853-ctrl.github.io/hardware_knowledge_base/preview.png">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://27834853-ctrl.github.io/hardware_knowledge_base/">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>">
+
     <title>硬件工程师知识库 - Hardware Engineer Knowledge Base</title>
     <link rel="stylesheet" href="styles.css">
     <!-- MathJax for LaTeX -->
@@ -199,6 +226,187 @@
                     <path d="M 100 300 L 120 300 L 130 280 L 140 300 L 160 300 L 170 280 L 180 300 L 200 300"
                           stroke="#00BCD4" stroke-width="2" fill="none" class="waveform"/>
                 </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- 学习路径指引 -->
+    <section class="learning-path">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-route"></i> 学习路径指引
+            </h2>
+            <p class="section-subtitle">根据您的基础选择合适的学习路径，循序渐进掌握硬件设计</p>
+
+            <div class="path-options">
+                <!-- 完全新手路径 -->
+                <div class="path-card beginner">
+                    <div class="path-header">
+                        <div class="path-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <h3>完全新手</h3>
+                        <span class="path-badge">推荐起点</span>
+                    </div>
+                    <p class="path-description">我刚开始学习硬件，需要从基础概念开始</p>
+                    <div class="path-timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker">1</div>
+                            <div class="timeline-content">
+                                <h4><a href="#basic-components">电子元件基础</a></h4>
+                                <p>学习电阻、电容、电感的基本原理</p>
+                                <span class="duration"><i class="fas fa-clock"></i> 2-3天</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker">2</div>
+                            <div class="timeline-content">
+                                <h4><a href="#basic-circuit">电路分析入门</a></h4>
+                                <p>掌握基尔霍夫定律和基本电路分析</p>
+                                <span class="duration"><i class="fas fa-clock"></i> 3-4天</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker">3</div>
+                            <div class="timeline-content">
+                                <h4><a href="#tools">使用在线计算器</a></h4>
+                                <p>实践RC时间常数、分压电路计算</p>
+                                <span class="duration"><i class="fas fa-clock"></i> 1-2天</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="path-footer">
+                        <a href="#basic" class="btn btn-primary">
+                            <i class="fas fa-play-circle"></i> 开始学习
+                        </a>
+                        <span class="estimated-time">预计 1-2周</span>
+                    </div>
+                </div>
+
+                <!-- 有基础进阶路径 -->
+                <div class="path-card intermediate-path">
+                    <div class="path-header">
+                        <div class="path-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h3>有基础进阶</h3>
+                        <span class="path-badge">快速提升</span>
+                    </div>
+                    <p class="path-description">我已经掌握基础知识，想学习PCB设计和信号完整性</p>
+                    <div class="path-timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker">1</div>
+                            <div class="timeline-content">
+                                <h4><a href="#pcb-design">PCB设计流程</a></h4>
+                                <p>从原理图到PCB布局的完整流程</p>
+                                <span class="duration"><i class="fas fa-clock"></i> 5-7天</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker">2</div>
+                            <div class="timeline-content">
+                                <h4><a href="#signal-integrity">信号完整性</a></h4>
+                                <p>理解反射、串扰、阻抗匹配</p>
+                                <span class="duration"><i class="fas fa-clock"></i> 4-5天</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker">3</div>
+                            <div class="timeline-content">
+                                <h4><a href="#power-management">电源管理</a></h4>
+                                <p>LDO和DC-DC电路设计</p>
+                                <span class="duration"><i class="fas fa-clock"></i> 3-4天</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="path-footer">
+                        <a href="#intermediate" class="btn btn-primary">
+                            <i class="fas fa-play-circle"></i> 开始学习
+                        </a>
+                        <span class="estimated-time">预计 2-3周</span>
+                    </div>
+                </div>
+
+                <!-- 高级工程师路径 -->
+                <div class="path-card advanced-path">
+                    <div class="path-header">
+                        <div class="path-icon">
+                            <i class="fas fa-tree"></i>
+                        </div>
+                        <h3>高级工程师</h3>
+                        <span class="path-badge">深度专研</span>
+                    </div>
+                    <p class="path-description">我想深入学习高速设计、FPGA和RF电路</p>
+                    <div class="path-timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker">1</div>
+                            <div class="timeline-content">
+                                <h4><a href="#high-speed-design">DDR/高速设计</a></h4>
+                                <p>DDR4内存接口和眼图分析</p>
+                                <span class="duration"><i class="fas fa-clock"></i> 7-10天</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker">2</div>
+                            <div class="timeline-content">
+                                <h4><a href="#fpga-design">FPGA系统设计</a></h4>
+                                <p>时钟树、电源设计、高速接口</p>
+                                <span class="duration"><i class="fas fa-clock"></i> 10-14天</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker">3</div>
+                            <div class="timeline-content">
+                                <h4><a href="#rf-design">RF射频电路</a></h4>
+                                <p>S参数、阻抗匹配网络设计</p>
+                                <span class="duration"><i class="fas fa-clock"></i> 7-10天</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="path-footer">
+                        <a href="#advanced" class="btn btn-primary">
+                            <i class="fas fa-play-circle"></i> 开始学习
+                        </a>
+                        <span class="estimated-time">预计 1-2月</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 学习建议 -->
+            <div class="learning-tips">
+                <h3><i class="fas fa-lightbulb"></i> 学习建议</h3>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <i class="fas fa-book-reader"></i>
+                        <h4>循序渐进</h4>
+                        <p>不要跳过基础知识，打好基础很重要</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-hands-helping"></i>
+                        <h4>动手实践</h4>
+                        <p>使用在线计算器验证理论知识</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-project-diagram"></i>
+                        <h4>参考案例</h4>
+                        <p>学习文中的25+实际工程案例</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-search"></i>
+                        <h4>善用搜索</h4>
+                        <p>按 Ctrl+K 快速查找任何知识点</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-bookmark"></i>
+                        <h4>标记重点</h4>
+                        <p>收藏重要的公式和设计规范</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>持续学习</h4>
+                        <p>硬件设计是实践性学科，需要不断积累</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
