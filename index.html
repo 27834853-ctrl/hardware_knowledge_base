@@ -34,12 +34,69 @@
                     <li><a href="#intermediate" class="nav-link"><i class="fas fa-layer-group"></i> 中级篇</a></li>
                     <li><a href="#advanced" class="nav-link"><i class="fas fa-rocket"></i> 高级篇</a></li>
                     <li><a href="#tools" class="nav-link"><i class="fas fa-calculator"></i> 工具箱</a></li>
-                    <li><a href="#cases" class="nav-link"><i class="fas fa-folder-open"></i> 案例库</a></li>
                     <li><a href="#knowledge-graph" class="nav-link"><i class="fas fa-project-diagram"></i> 知识图谱</a></li>
                 </ul>
+                <div class="nav-actions">
+                    <button class="search-toggle" id="searchToggle" aria-label="Search" title="搜索 (Ctrl+K)">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="切换主题">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
             </div>
         </nav>
     </header>
+
+    <!-- 搜索弹窗 -->
+    <div class="search-modal" id="searchModal">
+        <div class="search-modal-content">
+            <div class="search-header">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text"
+                           id="searchInput"
+                           placeholder="搜索知识库... (支持公式、元件、电路、标准等)"
+                           autocomplete="off"
+                           autofocus>
+                    <button class="search-clear" id="searchClear" style="display:none;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <button class="search-close" id="searchClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="search-shortcuts">
+                <div class="shortcut-tip">
+                    <kbd>↑</kbd><kbd>↓</kbd> 导航
+                </div>
+                <div class="shortcut-tip">
+                    <kbd>Enter</kbd> 选择
+                </div>
+                <div class="shortcut-tip">
+                    <kbd>Esc</kbd> 关闭
+                </div>
+            </div>
+            <div class="search-results" id="searchResults">
+                <div class="search-empty">
+                    <i class="fas fa-lightbulb"></i>
+                    <p>输入关键词开始搜索</p>
+                    <div class="search-suggestions">
+                        <h5>热门搜索：</h5>
+                        <div class="suggestion-tags">
+                            <span class="suggestion-tag" onclick="performSearch('阻抗计算')">阻抗计算</span>
+                            <span class="suggestion-tag" onclick="performSearch('PCB设计')">PCB设计</span>
+                            <span class="suggestion-tag" onclick="performSearch('DDR4')">DDR4</span>
+                            <span class="suggestion-tag" onclick="performSearch('信号完整性')">信号完整性</span>
+                            <span class="suggestion-tag" onclick="performSearch('LDO')">LDO</span>
+                            <span class="suggestion-tag" onclick="performSearch('去耦电容')">去耦电容</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Hero区域 -->
     <section id="home" class="hero">

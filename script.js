@@ -40,6 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initTOC();
     initToolButtons();
     initInteractiveExamples();
+    initSearch();        // NEW: Search functionality
+    initTheme();         // NEW: Dark mode support
+    initKnowledgeGraph(); // NEW: Interactive knowledge graph
 
     // Set initial active section
     updateActiveNavLink();
@@ -1201,6 +1204,169 @@ if ('serviceWorker' in navigator) {
 }
 
 /* ============================================================================
+   SEARCH FUNCTIONALITY
+   ============================================================================ */
+
+let searchIndex = [];
+
+function initSearchIndex() {
+    const articles = document.querySelectorAll('.knowledge-article, .calculator-section');
+    articles.forEach(article => {
+        const id = article.id || '';
+        const title = article.querySelector('h3, h4')?.textContent || '';
+        const content = article.textContent || '';
+        const keywords = new Set();
+        title.split(/\s+/).forEach(word => {
+            if (word.length > 1) keywords.add(word.toLowerCase());
+        });
+        content.match(/[\u4e00-\u9fa5a-zA-Z0-9]+/g)?.forEach(word => {
+            if (word.length > 2) keywords.add(word.toLowerCase());
+        });
+        searchIndex.push({
+            id, title,
+            content: content.substring(0, 200),
+            keywords: Array.from(keywords),
+            element: article
+        });
+    });
+}
+
+function performSearch(query) {
+    if (!query || query.trim().length === 0) {
+        showEmptyState();
+        return;
+    }
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.value = query;
+    const normalizedQuery = query.toLowerCase().trim();
+    const results = [];
+    searchIndex.forEach(item => {
+        let score = 0;
+        if (item.title.toLowerCase().includes(normalizedQuery)) score += 100;
+        item.keywords.forEach(keyword => {
+            if (keyword.includes(normalizedQuery) || normalizedQuery.includes(keyword)) score += 10;
+        });
+        if (item.content.toLowerCase().includes(normalizedQuery)) score += 5;
+        if (score > 0) results.push({ ...item, score });
+    });
+    results.sort((a, b) => b.score - a.score);
+    displaySearchResults(results, normalizedQuery);
+}
+
+function displaySearchResults(results, query) {
+    const resultsContainer = document.getElementById('searchResults');
+    if (results.length === 0) {
+        resultsContainer.innerHTML = `<div class="search-no-results"><i class="fas fa-search-minus"></i><p>未找到包含 "${query}" 的内容</p></div>`;
+        return;
+    }
+    let html = `<div class="search-results-list"><div class="search-count">找到 ${results.length} 个相关结果</div>`;
+    results.slice(0, 10).forEach((result, index) => {
+        const snippet = result.content.replace(/<[^>]*>/g, '');
+        html += `<div class="search-result-item" data-index="${index}" onclick="navigateToResult('${result.id}')">
+            <div class="result-icon"><i class="fas fa-file-alt"></i></div>
+            <div class="result-content">
+                <div class="result-title">${result.title}</div>
+                <div class="result-snippet">${snippet}...</div>
+            </div>
+            <div class="result-arrow"><i class="fas fa-chevron-right"></i></div>
+        </div>`;
+    });
+    html += `</div>`;
+    resultsContainer.innerHTML = html;
+}
+
+function navigateToResult(id) {
+    closeSearchModal();
+    setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            element.style.backgroundColor = 'rgba(33, 150, 243, 0.1)';
+            setTimeout(() => { element.style.backgroundColor = ''; }, 2000);
+        }
+    }, 300);
+}
+
+function showEmptyState() {
+    const resultsContainer = document.getElementById('searchResults');
+    resultsContainer.innerHTML = `<div class="search-empty"><i class="fas fa-lightbulb"></i><p>输入关键词开始搜索</p>
+        <div class="search-suggestions"><h5>热门搜索：</h5><div class="suggestion-tags">
+            <span class="suggestion-tag" onclick="performSearch('阻抗计算')">阻抗计算</span>
+            <span class="suggestion-tag" onclick="performSearch('PCB设计')">PCB设计</span>
+            <span class="suggestion-tag" onclick="performSearch('DDR4')">DDR4</span>
+        </div></div></div>`;
+}
+
+function openSearchModal() {
+    const modal = document.getElementById('searchModal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => { document.getElementById('searchInput')?.focus(); }, 100);
+    }
+}
+
+function closeSearchModal() {
+    const modal = document.getElementById('searchModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        const input = document.getElementById('searchInput');
+        if (input) { input.value = ''; showEmptyState(); }
+    }
+}
+
+function initSearch() {
+    document.getElementById('searchToggle')?.addEventListener('click', openSearchModal);
+    document.getElementById('searchClose')?.addEventListener('click', closeSearchModal);
+    document.getElementById('searchModal')?.addEventListener('click', (e) => {
+        if (e.target.id === 'searchModal') closeSearchModal();
+    });
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        let searchTimeout;
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value;
+            const clearBtn = document.getElementById('searchClear');
+            if (clearBtn) clearBtn.style.display = query ? 'flex' : 'none';
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => performSearch(query), 300);
+        });
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeSearchModal();
+        });
+    }
+    document.getElementById('searchClear')?.addEventListener('click', () => {
+        const input = document.getElementById('searchInput');
+        if (input) { input.value = ''; input.focus(); showEmptyState(); }
+    });
+    document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            openSearchModal();
+        }
+    });
+    initSearchIndex();
+}
+
+function toggleTheme() {
+    const html = document.documentElement;
+    const newTheme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    const icon = document.querySelector('#themeToggle i');
+    if (icon) icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+}
+
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
+    const icon = document.querySelector('#themeToggle i');
+    if (icon) icon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+}
+
+/* ============================================================================
    MATHJAX CONFIGURATION (for LaTeX rendering)
    ============================================================================ */
 window.MathJax = {
@@ -1233,3 +1399,39 @@ console.log(
 /* ============================================================================
    END OF SCRIPT
    ============================================================================ */
+/* ============================================================================
+   INTERACTIVE KNOWLEDGE GRAPH
+   ============================================================================ */
+
+function initKnowledgeGraph() {
+    const graphNodes = document.querySelectorAll('.graph-node, .graph-subnode');
+    graphNodes.forEach(node => {
+        node.style.cursor = 'pointer';
+        node.addEventListener('click', function() {
+            const text = this.querySelector('text')?.textContent;
+            const sectionMap = {
+                '基础篇': 'basic',
+                '中级篇': 'intermediate',
+                '高级篇': 'advanced',
+                '元件': 'basic-components',
+                'PCB': 'pcb-design',
+                '信号完整性': 'signal-integrity',
+                'DDR': 'high-speed-design',
+                'FPGA': 'fpga-design',
+                'RF': 'rf-design'
+            };
+            const targetId = sectionMap[text];
+            if (targetId) {
+                document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+        node.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.1)';
+            this.style.transition = 'transform 0.3s';
+        });
+        node.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+}
+
