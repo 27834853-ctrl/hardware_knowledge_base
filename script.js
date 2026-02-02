@@ -1699,3 +1699,171 @@ if (!document.getElementById('notificationStyles')) {
     document.head.appendChild(style);
 }
 
+// ==================== 高速接口深度内容显示函数 (v2.5.2) ====================
+
+/**
+ * 显示高速接口深度内容
+ * @param {string} contentKey - 内容key (对应highSpeedDeepDive中的属性名)
+ */
+function showHighSpeedContent(contentKey) {
+    // 检查highSpeedDeepDive对象是否已加载
+    if (typeof highSpeedDeepDive === 'undefined') {
+        console.error('highSpeedDeepDive模块未加载');
+        showNotification('内容加载失败，请刷新页面重试', 'error');
+        return;
+    }
+
+    // 获取内容
+    const content = highSpeedDeepDive[contentKey];
+    if (!content) {
+        console.error('未找到内容:', contentKey);
+        showNotification('未找到对应内容', 'error');
+        return;
+    }
+
+    // 获取显示区域
+    const contentArea = document.getElementById('highSpeedDeepDiveContent');
+    if (!contentArea) {
+        console.error('未找到内容显示区域');
+        return;
+    }
+
+    // 显示内容
+    contentArea.innerHTML = content.content;
+
+    // 平滑滚动到内容区域
+    contentArea.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest'
+    });
+
+    // 重新渲染MathJax公式
+    if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+        MathJax.typesetPromise([contentArea]).catch((err) => {
+            console.warn('MathJax渲染失败:', err);
+        });
+    }
+
+    // 添加fade-in动画
+    contentArea.style.animation = 'none';
+    setTimeout(() => {
+        contentArea.style.animation = 'fadeIn 0.5s ease-in';
+    }, 10);
+
+    // 显示通知
+    showNotification(`已加载: ${content.title}`, 'success');
+
+    // 记录学习进度（如果学习追踪系统已启用）
+    if (typeof updateLearningProgress === 'function') {
+        updateLearningProgress('high-speed-deep-dive', contentKey);
+    }
+
+    // Google Analytics事件追踪（如果已配置）
+    if (typeof gtag === 'function') {
+        gtag('event', 'view_high_speed_content', {
+            'content_type': contentKey,
+            'content_title': content.title
+        });
+    }
+}
+
+/**
+ * 显示通知消息
+ * @param {string} message - 消息内容
+ * @param {string} type - 消息类型 (success/error/info/warning)
+ */
+function showNotification(message, type = 'info') {
+    // 创建通知元素
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.style.cssText = `
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        padding: 16px 24px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 10000;
+        animation: slideIn 0.3s ease-out;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        max-width: 400px;
+    `;
+
+    // 根据类型设置颜色
+    const colors = {
+        success: '#4caf50',
+        error: '#f44336',
+        warning: '#ff9800',
+        info: '#2196f3'
+    };
+    const icons = {
+        success: 'fa-check-circle',
+        error: 'fa-exclamation-circle',
+        warning: 'fa-exclamation-triangle',
+        info: 'fa-info-circle'
+    };
+
+    notification.style.borderLeft = `4px solid ${colors[type] || colors.info}`;
+
+    // 添加图标和消息
+    notification.innerHTML = `
+        <i class="fas ${icons[type] || icons.info}" style="color: ${colors[type] || colors.info}; font-size: 20px;"></i>
+        <span style="color: #333; font-size: 14px;">${message}</span>
+        <button onclick="this.parentElement.remove()" style="background: none; border: none; cursor: pointer; color: #999; font-size: 18px; padding: 0; margin-left: auto;">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+
+    // 添加到页面
+    document.body.appendChild(notification);
+
+    // 3秒后自动消失
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease-in';
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 3000);
+}
+
+// ==================== 阻抗快速计算器 ====================
+function calculateImpedance() {
+    try {
+        const w = parseFloat(document.getElementById('traceWidth').value);
+        const h = parseFloat(document.getElementById('dielectricHeight').value);
+        const er = parseFloat(document.getElementById('dielectricConstant').value);
+
+        // 输入验证
+        if (isNaN(w) || isNaN(h) || isNaN(er) || w <= 0 || h <= 0 || er <= 0) {
+            showNotification('请输入有效的正数值', 'error');
+            return;
+        }
+
+        // 微带线阻抗计算 (IPC-2141A公式)
+        const wOverH = w / h;
+        let Z0_microstrip;
+
+        if (wOverH <= 1) {
+            Z0_microstrip = (60 / Math.sqrt(er)) * Math.log((8 * h / w) + (w / (4 * h)));
+        } else {
+            Z0_microstrip = (120 * Math.PI) / (Math.sqrt(er) * (wOverH + 1.393 + 0.667 * Math.log(wOverH + 1.444)));
+        }
+
+        // 带状线阻抗计算 (对称带状线)
+        const Z0_stripline = (60 / Math.sqrt(er)) * Math.log((4 * h) / (0.67 * Math.PI * w));
+
+        // 显示结果
+        document.getElementById('microstripZ').textContent = Z0_microstrip.toFixed(2);
+        document.getElementById('striplineZ').textContent = Z0_stripline.toFixed(2);
+        document.getElementById('impedanceResult').style.display = 'block';
+
+        showNotification('阻抗计算完成！', 'success');
+    } catch (error) {
+        console.error('阻抗计算错误:', error);
+        showNotification('计算过程出现错误，请检查输入值', 'error');
+    }
+}
+

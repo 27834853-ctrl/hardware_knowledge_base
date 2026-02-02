@@ -44,6 +44,11 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="print.css">
     <link rel="stylesheet" href="mobile.css">
+    <!-- v2.5.0 Enhanced Styles -->
+    <link rel="stylesheet" href="enhanced-styles.css">
+    <link rel="stylesheet" href="ui-components.css">
+    <!-- v2.5.1 Accessibility Styles -->
+    <link rel="stylesheet" href="accessibility-styles.css">
     <!-- MathJax for LaTeX -->
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <!-- Font Awesome Icons -->
@@ -609,7 +614,7 @@
                                         <h5><i class="fas fa-book"></i> 参考资料</h5>
                                         <ul>
                                             <li><a href="https://www.ieee.org/" target="_blank"><i class="fas fa-external-link-alt"></i> IEEE Std 315-1975 - 电路符号标准</a></li>
-                                            <li><a href="#" target="_blank"><i class="fas fa-file-pdf"></i> 村田电阻选型指南</a></li>
+                                            <li><a href="https://www.murata.com/products/resistor" target="_blank"><i class="fas fa-file-pdf"></i> 村田电阻选型指南</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -1260,13 +1265,14 @@
                                                 <line x1="50" y1="35" x2="180" y2="35" stroke="#333" stroke-width="3"/>
                                                 <rect x="180" y="20" width="40" height="30" fill="#4caf50" stroke="#2e7d32" stroke-width="2"/>
                                                 <text x="200" y="40" text-anchor="middle" font-size="10" fill="#fff">Load</text>
-                                                <!-- 上拉电阻 -->
+                                                <!-- VCC电源 (最上方) -->
+                                                <text x="200" y="-10" text-anchor="middle" font-size="10" font-weight="bold" fill="#f44336">VCC</text>
+                                                <line x1="200" y1="-5" x2="200" y2="0" stroke="#f44336" stroke-width="2"/>
+                                                <!-- 上拉电阻 R1 -->
                                                 <rect x="193" y="0" width="15" height="15" fill="none" stroke="#795548" stroke-width="2"/>
-                                                <line x1="200" y1="-5" x2="200" y2="0" stroke="#333" stroke-width="2"/>
                                                 <line x1="200" y1="15" x2="200" y2="20" stroke="#333" stroke-width="2"/>
-                                                <text x="175" y="10" font-size="9" fill="#f44336">VCC</text>
                                                 <text x="215" y="10" font-size="9" fill="#666">R1</text>
-                                                <!-- 下拉电阻 -->
+                                                <!-- 下拉电阻 R2 -->
                                                 <rect x="193" y="55" width="15" height="15" fill="none" stroke="#795548" stroke-width="2"/>
                                                 <line x1="200" y1="50" x2="200" y2="55" stroke="#333" stroke-width="2"/>
                                                 <line x1="200" y1="70" x2="200" y2="80" stroke="#333" stroke-width="2"/>
@@ -1328,10 +1334,10 @@
                                 <div class="reference-box">
                                     <h5><i class="fas fa-book"></i> 推荐参考资料</h5>
                                     <ul>
-                                        <li><a href="#" target="_blank"><i class="fas fa-file-pdf"></i> Howard Johnson - "High-Speed Signal Propagation"</a></li>
-                                        <li><a href="#" target="_blank"><i class="fas fa-file-pdf"></i> Eric Bogatin - "Signal and Power Integrity Simplified"</a></li>
-                                        <li><a href="#" target="_blank"><i class="fas fa-external-link-alt"></i> Altera AN 315 - "Guidelines for PCB Design"</a></li>
-                                        <li><a href="#" target="_blank"><i class="fas fa-external-link-alt"></i> TI - "High-Speed Interface Layout Guidelines"</a></li>
+                                        <li><a href="https://www.signalintegrityjournal.com/" target="_blank"><i class="fas fa-file-pdf"></i> Howard Johnson - "High-Speed Signal Propagation"</a></li>
+                                        <li><a href="https://www.bogatin.com/" target="_blank"><i class="fas fa-file-pdf"></i> Eric Bogatin - "Signal and Power Integrity Simplified"</a></li>
+                                        <li><a href="https://www.intel.com/content/www/us/en/programmable/documentation/application-notes.html" target="_blank"><i class="fas fa-external-link-alt"></i> Intel (Altera) AN 315 - "Guidelines for PCB Design"</a></li>
+                                        <li><a href="https://www.ti.com/lit/an/slva959/slva959.pdf" target="_blank"><i class="fas fa-external-link-alt"></i> TI - "High-Speed Interface Layout Guidelines"</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -4171,6 +4177,79 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47
                                 </div>
                             </div>
                         </article>
+
+                        <!-- 高速接口深度技术 (v2.5.2) -->
+                        <article id="high-speed-deep-dive" class="knowledge-article">
+                            <div class="article-header">
+                                <h3><i class="fas fa-microscope"></i> 高速接口深度技术详解</h3>
+                                <div class="article-meta">
+                                    <span class="difficulty expert"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> 专家级</span>
+                                    <span class="read-time"><i class="fas fa-clock"></i> 120分钟</span>
+                                    <span class="updated"><i class="fas fa-calendar"></i> 2026-01-30</span>
+                                </div>
+                            </div>
+
+                            <div class="article-content">
+                                <div class="intro-box">
+                                    <h4><i class="fas fa-info-circle"></i> 关于本章节</h4>
+                                    <p>本章节提供<strong>6大高速接口</strong>的深度技术知识，涵盖<strong>测试方法、设计规范、预加重、均衡技术</strong>等专业内容。</p>
+                                    <p>内容包括: <strong>PCIe</strong>, <strong>USB</strong>, <strong>MIPI</strong>, <strong>LPDDR5X</strong>, <strong>DisplayPort</strong>, <strong>HDMI</strong></p>
+                                </div>
+
+                                <!-- 高速接口导航卡片 -->
+                                <div class="high-speed-nav-grid">
+                                    <div class="hs-nav-card" onclick="showHighSpeedContent('pcieTestingDeepDive')">
+                                        <div class="hs-card-icon"><i class="fas fa-microscope"></i></div>
+                                        <h4>PCIe深度测试</h4>
+                                        <p>TX/RX测试、LTSSM、均衡、PCB设计</p>
+                                        <span class="hs-badge">Gen 1-5</span>
+                                    </div>
+
+                                    <div class="hs-nav-card" onclick="showHighSpeedContent('usbTestingDeepDive')">
+                                        <div class="hs-card-icon"><i class="fab fa-usb"></i></div>
+                                        <h4>USB深度测试</h4>
+                                        <p>USB 3.2/4、PD 3.1、Type-C、Alt Mode</p>
+                                        <span class="hs-badge">USB4 40G</span>
+                                    </div>
+
+                                    <div class="hs-nav-card" onclick="showHighSpeedContent('mipiTestingDeepDive')">
+                                        <div class="hs-card-icon"><i class="fas fa-camera"></i></div>
+                                        <h4>MIPI深度测试</h4>
+                                        <p>D-PHY/C-PHY、CSI-2调试、LP/HS模式</p>
+                                        <span class="hs-badge">2.5 Gbps</span>
+                                    </div>
+
+                                    <div class="hs-nav-card" onclick="showHighSpeedContent('lpddr5xTestingDeepDive')">
+                                        <div class="hs-card-icon"><i class="fas fa-memory"></i></div>
+                                        <h4>LPDDR5X训练</h4>
+                                        <p>CA/WL/Read训练、WCK2CK、Link ECC</p>
+                                        <span class="hs-badge">8533 MT/s</span>
+                                    </div>
+
+                                    <div class="hs-nav-card" onclick="showHighSpeedContent('displayPortTestingDeepDive')">
+                                        <div class="hs-card-icon"><i class="fas fa-desktop"></i></div>
+                                        <h4>DisplayPort测试</h4>
+                                        <p>Link Training、HBR3、DSC、PSR、MST</p>
+                                        <span class="hs-badge">DP 2.0</span>
+                                    </div>
+
+                                    <div class="hs-nav-card" onclick="showHighSpeedContent('hdmiTestingDeepDive')">
+                                        <div class="hs-card-icon"><i class="fas fa-tv"></i></div>
+                                        <h4>HDMI深度测试</h4>
+                                        <p>HDMI 2.1 FRL、HDCP 2.3、EMI合规</p>
+                                        <span class="hs-badge">48 Gbps</span>
+                                    </div>
+                                </div>
+
+                                <!-- 深度内容显示区域 -->
+                                <div id="highSpeedDeepDiveContent" class="high-speed-content-area">
+                                    <div class="content-placeholder">
+                                        <i class="fas fa-hand-pointer"></i>
+                                        <p>请点击上方卡片查看详细内容</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
                     </section>
 
                     <!-- 工具箱部分 -->
@@ -4576,6 +4655,21 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47
     <script src="advanced-content-final.js"></script>
     <script src="search-optimizer.js"></script>
     <script src="performance-monitor.js"></script>
+    <!-- v2.5.0 Enhancement Modules -->
+    <script src="content-enhancement.js"></script>
+    <script src="advanced-calculators.js"></script>
+    <script src="high-speed-interfaces.js"></script>
+    <script src="high-speed-advanced.js"></script>
+    <script src="ui-enhancements.js"></script>
+    <script src="performance-optimization.js"></script>
+    <script src="seo-enhancements.js"></script>
+    <!-- v2.5.1 Enhancement Modules -->
+    <script src="accessibility-enhancements.js"></script>
+    <script src="additional-calculators.js"></script>
+    <!-- End v2.5.1 Modules -->
+    <!-- v2.5.2 High-Speed Deep Dive Module -->
+    <script src="high-speed-deep-dive.js"></script>
+    <!-- End v2.5.2 Modules -->
     <script src="sw-register.js"></script>
     <script src="share.js"></script>
     <script src="analytics.js"></script>
