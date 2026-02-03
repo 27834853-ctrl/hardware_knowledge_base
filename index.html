@@ -574,9 +574,9 @@
                                     <li class="toc-item-group">
                                         <a href="#high-speed" class="toc-group-link"><i class="fas fa-bolt"></i> 高速接口设计</a>
                                         <ul class="toc-sub-items">
-                                            <li><a href="#high-speed"><i class="fas fa-memory"></i> DDR4 设计要点</a></li>
-                                            <li><a href="#high-speed"><i class="fas fa-memory"></i> DDR5 新特性</a></li>
-                                            <li><a href="#high-speed"><i class="fas fa-wave-square"></i> DDR 信号完整性</a></li>
+                                            <li><a href="#high-speed"><i class="fas fa-memory"></i> 1. DDR4/LPDDR 设计要点</a></li>
+                                            <li><a href="#high-speed"><i class="fas fa-wave-square"></i> 2. 高速差分对设计</a></li>
+                                            <li><a href="#high-speed"><i class="fas fa-eye"></i> 3. 眼图分析</a></li>
                                         </ul>
                                     </li>
                                     <li class="toc-item-group">
@@ -2751,7 +2751,7 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
                             </div>
 
                             <div class="article-content">
-                                <h4>1. DDR4/LPDDR设计要点</h4>
+                                <h4 id="ddr4-design">1. DDR4/LPDDR设计要点</h4>
 
                                 <div class="content-block">
                                     <p><strong>DDR4特点：</strong>高速(1600-3200 MT/s)，低功耗(1.2V)，高密度，严格时序要求。</p>
@@ -2894,7 +2894,7 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
 
                                 <div class="separator"></div>
 
-                                <h4>2. 高速差分对设计</h4>
+                                <h4 id="high-speed-differential">2. 高速差分对设计</h4>
 
                                 <div class="content-block">
                                     <p><strong>差分信号优势：</strong>抗干扰强，EMI低，支持更高速率，是高速接口的标准方案。</p>
@@ -3031,7 +3031,7 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
 
                                 <div class="separator"></div>
 
-                                <h4>3. 时序分析与眼图测试</h4>
+                                <h4 id="eye-diagram">3. 时序分析与眼图测试</h4>
 
                                 <div class="content-block">
                                     <div class="info-grid">
