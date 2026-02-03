@@ -173,25 +173,23 @@ function toggleTocSection(header) {
     const items = section.querySelector('.toc-items');
     const isActive = section.classList.contains('active');
 
-    // Close all other sections (optional - remove if you want multiple open)
-    // const allSections = document.querySelectorAll('.toc-section');
-    // allSections.forEach(s => {
-    //     if (s !== section) {
-    //         s.classList.remove('active');
-    //         s.querySelector('.toc-items').classList.remove('active');
-    //     }
-    // });
+    console.log(`[TOC Section] 切换: ${header.querySelector('span').textContent} ${isActive ? '→ 收起' : '→ 展开'}`);
 
-    // Toggle current section
+    // 可选：关闭其他一级目录（手风琴效果）
+    // 如果不需要，可以注释掉下面的代码
+    /*
+    const allSections = document.querySelectorAll('.toc-section');
+    allSections.forEach(s => {
+        if (s !== section && s.classList.contains('active')) {
+            s.classList.remove('active');
+            s.querySelector('.toc-items').classList.remove('active');
+        }
+    });
+    */
+
+    // 切换当前一级目录的展开/收起状态
     section.classList.toggle('active');
     items.classList.toggle('active');
-
-    // Animate the expansion
-    if (!isActive) {
-        items.style.maxHeight = items.scrollHeight + 'px';
-    } else {
-        items.style.maxHeight = '0';
-    }
 }
 
 /**
@@ -199,20 +197,17 @@ function toggleTocSection(header) {
  */
 function initTOC() {
     const tocHeaders = document.querySelectorAll('.toc-header');
+    console.log(`[TOC] 初始化目录，找到 ${tocHeaders.length} 个一级目录`);
 
-    tocHeaders.forEach(header => {
-        // Event listener added via onclick in HTML
-        // This is a fallback/enhancement
+    // 检查哪些一级目录默认展开
+    tocHeaders.forEach((header, index) => {
         const section = header.parentElement;
-        const items = section.querySelector('.toc-items');
-
-        // Set initial max-height for active sections
-        if (items.classList.contains('active')) {
-            items.style.maxHeight = items.scrollHeight + 'px';
-        }
+        const sectionName = header.querySelector('span').textContent;
+        const isActive = section.classList.contains('active');
+        console.log(`[TOC] ${index + 1}. ${sectionName} - ${isActive ? '默认展开' : '默认折叠'}`);
     });
 
-    console.log('TOC initialized');
+    console.log('[TOC] ✅ 目录初始化完成');
 }
 
 /* ============================================================================

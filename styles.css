@@ -787,17 +787,17 @@ strong {
     transform: rotate(180deg);
 }
 
+/* 一级目录：默认折叠 */
 .toc-items {
+    display: none; /* ✅ 默认完全隐藏 */
     list-style: none;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height var(--transition-base);
 }
 
+/* 一级目录：展开状态 */
 .toc-items.active {
-    max-height: 2000px; /* 增加到2000px，支持更多内容 */
+    display: block; /* ✅ 展开时显示 */
     margin-top: var(--spacing-sm);
-    overflow-y: auto; /* 如果内容过多，显示滚动条 */
+    animation: slideDown 0.2s ease-out; /* 与子项使用相同动画 */
 }
 
 .toc-items li {
