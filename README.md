@@ -452,6 +452,38 @@ hardware_knowledge_base/
 
 如果这个项目对你有帮助，请给一个 ⭐ Star！
 
+---
+
+## 📚 文档导航
+
+### 核心文档
+- **[README.md](README.md)** - 项目主文档（当前文档）
+- **[CHANGELOG.md](CHANGELOG.md)** - 版本变更记录
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - 贡献指南
+- **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)** - 行为准则
+- **[CONTRIBUTORS.md](CONTRIBUTORS.md)** - 贡献者列表
+
+### 用户指南
+- **[本地部署指南.md](本地部署指南.md)** - 本地运行和测试说明 ⭐ 推荐
+- **[导航使用说明.md](导航使用说明.md)** - 网站导航功能使用
+- **[故障排除指南.md](故障排除指南.md)** - 常见问题诊断和解决
+- **[快速开始_v2.6.3.md](快速开始_v2.6.3.md)** - 快速入门指南
+
+### 版本文档
+- **[v2.6.3_完成报告.md](v2.6.3_完成报告.md)** - v2.6.3 版本详细报告
+- **[VERSION_2.6.0_RELEASE.md](VERSION_2.6.0_RELEASE.md)** - v2.6.0 里程碑发布说明
+
+### 技术文档
+- **[修复说明_showHighSpeedContent.md](修复说明_showHighSpeedContent.md)** - 高速接口内容加载修复
+
+### GitHub 模板
+- **[.github/ISSUE_TEMPLATE/bug_report.md](.github/ISSUE_TEMPLATE/bug_report.md)** - Bug 报告模板
+- **[.github/ISSUE_TEMPLATE/content_suggestion.md](.github/ISSUE_TEMPLATE/content_suggestion.md)** - 内容建议模板
+- **[.github/ISSUE_TEMPLATE/feature_request.md](.github/ISSUE_TEMPLATE/feature_request.md)** - 功能请求模板
+- **[.github/pull_request_template.md](.github/pull_request_template.md)** - Pull Request 模板
+
+---
+
 [⬆ 回到顶部](#硬件工程师知识库--hardware-engineer-knowledge-base)
 
 ---
