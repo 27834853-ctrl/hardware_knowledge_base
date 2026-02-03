@@ -844,6 +844,8 @@ strong {
     transition: all var(--transition-fast);
     font-size: var(--font-size-base);
     background: var(--bg-secondary);
+    cursor: pointer; /* 添加点击指示 */
+    position: relative; /* 为伪元素定位 */
 }
 
 .toc-group-link:hover {
@@ -859,6 +861,22 @@ strong {
     text-align: center;
 }
 
+/* 添加展开/收起箭头指示器 */
+.toc-group-link::after {
+    content: '\f078'; /* Font Awesome chevron-down */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    margin-left: auto;
+    font-size: 0.8em;
+    transition: transform var(--transition-fast);
+    color: var(--text-secondary);
+}
+
+.toc-item-group.expanded .toc-group-link::after {
+    transform: rotate(180deg); /* 展开时箭头向上 */
+    color: var(--primary-color);
+}
+
 .toc-sub-items {
     list-style: none;
     margin: var(--spacing-xs) 0 0 0;
@@ -869,7 +887,7 @@ strong {
     opacity: 0;
 }
 
-.toc-item-group:hover .toc-sub-items,
+/* 移除hover触发，只保留点击展开 */
 .toc-item-group.expanded .toc-sub-items {
     max-height: 1500px; /* 增加到1500px，确保所有子项可见 */
     opacity: 1;

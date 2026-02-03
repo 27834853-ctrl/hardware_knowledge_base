@@ -2015,3 +2015,61 @@ if (document.readyState === 'loading') {
     initSmartTOCNavigation();
 }
 
+/* ============================================================================
+   TOC GROUP CLICK TOGGLE (目录分组点击展开/收起)
+   移除hover触发，改为点击触发
+   ============================================================================ */
+
+/**
+ * 初始化目录分组点击切换功能
+ */
+function initTOCGroupToggle() {
+    console.log('[TOC Toggle] 初始化目录分组点击切换...');
+
+    // 获取所有分组链接
+    const groupLinks = document.querySelectorAll('.toc-group-link');
+    console.log(`[TOC Toggle] 找到 ${groupLinks.length} 个分组链接`);
+
+    groupLinks.forEach((link, index) => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault(); // 阻止默认跳转
+            e.stopPropagation(); // 阻止事件冒泡
+
+            // 获取父级 .toc-item-group
+            const parentGroup = this.closest('.toc-item-group');
+            if (!parentGroup) {
+                console.warn(`[TOC Toggle] 链接 ${index + 1} 没有找到父级 .toc-item-group`);
+                return;
+            }
+
+            // 切换展开/收起状态
+            const wasExpanded = parentGroup.classList.contains('expanded');
+            parentGroup.classList.toggle('expanded');
+
+            const groupTitle = this.textContent.trim();
+            console.log(`[TOC Toggle] "${groupTitle}" ${wasExpanded ? '收起' : '展开'}`);
+
+            // 可选：关闭其他展开的分组（手风琴效果）
+            // 如果不需要手风琴效果，注释掉下面的代码
+            /*
+            const allGroups = document.querySelectorAll('.toc-item-group');
+            allGroups.forEach(group => {
+                if (group !== parentGroup) {
+                    group.classList.remove('expanded');
+                }
+            });
+            */
+        });
+    });
+
+    console.log('[TOC Toggle] ✅ 目录分组点击切换初始化完成');
+}
+
+// 在 DOMContentLoaded 后初始化
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTOCGroupToggle);
+} else {
+    // DOMContentLoaded 已经触发
+    initTOCGroupToggle();
+}
+
