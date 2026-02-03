@@ -2636,14 +2636,12 @@
                                                 <li>更新率: 1Hz (每秒1次)</li>
                                             </ul>
                                             <p><strong>NMEA数据格式示例：</strong></p>
-                                            <code style="display: block; background: #f5f5f5; padding: 10px; font-size: 10px;">
-$GPRMC,081836,A,3751.65,S,14507.36,E,000.0,360.0,130998,011.3,E*62<br>
-$GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47
-                                            </code>
+                                            <pre style="display: block; background: #f5f5f5; padding: 10px; font-size: 11px; overflow-x: auto; border-left: 3px solid #4caf50;">$GPRMC,081836,A,3751.65,S,14507.36,E,000.0,360.0,130998,011.3,E*62
+$GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
                                             <p><strong>解析要点：</strong></p>
                                             <ul>
-                                                <li>$GPRMC: 推荐最小定位信息</li>
-                                                <li>$GPGGA: 定位数据</li>
+                                                <li><code>$GPRMC</code>: 推荐最小定位信息 (Recommended Minimum)</li>
+                                                <li><code>$GPGGA</code>: 全球定位系统固定数据 (Global Positioning System Fix Data)</li>
                                                 <li>使用DMA接收，避免丢数据</li>
                                                 <li>NMEA库解析或自己解析</li>
                                                 <li>校验和验证(XOR校验)</li>
