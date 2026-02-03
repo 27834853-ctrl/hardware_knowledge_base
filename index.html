@@ -874,7 +874,7 @@
                                         <p><strong>定律内容：</strong>在电路中任一节点，流入节点的电流之和等于流出节点的电流之和。</p>
                                         <div class="formula-box">
                                             $$\sum I_{in} = \sum I_{out}$$
-                                            $$或：\sum I = 0$$
+                                            $$\text{或：}\sum I = 0$$
                                         </div>
                                     </div>
 
@@ -1046,8 +1046,8 @@
                                     <div class="formula-box">
                                         <div class="formula-title"><i class="fas fa-calculator"></i> 串扰计算</div>
                                         <div class="formula-content">
-                                            $$K_f = \frac{C_m}{C_m + C_g} \quad (前向串扰系数)$$
-                                            $$K_b = \frac{C_m}{C_m + C_g} + \frac{L_m}{L_s + L_m} \quad (后向串扰系数)$$
+                                            $$K_f = \frac{C_m}{C_m + C_g} \quad \text{(前向串扰系数)}$$
+                                            $$K_b = \frac{C_m}{C_m + C_g} + \frac{L_m}{L_s + L_m} \quad \text{(后向串扰系数)}$$
                                             $$V_{crosstalk} = K \times V_{aggressor}$$
                                             <p class="formula-desc">
                                                 C<sub>m</sub>为互容，C<sub>g</sub>为地耦合电容<br>
@@ -1120,7 +1120,7 @@
                                         <div class="formula-title"><i class="fas fa-calculator"></i> 地弹电压</div>
                                         <div class="formula-content">
                                             $$V_{bounce} = L \times \frac{dI}{dt}$$
-                                            $$L_{via} \approx 0.2 \times h \quad (nH, h为板厚mm)$$
+                                            $$L_{via} \approx 0.2 \times h \quad \text{(nH, h为板厚mm)}$$
                                             <p class="formula-desc">
                                                 L为地路径电感，dI/dt为电流变化率<br>
                                                 典型值：1.6mm板厚单过孔约0.3nH<br>
@@ -2062,7 +2062,7 @@
                                             <h5><i class="fas fa-arrow-down"></i> Buck降压转换器</h5>
                                             <div class="formula-box">
                                                 <div class="formula-content">
-                                                    $$D = \frac{V_{out}}{V_{in}} \quad (占空比)$$
+                                                    $$D = \frac{V_{out}}{V_{in}} \quad \text{(占空比)}$$
                                                     $$L = \frac{(V_{in} - V_{out}) \times V_{out}}{V_{in} \times \Delta I_L \times f_{sw}}$$
                                                     $$C_{out} = \frac{\Delta I_L}{8 \times f_{sw} \times \Delta V_{out}}$$
                                                     <p class="formula-desc" style="font-size: 10px;">
@@ -3468,7 +3468,7 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
                                     <div class="formula-box">
                                         <div class="formula-title"><i class="fas fa-calculator"></i> 时钟抖动与相位噪声</div>
                                         <div class="formula-content">
-                                            $$Jitter_{rms} = \frac{1}{2\pi f_c} \sqrt{2 \times 10^{L(f)/10}}$$
+                                            $$Jitter_{rms} = \frac{1}{2\pi f_{c}} \sqrt{2 \times 10^{L(f)/10}}$$
                                             $$SNR_{max} = -20 \log_{10}(2\pi f_{signal} \times t_{jitter})$$
                                             <p class="formula-desc">
                                                 L(f)为相位噪声(dBc/Hz)，f<sub>c</sub>为载波频率<br>
