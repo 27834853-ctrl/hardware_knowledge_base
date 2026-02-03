@@ -1874,3 +1874,144 @@ function calculateImpedance() {
     }
 }
 
+/* ============================================================================
+   SMART TOC NAVIGATION (智能目录导航)
+   修复子导航链接精确跳转问题
+   ============================================================================ */
+
+/**
+ * 初始化智能TOC导航
+ * 为子导航链接添加智能滚动功能，自动查找匹配的标题
+ */
+function initSmartTOCNavigation() {
+    console.log('[Smart TOC] 初始化智能导航...');
+
+    // 获取所有子导航链接
+    const subNavLinks = document.querySelectorAll('.toc-sub-items a');
+    console.log(`[Smart TOC] 找到 ${subNavLinks.length} 个子导航链接`);
+
+    let fixedCount = 0;
+
+    subNavLinks.forEach((link, index) => {
+        // 跳过已经有 onclick 的链接（高速接口深度链接）
+        if (link.hasAttribute('onclick')) {
+            console.log(`[Smart TOC] 跳过链接 ${index + 1}: ${link.textContent.trim()} (已有 onclick)`);
+            return;
+        }
+
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            const linkText = this.textContent.trim();
+
+            console.log(`[Smart TOC] 点击链接: "${linkText}" → ${href}`);
+
+            // 跳转到父section
+            const targetSection = document.querySelector(href);
+            if (!targetSection) {
+                console.warn(`[Smart TOC] 未找到目标section: ${href}`);
+                return;
+            }
+
+            e.preventDefault();
+
+            // 尝试在section内查找匹配的标题
+            const headings = targetSection.querySelectorAll('h3, h4, h5');
+            let matchingHeading = null;
+            let bestMatchScore = 0;
+
+            for (const heading of headings) {
+                const headingText = heading.textContent.trim();
+
+                // 精确匹配
+                if (headingText === linkText) {
+                    matchingHeading = heading;
+                    console.log(`[Smart TOC] 找到精确匹配: "${headingText}"`);
+                    break;
+                }
+
+                // 部分匹配（计算相似度）
+                const similarity = calculateTextSimilarity(linkText, headingText);
+                if (similarity > bestMatchScore && similarity > 0.5) {
+                    bestMatchScore = similarity;
+                    matchingHeading = heading;
+                }
+            }
+
+            if (matchingHeading) {
+                console.log(`[Smart TOC] 滚动到匹配标题: "${matchingHeading.textContent.trim()}" (相似度: ${bestMatchScore.toFixed(2)})`);
+            } else {
+                console.log(`[Smart TOC] 未找到匹配标题，滚动到父section: ${href}`);
+            }
+
+            // 滚动到匹配的标题或父section
+            const scrollTarget = matchingHeading || targetSection;
+            const offsetTop = scrollTarget.offsetTop - CONFIG.scrollOffset;
+
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
+            });
+
+            // 添加高亮效果
+            highlightTarget(scrollTarget);
+        });
+
+        fixedCount++;
+    });
+
+    console.log(`[Smart TOC] ✅ 已为 ${fixedCount} 个子导航链接添加智能滚动`);
+}
+
+/**
+ * 计算两个文本的相似度
+ * @param {string} text1 - 文本1
+ * @param {string} text2 - 文本2
+ * @returns {number} - 相似度 (0-1)
+ */
+function calculateTextSimilarity(text1, text2) {
+    // 移除特殊字符，转小写
+    const clean1 = text1.replace(/[^\w\s\u4e00-\u9fa5]/g, '').toLowerCase();
+    const clean2 = text2.replace(/[^\w\s\u4e00-\u9fa5]/g, '').toLowerCase();
+
+    // 包含关系检查
+    if (clean2.includes(clean1) || clean1.includes(clean2)) {
+        return 0.8;
+    }
+
+    // 计算共同单词数
+    const words1 = clean1.split(/\s+/);
+    const words2 = clean2.split(/\s+/);
+    const commonWords = words1.filter(word => clean2.includes(word));
+
+    if (commonWords.length === 0) return 0;
+
+    return commonWords.length / Math.max(words1.length, words2.length);
+}
+
+/**
+ * 高亮滚动目标
+ * @param {HTMLElement} element - 要高亮的元素
+ */
+function highlightTarget(element) {
+    // 移除之前的高亮
+    document.querySelectorAll('.toc-highlight').forEach(el => {
+        el.classList.remove('toc-highlight');
+    });
+
+    // 添加高亮效果
+    element.classList.add('toc-highlight');
+
+    // 2秒后移除高亮
+    setTimeout(() => {
+        element.classList.remove('toc-highlight');
+    }, 2000);
+}
+
+// 在 DOMContentLoaded 后初始化
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSmartTOCNavigation);
+} else {
+    // DOMContentLoaded 已经触发
+    initSmartTOCNavigation();
+}
+

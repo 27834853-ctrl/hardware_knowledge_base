@@ -3030,3 +3030,101 @@ strong {
         gap: 20px;
     }
 }
+
+/* ============================================================================
+   SMART TOC NAVIGATION - HIGHLIGHT EFFECT
+   智能目录导航 - 高亮效果
+   ============================================================================ */
+
+/* 目标标题高亮动画 */
+.toc-highlight {
+    animation: tocHighlight 2s ease-in-out;
+    position: relative;
+}
+
+/* 高亮动画：闪烁背景 */
+@keyframes tocHighlight {
+    0% {
+        background-color: transparent;
+        transform: scale(1);
+    }
+    10% {
+        background-color: rgba(33, 150, 243, 0.15);
+        transform: scale(1.02);
+    }
+    20% {
+        background-color: rgba(33, 150, 243, 0.25);
+    }
+    40% {
+        background-color: rgba(33, 150, 243, 0.15);
+    }
+    60% {
+        background-color: rgba(33, 150, 243, 0.10);
+    }
+    100% {
+        background-color: transparent;
+        transform: scale(1);
+    }
+}
+
+/* 左侧边框指示器 */
+.toc-highlight::before {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--primary-color), var(--accent-color));
+    border-radius: 2px;
+    animation: highlightBorder 2s ease-in-out;
+}
+
+@keyframes highlightBorder {
+    0%, 100% {
+        opacity: 0;
+        transform: scaleY(0);
+    }
+    10% {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+    90% {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .toc-highlight::before {
+        left: -10px;
+        width: 3px;
+    }
+}
+
+/* 暗色模式适配 */
+[data-theme="dark"] .toc-highlight {
+    animation: tocHighlightDark 2s ease-in-out;
+}
+
+@keyframes tocHighlightDark {
+    0% {
+        background-color: transparent;
+    }
+    10% {
+        background-color: rgba(33, 150, 243, 0.25);
+    }
+    20% {
+        background-color: rgba(33, 150, 243, 0.35);
+    }
+    40% {
+        background-color: rgba(33, 150, 243, 0.25);
+    }
+    60% {
+        background-color: rgba(33, 150, 243, 0.15);
+    }
+    100% {
+        background-color: transparent;
+    }
+}
