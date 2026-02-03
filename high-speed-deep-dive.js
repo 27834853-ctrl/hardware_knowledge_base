@@ -7003,3 +7003,8 @@ if (typeof module !== 'undefined' && module.exports) {
 }
 
 console.log('�?高速接口深度测试技术模块已加载 v2.6.3 (完整�? PCIe + MIPI + DP/HDMI 深度扩展)');
+
+// 浏览器环境：挂载到 window 对象
+if (typeof window !== 'undefined') {
+    window.highSpeedDeepDive = highSpeedDeepDive;
+}
