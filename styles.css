@@ -229,6 +229,8 @@ strong {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: var(--spacing-md); /* 添加间距 */
+    flex-wrap: nowrap; /* 防止换行 */
 }
 
 /* Navigation Brand */
@@ -240,14 +242,19 @@ strong {
     font-weight: 700;
     color: var(--primary-color);
     cursor: pointer;
+    flex-shrink: 0; /* 防止收缩 */
 }
 
 .nav-brand i {
     font-size: 1.5em;
+    flex-shrink: 0; /* 防止图标收缩 */
 }
 
 .brand-title {
     color: var(--text-primary);
+    white-space: nowrap; /* 防止文字换行 */
+    overflow: hidden; /* 隐藏溢出 */
+    text-overflow: ellipsis; /* 使用省略号 */
 }
 
 .brand-subtitle {
@@ -255,6 +262,9 @@ strong {
     color: var(--text-secondary);
     font-weight: 400;
     margin-left: var(--spacing-sm);
+    white-space: nowrap; /* 防止文字换行 */
+    overflow: hidden; /* 隐藏溢出 */
+    text-overflow: ellipsis; /* 使用省略号 */
 }
 
 /* Navigation Toggle (Mobile) */
