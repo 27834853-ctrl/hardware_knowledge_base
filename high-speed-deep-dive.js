@@ -2939,7 +2939,7 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
 
                         <div class="formula-box">
                             <p><strong>UI (Unit Interval)计算</strong>:</p>
-                            <p>$UI = \frac{1}{Data\\ Rate}$</p>
+                            <p>$UI = \frac{1}{Data\ Rate}$</p>
                             <p>示例: 2.5 Gbps → UI = 400 ps</p>
                         </div>
                     </div>
@@ -3111,7 +3111,7 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
                             <p><strong>示例</strong>:</p>
                             <ul>
                                 <li>4K60, RAW10, 4-lane:</li>
-                                <li>$BW = \frac{3840 \times 2160 \times 60 \times 10}{4 \times 0.8} = 1.55\\ Gbps/lane$</li>
+                                <li>$BW = \frac{3840 \times 2160 \times 60 \times 10}{4 \times 0.8} = 1.55\ Gbps/lane$</li>
                                 <li>选择2.5 Gbps D-PHY ✓</li>
                             </ul>
                         </div>
@@ -3175,7 +3175,7 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
 
                         <div class="formula-box">
                             <p><strong>数据率计算</strong>:</p>
-                            <p>$Data\\ Rate = Symbol\\ Rate \times \log_2(7) = Symbol\\ Rate \times 2.28$</p>
+                            <p>$Data\ Rate = Symbol\ Rate \times \log_2(7) = Symbol\ Rate \times 2.28$</p>
                             <p>示例: 2.5 Gsps → 5.7 Gbps</p>
                         </div>
                     </div>
