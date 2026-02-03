@@ -2072,9 +2072,6 @@ function initTOCGroupToggle() {
 
     groupLinks.forEach((link, index) => {
         link.addEventListener('click', function(e) {
-            e.preventDefault(); // 阻止默认跳转
-            e.stopPropagation(); // 阻止事件冒泡
-
             // 获取父级 .toc-item-group
             const parentGroup = this.closest('.toc-item-group');
             if (!parentGroup) {
@@ -2082,23 +2079,34 @@ function initTOCGroupToggle() {
                 return;
             }
 
-            // 切换展开/收起状态
             const wasExpanded = parentGroup.classList.contains('expanded');
-            parentGroup.classList.toggle('expanded');
-
             const groupTitle = this.textContent.trim();
-            console.log(`[TOC Toggle] "${groupTitle}" ${wasExpanded ? '收起' : '展开'}`);
+            const href = this.getAttribute('href');
 
-            // 可选：关闭其他展开的分组（手风琴效果）
-            // 如果不需要手风琴效果，注释掉下面的代码
-            /*
-            const allGroups = document.querySelectorAll('.toc-item-group');
-            allGroups.forEach(group => {
-                if (group !== parentGroup) {
-                    group.classList.remove('expanded');
-                }
-            });
-            */
+            if (wasExpanded) {
+                // 如果已经展开，第二次点击：跳转到section
+                console.log(`[TOC Toggle] "${groupTitle}" 已展开，跳转到 ${href}`);
+                // 允许默认跳转行为
+                // 不调用 preventDefault()
+            } else {
+                // 如果未展开，第一次点击：只展开不跳转
+                e.preventDefault(); // 阻止默认跳转
+                e.stopPropagation(); // 阻止事件冒泡
+
+                parentGroup.classList.add('expanded');
+                console.log(`[TOC Toggle] "${groupTitle}" 展开子项`);
+
+                // 可选：关闭其他展开的分组（手风琴效果）
+                // 如果不需要手风琴效果，注释掉下面的代码
+                /*
+                const allGroups = document.querySelectorAll('.toc-item-group');
+                allGroups.forEach(group => {
+                    if (group !== parentGroup) {
+                        group.classList.remove('expanded');
+                    }
+                });
+                */
+            }
         });
     });
 

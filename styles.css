@@ -863,35 +863,52 @@ strong {
 
 /* 添加展开/收起箭头指示器 */
 .toc-group-link::after {
-    content: '\f078'; /* Font Awesome chevron-down */
+    content: '\f078'; /* Font Awesome chevron-down (折叠状态) */
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     margin-left: auto;
     font-size: 0.8em;
-    transition: transform var(--transition-fast);
+    transition: all var(--transition-fast);
     color: var(--text-secondary);
 }
 
+/* 展开状态：改变图标提示可以点击跳转 */
 .toc-item-group.expanded .toc-group-link::after {
-    transform: rotate(180deg); /* 展开时箭头向上 */
+    content: '\f35d'; /* Font Awesome arrow-circle-right (展开状态，提示可跳转) */
     color: var(--primary-color);
+    transform: scale(1.1);
 }
 
+/* 展开状态下hover效果：强调可跳转 */
+.toc-item-group.expanded .toc-group-link:hover::after {
+    color: var(--primary-dark);
+    transform: scale(1.2) translateX(3px);
+}
+
+/* 子项默认折叠（完全隐藏） */
 .toc-sub-items {
+    display: none; /* ✅ 默认完全隐藏，无动画 */
     list-style: none;
     margin: var(--spacing-xs) 0 0 0;
     padding-left: 32px;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height var(--transition-base), opacity var(--transition-fast);
-    opacity: 0;
 }
 
-/* 移除hover触发，只保留点击展开 */
+/* 点击展开后才显示子项 */
 .toc-item-group.expanded .toc-sub-items {
-    max-height: 1500px; /* 增加到1500px，确保所有子项可见 */
-    opacity: 1;
-    overflow-y: auto; /* 内容过多时显示滚动条 */
+    display: block; /* ✅ 展开时显示 */
+    animation: slideDown 0.2s ease-out; /* 添加简单的下滑动画 */
+}
+
+/* 下滑动画 */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .toc-sub-items li {
