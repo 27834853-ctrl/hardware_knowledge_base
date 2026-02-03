@@ -367,7 +367,7 @@ const highSpeedDeepDive = {
 
                         <div class="formula-box">
                             <p><strong>BER计算</strong>:</p>
-                            <p>$BER = \frac{错误比特数}{总比特数}$</p>
+                            <p>$BER = \frac{\text{错误比特数}}{\text{总比特数}}$</p>
                             <p>置信度计算:</p>
                             <p>对于BER = 10⁻¹², 需要测试 > 10¹³ bits 才能有统计意义</p>
                         </div>
@@ -398,8 +398,8 @@ const highSpeedDeepDive = {
                             <p>$H_{CTLE}(f) = \frac{1 + j \cdot \frac{f}{f_{z}}}{1 + j \cdot \frac{f}{f_{p}}}$</p>
                             <p>其中:</p>
                             <ul>
-                                <li>$f_z$: 零点频率(boost起始)</li>
-                                <li>$f_p$: 极点频率(boost终止)</li>
+                                <li>$f_{z}$: 零点频率(boost起始)</li>
+                                <li>$f_{p}$: 极点频率(boost终止)</li>
                                 <li>增益: $20\log_{10}\left(\frac{f_p}{f_z}\right)$ dB</li>
                             </ul>
                         </div>
@@ -782,7 +782,7 @@ const highSpeedDeepDive = {
 
                         <div class="formula-box">
                             <p><strong>过孔寄生电感估算</strong>:</p>
-                            <p>$L_{via} \approx 5.08 \times h \times [\ln(\frac{4h}{d}) + 1]$ (nH)</p>
+                            <p>$L_{via} \approx 5.08 \times h \times \left[\ln\left(\frac{4h}{d}\right) + 1\right] \text{ (nH)}$</p>
                             <p>其中:</p>
                             <ul>
                                 <li>$h$: 过孔长度 (mm)</li>
@@ -1930,11 +1930,11 @@ FEC 校验: 14 bits (parity)
         <p><strong>模拟前端均衡器</strong>，在 ADC 之前补偿高频损耗：</p>
         <div class="formula-box">
             <p><strong>CTLE 传递函数</strong>:</p>
-            <p>$H_{CTLE}(f) = A_{DC} \times \left(1 + \frac{f}{f_z}\right) / \left(1 + \frac{f}{f_p}\right)$</p>
+            <p>$H_{CTLE}(f) = A_{DC} \times \left(1 + \frac{f}{f_{z}}\right) / \left(1 + \frac{f}{f_{p}}\right)$</p>
             <p>其中:</p>
             <ul>
-                <li>$f_z$: 零点频率 (Boost 起点，典型 5 GHz)</li>
-                <li>$f_p$: 极点频率 (Boost 终点，典型 20 GHz)</li>
+                <li>$f_{z}$: 零点频率 (Boost 起点，典型 5 GHz)</li>
+                <li>$f_{p}$: 极点频率 (Boost 终点，典型 20 GHz)</li>
                 <li>$A_{DC}$: 直流增益</li>
             </ul>
             <p><strong>效果</strong>: 高频提升 +12 ~ +24 dB</p>
