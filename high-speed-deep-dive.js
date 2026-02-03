@@ -395,12 +395,12 @@ const highSpeedDeepDive = {
 
                         <h5>CTLE频率响应</h5>
                         <div class="formula-box">
-                            <p>$H_{CTLE}(f) = \frac{1 + j\frac{f}{f_{z}}}{1 + j\frac{f}{f_{p}}}$</p>
+                            <p>$H_{CTLE}(f) = \frac{1 + j \cdot \frac{f}{f_{z}}}{1 + j \cdot \frac{f}{f_{p}}}$</p>
                             <p>其中:</p>
                             <ul>
                                 <li>$f_z$: 零点频率(boost起始)</li>
                                 <li>$f_p$: 极点频率(boost终止)</li>
-                                <li>增益: $20\log_{10}(\frac{f_p}{f_z})$ dB</li>
+                                <li>增益: $20\log_{10}\left(\frac{f_p}{f_z}\right)$ dB</li>
                             </ul>
                         </div>
 
@@ -1767,9 +1767,9 @@ COM | Link# | Lane# | N_FTS | Data Rate | ... | Symbol 15
 
         <div class="formula-box">
             <p><strong>眼高计算</strong>:</p>
-            <p>$Eye_{height,PAM4} = \frac{V_{swing}}{3} = \frac{1.2V}{3} = 0.4V$</p>
+            <p>$Eye_{height,\text{PAM4}} = \frac{V_{swing}}{3} = \frac{1.2V}{3} = 0.4V$</p>
             <p><strong>相比 NRZ</strong>:</p>
-            <p>$Eye_{height,NRZ} = V_{swing} = 1.2V$</p>
+            <p>$Eye_{height,\text{NRZ}} = V_{swing} = 1.2V$</p>
             <p><strong>眼高损失</strong>: PAM4 眼高仅为 NRZ 的 <strong>33.3%</strong> (损失 9.5 dB)</p>
         </div>
 
