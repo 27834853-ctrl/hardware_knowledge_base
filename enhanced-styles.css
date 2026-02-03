@@ -1,0 +1,953 @@
+/**
+ * 增强样式表 - Enhanced Styles
+ * 版本：1.0.0
+ * 用于改善用户体验和视觉效果
+ */
+
+/* ==================== 全局增强 ==================== */
+
+:root {
+    /* 新增颜色变量 */
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-success: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    --gradient-warning: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --gradient-info: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+
+    /* 阴影层级 */
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+    --shadow-lg: 0 10px 20px rgba(0,0,0,0.10);
+    --shadow-xl: 0 20px 40px rgba(0,0,0,0.15);
+
+    /* 动画时长 */
+    --transition-fast: 0.15s;
+    --transition-base: 0.3s;
+    --transition-slow: 0.5s;
+
+    /* 新增间距 */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+}
+
+/* ==================== 高级计算器样式 ==================== */
+
+.advanced-calculator {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    box-shadow: var(--shadow-lg);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+    border: 1px solid var(--border-color);
+}
+
+.advanced-calculator:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+}
+
+.calc-header {
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.calc-header h3 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.calc-header h3 i {
+    font-size: 1.8rem;
+}
+
+.calc-description {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.calc-body {
+    display: grid;
+    gap: var(--spacing-md);
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.input-group label {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+.input-group input,
+.input-group select {
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all var(--transition-fast);
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.1);
+}
+
+.input-group small {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+.calc-btn {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+}
+
+.calc-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.calc-btn:active {
+    transform: translateY(0);
+}
+
+.calc-btn i {
+    font-size: 1.2rem;
+}
+
+/* ==================== 计算结果样式 ==================== */
+
+.calc-result {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background: linear-gradient(135deg, rgba(103, 58, 183, 0.05) 0%, rgba(103, 58, 183, 0.02) 100%);
+    border-radius: 12px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.calc-result h4 {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.result-item {
+    background: var(--card-bg);
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all var(--transition-fast);
+}
+
+.result-item:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-sm);
+}
+
+.result-label {
+    font-weight: 500;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.result-value {
+    font-weight: 700;
+    color: var(--text-color);
+    font-size: 1.1rem;
+}
+
+.result-value.highlight {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+}
+
+.result-value.safe {
+    color: var(--success-color);
+}
+
+.result-value.warning {
+    color: var(--warning-color);
+}
+
+.result-notes {
+    background: rgba(255, 193, 7, 0.1);
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    border-left: 4px solid var(--warning-color);
+    margin-top: var(--spacing-md);
+}
+
+.result-notes strong {
+    color: var(--warning-color);
+}
+
+.result-notes ul {
+    margin-top: var(--spacing-sm);
+    padding-left: var(--spacing-lg);
+}
+
+.result-notes li {
+    margin-bottom: var(--spacing-xs);
+    color: var(--text-color);
+}
+
+/* ==================== 增强内容框样式 ==================== */
+
+.formula-box {
+    background: linear-gradient(135deg, rgba(33, 150, 243, 0.05) 0%, rgba(33, 150, 243, 0.02) 100%);
+    padding: var(--spacing-lg);
+    border-radius: 12px;
+    margin: var(--spacing-md) 0;
+    border-left: 4px solid var(--info-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.formula-box h4 {
+    color: var(--info-color);
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.concept-box {
+    background: linear-gradient(135deg, rgba(156, 39, 176, 0.05) 0%, rgba(156, 39, 176, 0.02) 100%);
+    padding: var(--spacing-lg);
+    border-radius: 12px;
+    margin: var(--spacing-md) 0;
+    border-left: 4px solid var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.concept-box h4 {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.example-box {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(76, 175, 80, 0.02) 100%);
+    padding: var(--spacing-lg);
+    border-radius: 12px;
+    margin: var(--spacing-md) 0;
+    border-left: 4px solid var(--success-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.example-box h4 {
+    color: var(--success-color);
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.warning-box {
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.05) 0%, rgba(244, 67, 54, 0.02) 100%);
+    padding: var(--spacing-lg);
+    border-radius: 12px;
+    margin: var(--spacing-md) 0;
+    border-left: 4px solid var(--danger-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.warning-box h4 {
+    color: var(--danger-color);
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.info-box {
+    background: linear-gradient(135deg, rgba(0, 188, 212, 0.05) 0%, rgba(0, 188, 212, 0.02) 100%);
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    border-left: 4px solid #00bcd4;
+    margin: var(--spacing-md) 0;
+}
+
+/* ==================== 增强表格样式 ==================== */
+
+.reference-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: var(--spacing-md) 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.reference-table th {
+    background: var(--gradient-primary);
+    color: white;
+    padding: var(--spacing-md);
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.reference-table td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+    background: var(--card-bg);
+}
+
+.reference-table tr:last-child td {
+    border-bottom: none;
+}
+
+.reference-table tr:hover td {
+    background: rgba(103, 58, 183, 0.05);
+}
+
+/* ==================== 进度指示器 ==================== */
+
+.progress-indicator {
+    position: relative;
+    height: 6px;
+    background: var(--border-color);
+    border-radius: 3px;
+    overflow: hidden;
+    margin: var(--spacing-md) 0;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--gradient-primary);
+    border-radius: 3px;
+    transition: width var(--transition-slow);
+    animation: progressShimmer 2s infinite;
+}
+
+@keyframes progressShimmer {
+    0% { background-position: -100% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* ==================== 工具提示 ==================== */
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+}
+
+.tooltip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    z-index: 1000;
+    animation: tooltipFadeIn var(--transition-fast);
+}
+
+.tooltip:hover::before {
+    content: '';
+    position: absolute;
+    bottom: 115%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+}
+
+@keyframes tooltipFadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* ==================== 徽章 ==================== */
+
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.badge-success {
+    background: var(--success-color);
+    color: white;
+}
+
+.badge-warning {
+    background: var(--warning-color);
+    color: white;
+}
+
+.badge-danger {
+    background: var(--danger-color);
+    color: white;
+}
+
+.badge-info {
+    background: var(--info-color);
+    color: white;
+}
+
+/* ==================== 卡片悬浮效果增强 ==================== */
+
+.card-hover {
+    transition: all var(--transition-base);
+    cursor: pointer;
+}
+
+.card-hover:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-xl);
+}
+
+/* ==================== 按钮变体 ==================== */
+
+.btn-gradient {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.btn-outline:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* ==================== 加载动画 ==================== */
+
+.loading-spinner {
+    border: 3px solid rgba(103, 58, 183, 0.1);
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: var(--spacing-lg) auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ==================== 脉冲动画 ==================== */
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
+/* ==================== 渐变文本 ==================== */
+
+.text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+}
+
+/* ==================== 玻璃态效果 ==================== */
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-lg);
+}
+
+[data-theme="dark"] .glass-card {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ==================== 响应式增强 ==================== */
+
+@media (max-width: 768px) {
+    .advanced-calculator {
+        padding: var(--spacing-md);
+    }
+
+    .result-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .calc-btn {
+        width: 100%;
+    }
+
+    .reference-table {
+        font-size: 0.85rem;
+    }
+
+    .reference-table th,
+    .reference-table td {
+        padding: var(--spacing-sm);
+    }
+}
+
+/* ==================== 深色模式适配 ==================== */
+
+[data-theme="dark"] {
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.4);
+    --shadow-lg: 0 10px 20px rgba(0,0,0,0.5);
+    --shadow-xl: 0 20px 40px rgba(0,0,0,0.6);
+}
+
+[data-theme="dark"] .advanced-calculator {
+    background: rgba(30, 30, 30, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .input-group input,
+[data-theme="dark"] .input-group select {
+    background: rgba(50, 50, 50, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .calc-result {
+    background: rgba(103, 58, 183, 0.1);
+}
+
+[data-theme="dark"] .result-item {
+    background: rgba(40, 40, 40, 0.8);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* ==================== 打印样式增强 ==================== */
+
+@media print {
+    .advanced-calculator {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+    }
+
+    .calc-btn {
+        display: none;
+    }
+
+    .result-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ==================== 可访问性增强 ==================== */
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* 焦点指示器 */
+*:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* ==================== 动画性能优化 ==================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ==================== 滚动条美化 ==================== */
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+}
+
+/* ==================== 高速接口深度内容样式 (v2.5.2) ==================== */
+
+.high-speed-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.hs-nav-card {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    border: 2px solid transparent;
+    border-radius: 16px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.hs-nav-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 0;
+}
+
+.hs-nav-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(102, 126, 234, 0.3);
+    border-color: #667eea;
+}
+
+.hs-nav-card:hover::before {
+    opacity: 0.08;
+}
+
+.hs-nav-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.hs-card-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 28px;
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.hs-nav-card h4 {
+    color: var(--text-color);
+    margin: 0.5rem 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.hs-nav-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0.5rem 0 1rem 0;
+    line-height: 1.5;
+}
+
+.hs-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.high-speed-content-area {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    min-height: 400px;
+}
+
+.content-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    color: var(--text-secondary);
+}
+
+.content-placeholder i {
+    font-size: 48px;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.deep-dive-container {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 深度内容区块样式 */
+.section-block {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: rgba(102, 126, 234, 0.03);
+    border-left: 4px solid #667eea;
+    border-radius: 8px;
+}
+
+.concept-box {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.dark-mode .concept-box {
+    background: #2a2a2a;
+}
+
+.formula-box {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    border-left: 4px solid #667eea;
+}
+
+.dark-mode .formula-box {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+}
+
+.example-box {
+    background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    border-left: 4px solid #00bcd4;
+}
+
+.dark-mode .example-box {
+    background: linear-gradient(135deg, #1a3a40 0%, #2d5a66 100%);
+}
+
+.warning-box {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    border-left: 4px solid #ff9800;
+}
+
+.dark-mode .warning-box {
+    background: linear-gradient(135deg, #3d2e1f 0%, #5a4730 100%);
+}
+
+.reference-box {
+    background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 2rem 0;
+    border-left: 4px solid #9c27b0;
+}
+
+.dark-mode .reference-box {
+    background: linear-gradient(135deg, #2d1b33 0%, #3e2548 100%);
+}
+
+.reference-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.dark-mode .reference-table {
+    background: #2a2a2a;
+}
+
+.reference-table thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.reference-table th,
+.reference-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.reference-table tbody tr:hover {
+    background: rgba(102, 126, 234, 0.05);
+}
+
+/* 专家级难度标签 */
+.difficulty.expert {
+    background: linear-gradient(135deg, #e91e63 0%, #9c27b0 100%);
+    color: white;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .high-speed-nav-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .hs-nav-card {
+        padding: 1rem;
+    }
+
+    .hs-card-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+
+    .high-speed-content-area {
+        padding: 1rem;
+    }
+}
