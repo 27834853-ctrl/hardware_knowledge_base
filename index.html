@@ -508,8 +508,6 @@
                                         <a href="#circuit-analysis" class="toc-group-link"><i class="fas fa-project-diagram"></i> 电路分析入门</a>
                                         <ul class="toc-sub-items">
                                             <li><a href="#circuit-analysis">1. 基尔霍夫定律</a></li>
-                                            <li><a href="#circuit-analysis">2. 分压电路分析</a></li>
-                                            <li><a href="#circuit-analysis">3. RC/RL电路</a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -549,15 +547,15 @@
                                             <li><a href="#power-management">1. LDO设计</a></li>
                                             <li><a href="#power-management">2. DC-DC转换器</a></li>
                                             <li><a href="#power-management">3. 电源时序</a></li>
+                                            <li><a href="#power-management">4. 热设计考虑</a></li>
                                         </ul>
                                     </li>
                                     <li class="toc-item-group">
                                         <a href="#protocols" class="toc-group-link"><i class="fas fa-ethernet"></i> 通信接口</a>
                                         <ul class="toc-sub-items">
-                                            <li><a href="#protocols">I2C 协议</a></li>
-                                            <li><a href="#protocols">SPI 协议</a></li>
-                                            <li><a href="#protocols">UART 协议</a></li>
-                                            <li><a href="#protocols">CAN 总线</a></li>
+                                            <li><a href="#protocols">1. I2C协议详解</a></li>
+                                            <li><a href="#protocols">2. SPI协议详解</a></li>
+                                            <li><a href="#protocols">3. UART配置与应用</a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -2213,7 +2211,7 @@
 
                                 <div class="separator"></div>
 
-                                <h4>4. 热设计考虑</h4>
+                                <h4 id="thermal-design">4. 热设计考虑</h4>
 
                                 <div class="content-block">
                                     <div class="formula-box">
@@ -2337,7 +2335,7 @@
                             </div>
 
                             <div class="article-content">
-                                <h4>1. I2C协议详解</h4>
+                                <h4 id="i2c-protocol">1. I2C协议详解</h4>
 
                                 <div class="content-block">
                                     <p><strong>I2C特点：</strong>双线(SDA+SCL)，多主多从，7/10位地址，常用100kHz/400kHz。</p>
@@ -2448,7 +2446,7 @@
 
                                 <div class="separator"></div>
 
-                                <h4>2. SPI协议详解</h4>
+                                <h4 id="spi-protocol">2. SPI协议详解</h4>
 
                                 <div class="content-block">
                                     <p><strong>SPI特点：</strong>全双工，四线(MOSI/MISO/SCK/CS)，高速(可达MHz级)，点对点或菊花链。</p>
@@ -2562,7 +2560,7 @@
 
                                 <div class="separator"></div>
 
-                                <h4>3. UART配置与应用</h4>
+                                <h4 id="uart-protocol">3. UART配置与应用</h4>
 
                                 <div class="content-block">
                                     <p><strong>UART特点：</strong>异步串口，点对点，简单可靠，适合调试和中低速通信。</p>
