@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MathJax 公式测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .formula-box {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #2196F3;
+            border-radius: 4px;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #2196F3;
+            padding-bottom: 10px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 MathJax 公式渲染测试</h1>
+
+    <div id="mathjaxStatus"></div>
+
+    <h2>1. 过孔寄生电感估算公式</h2>
+
+    <div class="formula-box">
+        <h3>Howard Johnson 公式</h3>
+        <p><strong>公式：</strong></p>
+        $$L_{via} = 5.08 \times h \times \left[\ln\left(\frac{4h}{d}\right) + 1\right] \text{ [nH]}$$
+
+        <p><strong>参数说明：</strong></p>
+        <ul>
+            <li>$h$: 过孔长度（英寸 inch）</li>
+            <li>$d$: 过孔内径（英寸 inch）</li>
+        </ul>
+
+        <p><strong>典型值计算：</strong></p>
+        <ul>
+            <li>板厚: $h = 1.6 \text{ mm} = 0.063 \text{ inch}$</li>
+            <li>过孔内径: $d = 0.3 \text{ mm} = 0.012 \text{ inch}$</li>
+            <li>计算: $L_{via} = 5.08 \times 0.063 \times [\ln(\frac{4 \times 0.063}{0.012}) + 1] \approx 1.1 \text{ nH}$</li>
+        </ul>
+    </div>
+
+    <h2>2. 简化公式</h2>
+
+    <div class="formula-box">
+        <h3>快速估算（mm单位）</h3>
+        $$L_{via} \approx 0.2 \times h \quad \text{(nH, h为板厚mm)}$$
+
+        <p><strong>示例：</strong></p>
+        <ul>
+            <li>1.6mm板厚: $L_{via} \approx 0.2 \times 1.6 = 0.32 \text{ nH}$</li>
+            <li>注意：这是简化公式，精度较低</li>
+        </ul>
+    </div>
+
+    <h2>3. 其他常用公式</h2>
+
+    <div class="formula-box">
+        <h3>微带线特征阻抗</h3>
+        $$Z_0 = \frac{87}{\sqrt{\varepsilon_r + 1.41}} \ln\left(\frac{5.98h}{0.8w + t}\right)$$
+
+        <p>其中：</p>
+        <ul>
+            <li>$\varepsilon_r$: 介电常数</li>
+            <li>$h$: 介质厚度</li>
+            <li>$w$: 走线宽度</li>
+            <li>$t$: 铜厚</li>
+        </ul>
+    </div>
+
+    <div class="formula-box">
+        <h3>信号传播延迟</h3>
+        $$t_d = \frac{l}{c} \sqrt{\varepsilon_{eff}}$$
+
+        <p>其中：</p>
+        <ul>
+            <li>$l$: 传输线长度</li>
+            <li>$c$: 光速 $3 \times 10^8 \text{ m/s}$</li>
+            <li>$\varepsilon_{eff}$: 有效介电常数</li>
+        </ul>
+    </div>
+
+    <h2>4. 调试信息</h2>
+
+    <div id="debugInfo"></div>
+
+    <!-- MathJax CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <script>
+        // 检测 MathJax 加载状态
+        window.addEventListener('load', function() {
+            const statusDiv = document.getElementById('mathjaxStatus');
+            const debugDiv = document.getElementById('debugInfo');
+
+            setTimeout(function() {
+                if (typeof MathJax !== 'undefined') {
+                    statusDiv.innerHTML = '<div class="status success">✅ MathJax 已加载，版本: ' + MathJax.version + '</div>';
+
+                    // 等待渲染完成
+                    MathJax.typesetPromise().then(function() {
+                        debugDiv.innerHTML = `
+                            <div class="status success">
+                                <strong>✅ 公式渲染完成</strong><br>
+                                渲染的公式数量: ${document.querySelectorAll('.MathJax').length}<br>
+                                MathJax 配置: ${JSON.stringify(MathJax.config, null, 2)}
+                            </div>
+                        `;
+                    }).catch(function(err) {
+                        debugDiv.innerHTML = '<div class="status error">❌ 渲染失败: ' + err + '</div>';
+                    });
+                } else {
+                    statusDiv.innerHTML = '<div class="status error">❌ MathJax 未加载，请检查网络连接</div>';
+                }
+            }, 1000);
+        });
+
+        // 检查是否有渲染错误
+        window.addEventListener('error', function(e) {
+            console.error('页面错误:', e);
+        });
+    </script>
+</body>
+</html>
