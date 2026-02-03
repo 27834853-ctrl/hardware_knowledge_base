@@ -580,18 +580,19 @@
                                     <li class="toc-item-group">
                                         <a href="#fpga-dsp" class="toc-group-link"><i class="fas fa-microchip"></i> FPGA/DSP系统</a>
                                         <ul class="toc-sub-items">
-                                            <li><a href="#fpga-dsp">FPGA 架构</a></li>
-                                            <li><a href="#fpga-dsp">时序约束</a></li>
-                                            <li><a href="#fpga-dsp">DSP 算法</a></li>
+                                            <li><a href="#fpga-dsp">1. FPGA选型</a></li>
+                                            <li><a href="#fpga-dsp">2. 时钟树设计</a></li>
+                                            <li><a href="#fpga-dsp">3. 接口设计</a></li>
+                                            <li><a href="#fpga-dsp">4. 电源轨设计</a></li>
                                         </ul>
                                     </li>
                                     <li class="toc-item-group">
                                         <a href="#rf-design" class="toc-group-link"><i class="fas fa-broadcast-tower"></i> 射频电路设计</a>
                                         <ul class="toc-sub-items">
-                                            <li><a href="#rf-design">Smith 圆图</a></li>
-                                            <li><a href="#rf-design">匹配网络设计</a></li>
-                                            <li><a href="#rf-design">滤波器设计</a></li>
-                                            <li><a href="#rf-design">天线设计基础</a></li>
+                                            <li><a href="#rf-design">1. RF基础概念</a></li>
+                                            <li><a href="#rf-design">2. 阻抗匹配网络</a></li>
+                                            <li><a href="#rf-design">3. PCB材料选择</a></li>
+                                            <li><a href="#rf-design">4. 测试方法</a></li>
                                         </ul>
                                     </li>
                                     <li class="toc-item-group">
@@ -3236,7 +3237,7 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
                             </div>
 
                             <div class="article-content">
-                                <h4>1. FPGA选型</h4>
+                                <h4 id="fpga-selection">1. FPGA选型</h4>
 
                                 <div class="content-block">
                                     <p><strong>FPGA选型考虑因素：</strong>逻辑资源、I/O数量、速度等级、功耗、成本。</p>
@@ -3375,7 +3376,7 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
 
                                 <div class="separator"></div>
 
-                                <h4>2. 时钟树设计</h4>
+                                <h4 id="fpga-clock-tree">2. 时钟树设计</h4>
 
                                 <div class="content-block">
                                     <p><strong>时钟设计是FPGA系统的核心，</strong>直接影响性能、时序和功耗。</p>
@@ -3478,7 +3479,7 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
 
                                 <div class="separator"></div>
 
-                                <h4>3. 接口设计</h4>
+                                <h4 id="fpga-interface">3. 接口设计</h4>
 
                                 <div class="content-block">
                                     <div class="info-grid">
@@ -3581,7 +3582,7 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
 
                                 <div class="separator"></div>
 
-                                <h4>4. 电源轨设计</h4>
+                                <h4 id="fpga-power-rail">4. 电源轨设计</h4>
 
                                 <div class="content-block">
                                     <p><strong>FPGA功耗大，电源设计至关重要。</strong></p>
@@ -3788,7 +3789,7 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
                             </div>
 
                             <div class="article-content">
-                                <h4>1. RF基础概念</h4>
+                                <h4 id="rf-basics">1. RF基础概念</h4>
 
                                 <div class="content-block">
                                     <div class="info-grid">
@@ -3864,7 +3865,7 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
 
                                 <div class="separator"></div>
 
-                                <h4>2. 阻抗匹配网络</h4>
+                                <h4 id="rf-impedance-matching">2. 阻抗匹配网络</h4>
 
                                 <div class="content-block">
                                     <p><strong>阻抗匹配目的：</strong>最大功率传输，减少反射，优化性能。</p>
@@ -3967,7 +3968,7 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
 
                                 <div class="separator"></div>
 
-                                <h4>3. PCB材料选择</h4>
+                                <h4 id="rf-pcb-material">3. PCB材料选择</h4>
 
                                 <div class="content-block">
                                     <div class="info-card">
@@ -4053,7 +4054,7 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
 
                                 <div class="separator"></div>
 
-                                <h4>4. 测试方法</h4>
+                                <h4 id="rf-testing">4. 测试方法</h4>
 
                                 <div class="content-block">
                                     <div class="info-grid">
