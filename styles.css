@@ -1488,6 +1488,13 @@ strong {
     align-items: center;
 }
 
+@media (max-width: 768px) {
+    .circuit-simulator {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+}
+
 .simulator-result {
     background: var(--bg-primary);
     border-radius: var(--radius-md);
