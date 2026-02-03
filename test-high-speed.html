@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高速接口内容加载测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #contentDisplay {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 高速接口内容加载测试</h1>
+
+    <div class="test-section">
+        <h2>1. 脚本加载检查</h2>
+        <div id="scriptLoadStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. highSpeedDeepDive 对象检查</h2>
+        <div id="objectStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. 内容键检查</h2>
+        <div id="keysStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. 功能测试</h2>
+        <p>点击按钮测试各个接口的内容加载：</p>
+        <div>
+            <button onclick="testContent('pcieTestingDeepDive')">PCIe</button>
+            <button onclick="testContent('usbTestingDeepDive')">USB</button>
+            <button onclick="testContent('mipiTestingDeepDive')">MIPI</button>
+            <button onclick="testContent('lpddr5xTestingDeepDive')">LPDDR5X</button>
+            <button onclick="testContent('displayPortTestingDeepDive')">DisplayPort</button>
+            <button onclick="testContent('hdmiTestingDeepDive')">HDMI</button>
+        </div>
+        <div id="testResult"></div>
+        <div id="contentDisplay"></div>
+    </div>
+
+    <!-- 引入脚本 -->
+    <script src="high-speed-deep-dive.js"></script>
+
+    <script>
+        // 1. 检查脚本加载
+        function checkScriptLoad() {
+            const status = document.getElementById('scriptLoadStatus');
+            if (typeof highSpeedDeepDive !== 'undefined') {
+                status.innerHTML = '<div class="status success">✓ high-speed-deep-dive.js 加载成功</div>';
+                return true;
+            } else {
+                status.innerHTML = '<div class="status error">✗ high-speed-deep-dive.js 加载失败</div>';
+                return false;
+            }
+        }
+
+        // 2. 检查对象结构
+        function checkObject() {
+            const status = document.getElementById('objectStatus');
+            if (typeof highSpeedDeepDive !== 'undefined') {
+                const type = typeof highSpeedDeepDive;
+                const isObject = type === 'object';
+                status.innerHTML = `
+                    <div class="status ${isObject ? 'success' : 'error'}">
+                        ${isObject ? '✓' : '✗'} highSpeedDeepDive 类型: ${type}
+                    </div>
+                `;
+                return isObject;
+            }
+            return false;
+        }
+
+        // 3. 检查所有键
+        function checkKeys() {
+            const status = document.getElementById('keysStatus');
+            const requiredKeys = [
+                'pcieTestingDeepDive',
+                'usbTestingDeepDive',
+                'mipiTestingDeepDive',
+                'lpddr5xTestingDeepDive',
+                'displayPortTestingDeepDive',
+                'hdmiTestingDeepDive'
+            ];
+
+            if (typeof highSpeedDeepDive === 'undefined') {
+                status.innerHTML = '<div class="status error">✗ highSpeedDeepDive 对象未定义</div>';
+                return;
+            }
+
+            let html = '<div class="status info">检查内容键：</div><ul>';
+            let allPresent = true;
+
+            requiredKeys.forEach(key => {
+                const exists = key in highSpeedDeepDive;
+                const hasContent = exists && highSpeedDeepDive[key] && highSpeedDeepDive[key].content;
+                const contentLength = hasContent ? highSpeedDeepDive[key].content.length : 0;
+
+                html += `<li style="color: ${exists ? 'green' : 'red'}">
+                    ${exists ? '✓' : '✗'} ${key}: ${exists ? '存在' : '缺失'}
+                    ${hasContent ? ` (内容长度: ${contentLength} 字符)` : ''}
+                </li>`;
+
+                if (!exists) allPresent = false;
+            });
+
+            html += '</ul>';
+            status.innerHTML = html;
+        }
+
+        // 4. 测试内容加载
+        function testContent(contentKey) {
+            const resultDiv = document.getElementById('testResult');
+            const displayDiv = document.getElementById('contentDisplay');
+
+            if (typeof highSpeedDeepDive === 'undefined') {
+                resultDiv.innerHTML = '<div class="status error">✗ highSpeedDeepDive 对象未定义</div>';
+                return;
+            }
+
+            const content = highSpeedDeepDive[contentKey];
+
+            if (!content) {
+                resultDiv.innerHTML = `<div class="status error">✗ 未找到内容: ${contentKey}</div>`;
+                displayDiv.innerHTML = '';
+                return;
+            }
+
+            resultDiv.innerHTML = `
+                <div class="status success">
+                    ✓ 成功加载: ${content.title || contentKey}<br>
+                    内容长度: ${content.content ? content.content.length : 0} 字符<br>
+                    图标: ${content.icon || 'N/A'}
+                </div>
+            `;
+
+            // 显示内容
+            displayDiv.innerHTML = content.content || '<p>内容为空</p>';
+
+            // 滚动到内容区域
+            displayDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // 页面加载完成后执行检查
+        window.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                checkScriptLoad();
+                checkObject();
+                checkKeys();
+            }, 100);
+        });
+    </script>
+</body>
+</html>

@@ -1706,29 +1706,36 @@ if (!document.getElementById('notificationStyles')) {
  * @param {string} contentKey - 内容key (对应highSpeedDeepDive中的属性名)
  */
 function showHighSpeedContent(contentKey) {
+    console.log('[showHighSpeedContent] 调用，contentKey:', contentKey);
+
     // 检查highSpeedDeepDive对象是否已加载
     if (typeof highSpeedDeepDive === 'undefined') {
-        console.error('highSpeedDeepDive模块未加载');
+        console.error('[showHighSpeedContent] highSpeedDeepDive模块未加载');
         showNotification('内容加载失败，请刷新页面重试', 'error');
         return;
     }
+    console.log('[showHighSpeedContent] highSpeedDeepDive 对象已加载');
 
     // 获取内容
     const content = highSpeedDeepDive[contentKey];
     if (!content) {
-        console.error('未找到内容:', contentKey);
+        console.error('[showHighSpeedContent] 未找到内容:', contentKey);
+        console.log('[showHighSpeedContent] 可用的键:', Object.keys(highSpeedDeepDive));
         showNotification('未找到对应内容', 'error');
         return;
     }
+    console.log('[showHighSpeedContent] 内容已找到:', content.title);
 
     // 获取显示区域
     const contentArea = document.getElementById('highSpeedDeepDiveContent');
     if (!contentArea) {
-        console.error('未找到内容显示区域');
+        console.error('[showHighSpeedContent] 未找到内容显示区域 #highSpeedDeepDiveContent');
         return;
     }
+    console.log('[showHighSpeedContent] 显示区域已找到');
 
     // 显示内容
+    console.log('[showHighSpeedContent] 开始显示内容，长度:', content.content ? content.content.length : 0);
     contentArea.innerHTML = content.content;
 
     // 平滑滚动到内容区域

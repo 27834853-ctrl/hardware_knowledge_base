@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>简单测试</title>
+</head>
+<body>
+    <h1>高速接口内容测试</h1>
+    <button onclick="testPCIe()">测试 PCIe</button>
+    <div id="result"></div>
+    <div id="content"></div>
+
+    <script src="high-speed-deep-dive.js"></script>
+    <script>
+        function testPCIe() {
+            const result = document.getElementById('result');
+            const content = document.getElementById('content');
+            
+            if (typeof highSpeedDeepDive === 'undefined') {
+                result.innerHTML = '❌ highSpeedDeepDive 未定义';
+                return;
+            }
+            
+            result.innerHTML = '✅ highSpeedDeepDive 已加载';
+            
+            const pcie = highSpeedDeepDive.pcieTestingDeepDive;
+            if (pcie && pcie.content) {
+                content.innerHTML = pcie.content.substring(0, 500) + '...';
+                result.innerHTML += '<br>✅ PCIe 内容已加载 (' + pcie.content.length + ' 字符)';
+            } else {
+                result.innerHTML += '<br>❌ PCIe 内容为空';
+            }
+        }
+        
+        window.onload = function() {
+            document.getElementById('result').innerHTML = 
+                'typeof highSpeedDeepDive = ' + typeof highSpeedDeepDive;
+        };
+    </script>
+</body>
+</html>
