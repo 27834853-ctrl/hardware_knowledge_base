@@ -3088,56 +3088,74 @@ strong {
     position: relative;
 }
 
-/* 高亮动画：闪烁背景 */
+/* 高亮动画：闪烁背景（增强版，更明显） */
 @keyframes tocHighlight {
     0% {
         background-color: transparent;
         transform: scale(1);
+        box-shadow: none;
     }
-    10% {
-        background-color: rgba(33, 150, 243, 0.15);
+    5% {
+        background-color: rgba(33, 150, 243, 0.3);
+        transform: scale(1.03);
+        box-shadow: 0 0 20px rgba(33, 150, 243, 0.3);
+    }
+    15% {
+        background-color: rgba(33, 150, 243, 0.4);
         transform: scale(1.02);
+        box-shadow: 0 0 25px rgba(33, 150, 243, 0.4);
     }
-    20% {
+    30% {
         background-color: rgba(33, 150, 243, 0.25);
+        box-shadow: 0 0 15px rgba(33, 150, 243, 0.2);
     }
-    40% {
+    50% {
         background-color: rgba(33, 150, 243, 0.15);
+        box-shadow: 0 0 10px rgba(33, 150, 243, 0.15);
     }
-    60% {
+    70% {
         background-color: rgba(33, 150, 243, 0.10);
+        box-shadow: 0 0 5px rgba(33, 150, 243, 0.1);
     }
     100% {
         background-color: transparent;
         transform: scale(1);
+        box-shadow: none;
     }
 }
 
-/* 左侧边框指示器 */
+/* 左侧边框指示器（增强版，更粗更明显） */
 .toc-highlight::before {
     content: '';
     position: absolute;
     left: -20px;
     top: 0;
     bottom: 0;
-    width: 4px;
+    width: 6px;
     background: linear-gradient(180deg, var(--primary-color), var(--accent-color));
-    border-radius: 2px;
+    border-radius: 3px;
     animation: highlightBorder 2s ease-in-out;
+    box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
 }
 
 @keyframes highlightBorder {
     0%, 100% {
         opacity: 0;
         transform: scaleY(0);
+        box-shadow: 0 0 0 rgba(33, 150, 243, 0);
     }
-    10% {
+    5% {
         opacity: 1;
         transform: scaleY(1);
+        box-shadow: 0 0 15px rgba(33, 150, 243, 0.6);
+    }
+    15% {
+        box-shadow: 0 0 20px rgba(33, 150, 243, 0.7);
     }
     90% {
         opacity: 1;
         transform: scaleY(1);
+        box-shadow: 0 0 10px rgba(33, 150, 243, 0.4);
     }
 }
 
@@ -3157,14 +3175,21 @@ strong {
 @keyframes tocHighlightDark {
     0% {
         background-color: transparent;
+        box-shadow: none;
     }
-    10% {
-        background-color: rgba(33, 150, 243, 0.25);
-    }
-    20% {
+    5% {
         background-color: rgba(33, 150, 243, 0.35);
+        box-shadow: 0 0 25px rgba(33, 150, 243, 0.4);
     }
-    40% {
+    15% {
+        background-color: rgba(33, 150, 243, 0.45);
+        box-shadow: 0 0 30px rgba(33, 150, 243, 0.5);
+    }
+    30% {
+        background-color: rgba(33, 150, 243, 0.35);
+        box-shadow: 0 0 20px rgba(33, 150, 243, 0.3);
+    }
+    50% {
         background-color: rgba(33, 150, 243, 0.25);
     }
     60% {

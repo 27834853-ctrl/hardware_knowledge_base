@@ -1900,6 +1900,8 @@ function initSmartTOCNavigation() {
         }
 
         link.addEventListener('click', function(e) {
+            e.preventDefault(); // 立即阻止默认行为
+
             const href = this.getAttribute('href');
             const linkText = this.textContent.trim();
 
@@ -1912,8 +1914,6 @@ function initSmartTOCNavigation() {
                 return;
             }
 
-            e.preventDefault();
-
             // 尝试在section内查找匹配的标题
             const headings = targetSection.querySelectorAll('h3, h4, h5');
             let matchingHeading = null;
@@ -1925,7 +1925,7 @@ function initSmartTOCNavigation() {
                 // 精确匹配
                 if (headingText === linkText) {
                     matchingHeading = heading;
-                    console.log(`[Smart TOC] 找到精确匹配: "${headingText}"`);
+                    console.log(`[Smart TOC] ✅ 找到精确匹配: "${headingText}"`);
                     break;
                 }
 
@@ -1938,22 +1938,62 @@ function initSmartTOCNavigation() {
             }
 
             if (matchingHeading) {
-                console.log(`[Smart TOC] 滚动到匹配标题: "${matchingHeading.textContent.trim()}" (相似度: ${bestMatchScore.toFixed(2)})`);
+                console.log(`[Smart TOC] 📍 滚动到匹配标题: "${matchingHeading.textContent.trim()}" (相似度: ${bestMatchScore.toFixed(2)})`);
             } else {
-                console.log(`[Smart TOC] 未找到匹配标题，滚动到父section: ${href}`);
+                console.log(`[Smart TOC] 📍 未找到匹配标题，滚动到父section: ${href}`);
             }
 
             // 滚动到匹配的标题或父section
             const scrollTarget = matchingHeading || targetSection;
-            const offsetTop = scrollTarget.offsetTop - CONFIG.scrollOffset;
 
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
+            // 先移除之前的高亮（避免视觉混淆）
+            document.querySelectorAll('.toc-highlight').forEach(el => {
+                el.classList.remove('toc-highlight');
             });
 
-            // 添加高亮效果
-            highlightTarget(scrollTarget);
+            // 立即添加高亮效果（在滚动前，确保用户看到反馈）
+            scrollTarget.classList.add('toc-highlight');
+
+            // 获取目标位置
+            const offsetTop = scrollTarget.offsetTop - CONFIG.scrollOffset;
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+            // 计算滚动距离
+            const scrollDistance = Math.abs(offsetTop - currentScroll);
+
+            console.log(`[Smart TOC] 当前位置: ${currentScroll.toFixed(0)}px, 目标位置: ${offsetTop.toFixed(0)}px, 距离: ${scrollDistance.toFixed(0)}px`);
+
+            // 如果距离很小（小于100px），说明已经在附近，使用 instant 滚动
+            // 否则使用平滑滚动
+            if (scrollDistance < 100) {
+                console.log(`[Smart TOC] ⚡ 使用即时滚动（已在目标附近）`);
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'instant'
+                });
+                // 即时滚动后，强制重新触发高亮动画
+                scrollTarget.classList.remove('toc-highlight');
+                // 使用 requestAnimationFrame 确保 DOM 更新
+                requestAnimationFrame(() => {
+                    scrollTarget.classList.add('toc-highlight');
+                    // 增强视觉反馈：短暂闪烁效果
+                    scrollTarget.style.animation = 'none';
+                    setTimeout(() => {
+                        scrollTarget.style.animation = '';
+                    }, 10);
+                });
+            } else {
+                console.log(`[Smart TOC] 🎯 使用平滑滚动`);
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+
+            // 2秒后移除高亮
+            setTimeout(() => {
+                scrollTarget.classList.remove('toc-highlight');
+            }, 2000);
         });
 
         fixedCount++;
