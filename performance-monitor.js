@@ -112,8 +112,9 @@
             domProcessing: timing.domComplete > 0 ?
                 timing.domComplete - timing.domLoading : -1,
 
-            // DOM Content Loaded
-            domContentLoaded: timing.domContentLoadedEventEnd - timing.navigationStart,
+            // DOM Content Loaded - 修复：检查 domContentLoadedEventEnd 是否有效
+            domContentLoaded: timing.domContentLoadedEventEnd > 0 ?
+                timing.domContentLoadedEventEnd - timing.navigationStart : -1,
 
             // Page load complete - 修复：检查 loadEventEnd 是否有效
             loadComplete: timing.loadEventEnd > 0 ?
