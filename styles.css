@@ -795,8 +795,9 @@ strong {
 }
 
 .toc-items.active {
-    max-height: 500px;
+    max-height: 2000px; /* 增加到2000px，支持更多内容 */
     margin-top: var(--spacing-sm);
+    overflow-y: auto; /* 如果内容过多，显示滚动条 */
 }
 
 .toc-items li {
@@ -870,8 +871,9 @@ strong {
 
 .toc-item-group:hover .toc-sub-items,
 .toc-item-group.expanded .toc-sub-items {
-    max-height: 600px;
+    max-height: 1500px; /* 增加到1500px，确保所有子项可见 */
     opacity: 1;
+    overflow-y: auto; /* 内容过多时显示滚动条 */
 }
 
 .toc-sub-items li {
