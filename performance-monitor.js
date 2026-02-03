@@ -108,17 +108,20 @@
             // Download time
             downloadTime: timing.responseEnd - timing.responseStart,
 
-            // DOM processing
-            domProcessing: timing.domComplete - timing.domLoading,
+            // DOM processing - 修复：检查 domComplete 是否有效
+            domProcessing: timing.domComplete > 0 ?
+                timing.domComplete - timing.domLoading : -1,
 
             // DOM Content Loaded
             domContentLoaded: timing.domContentLoadedEventEnd - timing.navigationStart,
 
-            // Page load complete
-            loadComplete: timing.loadEventEnd - timing.navigationStart,
+            // Page load complete - 修复：检查 loadEventEnd 是否有效
+            loadComplete: timing.loadEventEnd > 0 ?
+                timing.loadEventEnd - timing.navigationStart : -1,
 
-            // Total page load time
-            totalTime: timing.loadEventEnd - timing.fetchStart
+            // Total page load time - 修复：检查 loadEventEnd 是否有效
+            totalTime: timing.loadEventEnd > 0 ?
+                timing.loadEventEnd - timing.fetchStart : -1
         };
 
         metrics.navigation = navigation;
@@ -512,7 +515,18 @@
                 // Navigation Timing
                 if (Object.keys(metrics.navigation).length > 0) {
                     console.group('⏱️  Navigation Timing');
-                    console.table(metrics.navigation);
+
+                    // 清理负数值，替换为友好提示
+                    const cleanedNavigation = {};
+                    for (const [key, value] of Object.entries(metrics.navigation)) {
+                        if (value < 0) {
+                            cleanedNavigation[key] = '等待中...';
+                        } else {
+                            cleanedNavigation[key] = value;
+                        }
+                    }
+
+                    console.table(cleanedNavigation);
                     console.groupEnd();
                 }
 
