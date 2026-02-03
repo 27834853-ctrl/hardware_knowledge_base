@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 高速接口深度技术详解
  * v2.6.3 - DisplayPort & HDMI 深度扩展完整版 (2,071行) + 其他接口内容优化
  *
@@ -2849,9 +2849,9 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
 
         <div class="formula-box">
             <p><strong>充电器效率计算</strong>:</p>
-            <p>$Efficiency = rac{P_{out}}{P_{in}} = rac{240W}{240W + P_{loss}}$</p>
+            <p>$Efficiency = \frac{P_{out}}{P_{in}} = \frac{240W}{240W + P_{loss}}$</p>
             <p>假设效率 94%:</p>
-            <p>$P_{loss} = rac{240W}{0.94} - 240W = 15.3W$</p>
+            <p>$P_{loss} = \frac{240W}{0.94} - 240W = 15.3W$</p>
             <p><strong>温升估算</strong>: 15.3W 损耗 → 外壳温升 ~40°C (需散热器)</p>
         </div>
     </div>
@@ -5772,7 +5772,7 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
 
                         <div class="formula-box">
                             <p><strong>128b/132b 编码效率</strong>:</p>
-                            <p>$Efficiency = rac{128}{132} = 97.0%$</p>
+                            <p>$Efficiency = \frac{128}{132} = 97.0%$</p>
                             <p>相比 HBR3 的 8b/10b (80% 效率)，提升 <strong>21.25%</strong></p>
                         </div>
                     </div>
@@ -6354,9 +6354,9 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
 
                         <div class="formula-box">
                             <p><strong>FRL 带宽计算 (FRL 6)</strong>:</p>
-                            <p>$Bandwidth = 4 lanes 	imes 12 Gbps/lane = 48 Gbps$</p>
+                            <p>$Bandwidth = 4 lanes \times 12 Gbps/lane = 48 Gbps$</p>
                             <p><strong>有效带宽</strong>:</p>
-                            <p>$Effective = 48 	imes 0.889 = 42.67 Gbps$</p>
+                            <p>$Effective = 48 \times 0.889 = 42.67 Gbps$</p>
                             <p>可传输 <strong>4K@120Hz RGB 12-bit</strong> (~39 Gbps) ✅</p>
                         </div>
                     </div>
@@ -6530,8 +6530,8 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
 
                         <div class="formula-box">
                             <p><strong>VRR 延迟改善</strong>:</p>
-                            <p>固定 60Hz 最大延迟: $rac{1}{60} = 16.67 ms$</p>
-                            <p>VRR 120Hz 最大延迟: $rac{1}{120} = 8.33 ms$</p>
+                            <p>固定 60Hz 最大延迟: $\frac{1}{60} = 16.67 ms$</p>
+                            <p>VRR 120Hz 最大延迟: $\frac{1}{120} = 8.33 ms$</p>
                             <p><strong>延迟降低</strong>: 50% ✅</p>
                         </div>
                     </div>
