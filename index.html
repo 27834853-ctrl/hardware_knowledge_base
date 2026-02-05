@@ -4913,229 +4913,2116 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
 
                         // 使用模板字符串直接嵌入HTML内容
                         highSpeedDeepDive.pcieTestingDeepDive.content = String.raw`
-    <div class="content-section">
-        <h2><i class="fas fa-microscope"></i> PCIe深度测试技术</h2>
+                        highSpeedDeepDive.pcieTestingDeepDive.content = String.raw`
+            <div class="deep-dive-container">
+                <h2><i class="fas fa-microscope"></i> PCIe深度测试与调试技术</h2>
 
-        <h4>1.1 发送端电压测试</h4>
-        <div class="concept-box">
-            <h5>测试目标</h5>
-            <p>验证PCIe发送端的差分电压和共模电压是否符合规范要求。</p>
+                <div class="section-block">
+                    <h3>1. PCIe发送端(TX)测试详解</h3>
 
-            <h5>测试步骤</h5>
+                    <h4>1.1 差分输出电压测试 (Differential Output Voltage)</h4>
+                    <div class="concept-box">
+                        <h5>测试目的</h5>
+                        <p>验证TX输出摆幅是否满足规范要求，确保信号强度足够接收端正确检测。</p>
+
+                        <h5>规范要求 (PCIe 3.0)</h5>
+                        <table class="reference-table">
+                            <thead>
+                                <tr>
+                                    <th>参数</th>
+                                    <th>最小值</th>
+                                    <th>典型值</th>
+                                    <th>最大值</th>
+                                    <th>单位</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>差分峰峰值(Vdiff,pp)</td>
+                                    <td>800</td>
+                                    <td>1000</td>
+                                    <td>1200</td>
+                                    <td>mV</td>
+                                </tr>
+                                <tr>
+                                    <td>直流共模电压(Vcm)</td>
+                                    <td>0</td>
+                                    <td>-</td>
+                                    <td>3.6</td>
+                                    <td>V</td>
+                                </tr>
+                                <tr>
+                                    <td>共模电压变化(ΔVcm)</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>25</td>
+                                    <td>mV</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h5>测试配置</h5>
+                        <ul>
+                            <li><strong>示波器</strong>: 实时带宽 ≥20 GHz (PCIe 3.0需16 GHz)</li>
+                            <li><strong>探头</strong>: 差分探头，带宽≥示波器带宽</li>
+                            <li><strong>测试点</strong>: TX发送端参考点(TP1a/TP1b)</li>
+                            <li><strong>负载</strong>: 标准测试负载板或compliance load</li>
+                        </ul>
+
+                        <h5>测试步骤</h5>
+                        <ol>
+                            <li>连接差分探头到TX输出端(DC耦合)</li>
+                            <li>设置示波器触发在数据转换边沿</li>
+                            <li>捕获至少10,000个UI的数据</li>
+                            <li>使用眼图mask测试功能</li>
+                            <li>测量差分峰峰值电压: Vpp = |V(D+) - V(D-)|</li>
+                            <li>测量共模电压: Vcm = (V(D+) + V(D-)) / 2</li>
+                            <li>验证是否在规范范围内</li>
+                        </ol>
+                    </div>
+
+                    <h4>1.2 预加重(De-emphasis)测试</h4>
+                    <div class="concept-box">
+                        <h5>预加重原理</h5>
+                        <p>通过减小高频成分的幅度来补偿传输线的高频损耗，改善信号完整性。</p>
+
+                        <div class="formula-box">
+                            <p><strong>预加重比计算公式</strong>:</p>
+                            <p>$De-emphasis (dB) = 20 \times \log_{10}\left(\frac{V_{low}}{V_{high}}\right)$</p>
+                            <p>其中:</p>
+                            <ul>
+                                <li>$V_{high}$: 首个UI的幅度(未加重)</li>
+                                <li>$V_{low}$: 后续UI的幅度(已加重)</li>
+                            </ul>
+                        </div>
+
+                        <h5>PCIe各代预加重要求</h5>
+                        <table class="reference-table">
+                            <thead>
+                                <tr>
+                                    <th>PCIe代</th>
+                                    <th>预加重级别</th>
+                                    <th>目标值</th>
+                                    <th>容差</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td rowspan="2">Gen 1/2</td>
+                                    <td>-3.5 dB</td>
+                                    <td>-3.5 dB</td>
+                                    <td>±1 dB</td>
+                                </tr>
+                                <tr>
+                                    <td>-6.0 dB</td>
+                                    <td>-6.0 dB</td>
+                                    <td>±1 dB</td>
+                                </tr>
+                                <tr>
+                                    <td>Gen 3</td>
+                                    <td>可变(协商)</td>
+                                    <td>-3.5 dB</td>
+                                    <td>±1 dB</td>
+                                </tr>
+                                <tr>
+                                    <td>Gen 4</td>
+                                    <td>可变(协商)</td>
+                                    <td>0 to -12 dB</td>
+                                    <td>步进0.5dB</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h5>测试方法</h5>
+                        <ol>
+                            <li>使用PRBS测试模式(Compliance Pattern)</li>
+                            <li>捕获包含"010"或"101"序列的波形</li>
+                            <li>测量第一个UI的峰值电压 V_high</li>
+                            <li>测量后续UI的峰值电压 V_low</li>
+                            <li>计算预加重比: De-emph = 20*log10(V_low/V_high)</li>
+                            <li>验证是否在±1dB容差内</li>
+                        </ol>
+
+                        <div class="warning-box">
+                            <h5>⚠️ 常见测试陷阱</h5>
+                            <ul>
+                                <li><strong>带宽不足</strong>: 示波器带宽不够会导致幅度测量偏小</li>
+                                <li><strong>探头负载</strong>: 探头电容会影响信号，使用低容探头</li>
+                                <li><strong>测试点位置</strong>: 必须在TX参考点测量，不能在connector端</li>
+                                <li><strong>触发稳定性</strong>: 使用pattern lock功能确保触发准确</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h4>1.3 TX抖动测试 (Transmitter Jitter)</h4>
+                    <div class="concept-box">
+                        <h5>抖动分类与要求</h5>
+                        <p>PCIe将抖动分为确定性抖动(DJ)和随机抖动(RJ)，总抖动(TJ)需满足规范。</p>
+
+                        <div class="formula-box">
+                            <p><strong>总抖动计算</strong>:</p>
+                            <p>$TJ = DJ + n \times RJ$</p>
+                            <p>其中 n 为置信系数，对于 BER = 10^{-12}，n ≈ 14.069</p>
+                        </div>
+
+                        <h5>PCIe 3.0抖动预算</h5>
+                        <table class="reference-table">
+                            <thead>
+                                <tr>
+                                    <th>抖动类型</th>
+                                    <th>最大值 (UI)</th>
+                                    <th>说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>总抖动 TJ @ 10⁻¹²</td>
+                                    <td>0.35</td>
+                                    <td>TX输出总抖动</td>
+                                </tr>
+                                <tr>
+                                    <td>确定性抖动 DJ</td>
+                                    <td>0.17</td>
+                                    <td>占比约50%</td>
+                                </tr>
+                                <tr>
+                                    <td>随机抖动 RJ</td>
+                                    <td>0.0128</td>
+                                    <td>14.069 × RJ < 0.18 UI</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h5>抖动测试流程</h5>
+                        <ol>
+                            <li><strong>设备连接</strong>: 使用BERT(误码仪)或高性能示波器</li>
+                            <li><strong>数据捕获</strong>: 捕获≥10⁶ UI的数据</li>
+                            <li><strong>TIE分析</strong>: Time Interval Error分析
+                                <ul>
+                                    <li>测量每个时钟边沿与理想时刻的偏差</li>
+                                    <li>生成TIE直方图</li>
+                                </ul>
+                            </li>
+                            <li><strong>RJ/DJ分解</strong>:
+                                <ul>
+                                    <li>双Delta算法提取RJ</li>
+                                    <li>Spectral分析提取周期性抖动PJ</li>
+                                    <li>残差为数据相关抖动DDJ</li>
+                                </ul>
+                            </li>
+                            <li><strong>结果验证</strong>: TJ = DJ + 14.069×RJ < 0.35 UI</li>
+                        </ol>
+
+                        <div class="example-box">
+                            <h5>实例分析</h5>
+                            <p><strong>测试结果</strong>:</p>
+                            <ul>
+                                <li>RJ = 0.8 ps (测量值)</li>
+                                <li>DJ = 18 ps (测量值)</li>
+                                <li>UI = 125 ps (PCIe 3.0, 8GT/s)</li>
+                            </ul>
+                            <p><strong>计算</strong>:</p>
+                            <ul>
+                                <li>RJ (UI) = 0.8 ps / 125 ps = 0.0064 UI</li>
+                                <li>DJ (UI) = 18 ps / 125 ps = 0.144 UI</li>
+                                <li>TJ = 0.144 + 14.069 × 0.0064 = 0.144 + 0.090 = 0.234 UI</li>
+                                <li><strong>结论</strong>: 0.234 UI < 0.35 UI ✓ 通过</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h4>1.4 TX均衡器系数测试 (Equalization Coefficients)</h4>
+                    <div class="concept-box">
+                        <h5>PCIe 3.0/4.0 TX均衡原理</h5>
+                        <p>PCIe 3.0+使用3-tap FIR滤波器实现发送端均衡，通过调整系数补偿信道损耗。</p>
+
+                        <div class="formula-box">
+                            <p><strong>3-tap FIR公式</strong>:</p>
+                            <p>$V_{out}(n) = C_{-1} \times V_{in}(n-1) + C_0 \times V_{in}(n) + C_{+1} \times V_{in}(n+1)$</p>
+                            <p>约束条件:</p>
+                            <ul>
+                                <li>$C_{-1} + C_0 + C_{+1} = 0$ (直流增益归一化)</li>
+                                <li>$|C_{-1}| \leq 0.25$, $|C_{+1}| \leq 0.25$ (PCIe 3.0)</li>
+                                <li>$C_0 \geq 0.5$</li>
+                            </ul>
+                        </div>
+
+                        <h5>系数测试方法</h5>
+                        <ol>
+                            <li><strong>读取系数</strong>: 通过LTSSM状态机读取协商的系数</li>
+                            <li><strong>波形捕获</strong>: 使用示波器捕获特定pattern
+                                <ul>
+                                    <li>测量"000...01000..."的幅度 → 提取 C₋₁</li>
+                                    <li>测量"111...10111..."的幅度 → 提取 C₀</li>
+                                    <li>测量"000...01000..."的幅度 → 提取 C₊₁</li>
+                                </ul>
+                            </li>
+                            <li><strong>验证约束</strong>: 检查是否满足规范约束条件</li>
+                        </ol>
+
+                        <h5>常用系数预设 (PCIe 3.0)</h5>
+                        <table class="reference-table">
+                            <thead>
+                                <tr>
+                                    <th>Preset</th>
+                                    <th>C₋₁</th>
+                                    <th>C₀</th>
+                                    <th>C₊₁</th>
+                                    <th>应用场景</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>P0</td>
+                                    <td>0</td>
+                                    <td>1.0</td>
+                                    <td>0</td>
+                                    <td>无均衡(短距离)</td>
+                                </tr>
+                                <tr>
+                                    <td>P1</td>
+                                    <td>-0.03</td>
+                                    <td>0.97</td>
+                                    <td>-0.06</td>
+                                    <td>轻度均衡</td>
+                                </tr>
+                                <tr>
+                                    <td>P7</td>
+                                    <td>-0.12</td>
+                                    <td>0.73</td>
+                                    <td>-0.15</td>
+                                    <td>中度均衡</td>
+                                </tr>
+                                <tr>
+                                    <td>P9</td>
+                                    <td>-0.18</td>
+                                    <td>0.57</td>
+                                    <td>-0.25</td>
+                                    <td>重度均衡(长距离)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="section-block">
+                    <h3>2. PCIe接收端(RX)测试详解</h3>
+
+                    <h4>2.1 RX容限测试 (Receiver Tolerance)</h4>
+                    <div class="concept-box">
+                        <h5>测试目的</h5>
+                        <p>验证接收端能否在最恶劣条件下正确解码信号，包括低幅度、高抖动、高ISI等。</p>
+
+                        <h5>RX容限规范 (PCIe 3.0)</h5>
+                        <table class="reference-table">
+                            <thead>
+                                <tr>
+                                    <th>测试条件</th>
+                                    <th>最小输入幅度</th>
+                                    <th>最大抖动</th>
+                                    <th>BER要求</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>短信道</td>
+                                    <td>175 mV (diff pp)</td>
+                                    <td>0.4 UI</td>
+                                    <td>< 10⁻¹²</td>
+                                </tr>
+                                <tr>
+                                    <td>中等信道</td>
+                                    <td>150 mV</td>
+                                    <td>0.45 UI</td>
+                                    <td>< 10⁻¹²</td>
+                                </tr>
+                                <tr>
+                                    <td>长信道</td>
+                                    <td>125 mV</td>
+                                    <td>0.5 UI</td>
+                                    <td>< 10⁻¹²</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h5>测试设备</h5>
+                        <ul>
+                            <li><strong>BERT(误码仪)</strong>: 可编程信号发生器 + 误码检测器</li>
+                            <li><strong>Compliance测试板</strong>: 标准测试夹具</li>
+                            <li><strong>抖动注入器</strong>: 添加可控抖动</li>
+                            <li><strong>衰减器</strong>: 降低信号幅度</li>
+                        </ul>
+
+                        <h5>测试流程</h5>
+                        <ol>
+                            <li>配置BERT生成PCIe compliance pattern</li>
+                            <li>设置信号幅度为测试点(如175mV)</li>
+                            <li>注入规范允许的最大抖动(如0.4 UI)</li>
+                            <li>运行测试时间≥10秒(≥10¹³ bits @ 8GT/s)</li>
+                            <li>记录误码数，计算BER</li>
+                            <li>要求: BER < 10⁻¹²</li>
+                        </ol>
+
+                        <div class="formula-box">
+                            <p><strong>BER计算</strong>:</p>
+                            <p>$BER = \frac{\text{错误比特数}}{\text{总比特数}}$</p>
+                            <p>置信度计算:</p>
+                            <p>对于BER = 10⁻¹², 需要测试 > 10¹³ bits 才能有统计意义</p>
+                        </div>
+                    </div>
+
+                    <h4>2.2 RX均衡器测试 (CTLE & DFE)</h4>
+                    <div class="concept-box">
+                        <h5>RX均衡技术</h5>
+                        <ul>
+                            <li><strong>CTLE (Continuous Time Linear Equalizer)</strong>: 连续时间线性均衡
+                                <ul>
+                                    <li>模拟域均衡，补偿高频损耗</li>
+                                    <li>提升高频增益，抑制低频</li>
+                                    <li>PCIe 3.0+必需</li>
+                                </ul>
+                            </li>
+                            <li><strong>DFE (Decision Feedback Equalizer)</strong>: 判决反馈均衡
+                                <ul>
+                                    <li>数字域均衡，消除码间干扰(ISI)</li>
+                                    <li>利用先前判决值补偿当前码元</li>
+                                    <li>PCIe 4.0+推荐</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <h5>CTLE频率响应</h5>
+                        <div class="formula-box">
+                            <p>$H_{CTLE}(f) = \frac{1 + j \cdot \frac{f}{f_{z}}}{1 + j \cdot \frac{f}{f_{p}}}$</p>
+                            <p>其中:</p>
+                            <ul>
+                                <li>$f_{z}$: 零点频率(boost起始)</li>
+                                <li>$f_{p}$: 极点频率(boost终止)</li>
+                                <li>增益: $20\log_{10}\left(\frac{f_p}{f_z}\right)$ dB</li>
+                            </ul>
+                        </div>
+
+                        <h5>DFE工作原理</h5>
+                        <div class="formula-box">
+                            <p>$y(n) = x(n) - \sum_{k=1}^{N} c_k \times \hat{y}(n-k)$</p>
+                            <p>其中:</p>
+                            <ul>
+                                <li>$x(n)$: 当前输入</li>
+                                <li>$\hat{y}(n-k)$: 前k个判决值</li>
+                                <li>$c_k$: DFE系数(自适应)</li>
+                            </ul>
+                        </div>
+
+                        <h5>均衡器测试方法</h5>
+                        <ol>
+                            <li><strong>眼图测量</strong>:
+                                <ul>
+                                    <li>均衡前: 捕获CDR输入端眼图</li>
+                                    <li>均衡后: 捕获CDR输出端眼图</li>
+                                    <li>比较眼高和眼宽改善量</li>
+                                </ul>
+                            </li>
+                            <li><strong>S参数扫描</strong>:
+                                <ul>
+                                    <li>使用VNA测量信道S21</li>
+                                    <li>提取插损曲线</li>
+                                    <li>验证CTLE是否补偿了信道损耗</li>
+                                </ul>
+                            </li>
+                            <li><strong>自适应收敛测试</strong>:
+                                <ul>
+                                    <li>监控均衡器系数变化</li>
+                                    <li>验证是否收敛到最优值</li>
+                                    <li>检查收敛时间(通常<100ms)</li>
+                                </ul>
+                            </li>
+                        </ol>
+
+                        <div class="example-box">
+                            <h5>典型测试结果</h5>
+                            <p><strong>未均衡</strong>:</p>
+                            <ul>
+                                <li>眼高: 80 mV</li>
+                                <li>眼宽: 0.4 UI</li>
+                                <li>BER: 10⁻⁶ (不合格)</li>
+                            </ul>
+                            <p><strong>均衡后</strong>:</p>
+                            <ul>
+                                <li>眼高: 200 mV (提升150%)</li>
+                                <li>眼宽: 0.75 UI (提升88%)</li>
+                                <li>BER: < 10⁻¹² (合格)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-block">
+                    <h3>3. PCIe链路训练与调试</h3>
+
+                    <h4>3.1 LTSSM状态机详解</h4>
+                    <div class="concept-box">
+                        <h5>LTSSM (Link Training and Status State Machine)</h5>
+                        <p>PCIe链路训练通过LTSSM状态机完成，包括检测、配置、训练、均衡等多个阶段。</p>
+
+                        <h5>主要状态及其功能</h5>
+                        <table class="reference-table">
+                            <thead>
+                                <tr>
+                                    <th>状态</th>
+                                    <th>功能</th>
+                                    <th>超时时间</th>
+                                    <th>成功条件</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Detect</td>
+                                    <td>检测对端是否存在</td>
+                                    <td>12 ms</td>
+                                    <td>检测到电容负载</td>
+                                </tr>
+                                <tr>
+                                    <td>Polling</td>
+                                    <td>比特锁定和符号锁定</td>
+                                    <td>24 ms</td>
+                                    <td>8次连续TS1/TS2</td>
+                                </tr>
+                                <tr>
+                                    <td>Configuration</td>
+                                    <td>链路宽度和速度协商</td>
+                                    <td>48 ms</td>
+                                    <td>配置完成</td>
+                                </tr>
+                                <tr>
+                                    <td>L0 (Gen3+)</td>
+                                    <td>均衡协商和优化</td>
+                                    <td>32 ms</td>
+                                    <td>Phase 2/3完成</td>
+                                </tr>
+                                <tr>
+                                    <td>L0</td>
+                                    <td>正常数据传输</td>
+                                    <td>-</td>
+                                    <td>持续运行</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h5>PCIe 3.0均衡训练流程</h5>
+                        <ol>
+                            <li><strong>Phase 0</strong>: Gen1速率训练
+                                <ul>
+                                    <li>完成基本链路建立</li>
+                                    <li>协商支持的速率</li>
+                                </ul>
+                            </li>
+                            <li><strong>Phase 1</strong>: Gen3速率切换
+                                <ul>
+                                    <li>切换到8GT/s</li>
+                                    <li>使用预设P0(无均衡)</li>
+                                </ul>
+                            </li>
+                            <li><strong>Phase 2</strong>: TX均衡优化
+                                <ul>
+                                    <li>RX评估多个TX预设</li>
+                                    <li>选择最优预设</li>
+                                    <li>可进行微调(Coefficient)</li>
+                                </ul>
+                            </li>
+                            <li><strong>Phase 3</strong>: RX均衡优化
+                                <ul>
+                                    <li>RX调整CTLE参数</li>
+                                    <li>DFE系数自适应</li>
+                                    <li>完成后进入L0</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <h4>3.2 链路训练失败诊断</h4>
+                    <div class="concept-box">
+                        <h5>常见失败模式及原因</h5>
+
+                        <div class="warning-box">
+                            <h5>问题1: 卡在Detect状态</h5>
+                            <p><strong>现象</strong>: 无法检测到对端设备</p>
+                            <p><strong>可能原因</strong>:</p>
+                            <ul>
+                                <li>TX电压不足或过高</li>
+                                <li>RX终端电阻不匹配(应为50Ω到Vcc/2)</li>
+                                <li>PCB走线断路或短路</li>
+                                <li>AC耦合电容失效</li>
+                            </ul>
+                            <p><strong>调试方法</strong>:</p>
+                            <ol>
+                                <li>使用示波器测量TX差分电压(应>600mV)</li>
+                                <li>检查RX端终端电阻(万用表测量)</li>
+                                <li>TDR测试检查阻抗连续性</li>
+                                <li>更换AC耦合电容</li>
+                            </ol>
+                        </div>
+
+                        <div class="warning-box">
+                            <h5>问题2: 卡在Polling状态</h5>
+                            <p><strong>现象</strong>: 无法完成比特锁定</p>
+                            <p><strong>可能原因</strong>:</p>
+                            <ul>
+                                <li>时钟质量差，抖动过大</li>
+                                <li>眼图质量不足</li>
+                                <li>电源噪声干扰CDR</li>
+                                <li>RX灵敏度不够</li>
+                            </ul>
+                            <p><strong>调试方法</strong>:</p>
+                            <ol>
+                                <li>测量RefClk抖动(应<120ps RMS)</li>
+                                <li>捕获眼图，检查眼高眼宽</li>
+                                <li>测量电源纹波(应<50mV pp)</li>
+                                <li>降低数据速率测试(Gen1→Gen2)</li>
+                            </ol>
+                        </div>
+
+                        <div class="warning-box">
+                            <h5>问题3: Gen3训练失败</h5>
+                            <p><strong>现象</strong>: Gen1/2正常，Gen3失败</p>
+                            <p><strong>可能原因</strong>:</p>
+                            <ul>
+                                <li>信道插损过大(>20dB @ 4GHz)</li>
+                                <li>TX预加重不足</li>
+                                <li>RX均衡器故障</li>
+                                <li>PCB串扰严重</li>
+                            </ul>
+                            <p><strong>调试方法</strong>:</p>
+                            <ol>
+                                <li>VNA测量S21，检查4GHz处插损</li>
+                                <li>验证TX预加重比(应-3.5dB±1dB)</li>
+                                <li>检查RX CTLE是否工作</li>
+                                <li>优化PCB布局，增加lane间距</li>
+                            </ol>
+                        </div>
+
+                        <div class="warning-box">
+                            <h5>问题4: 链路不稳定，频繁重训练</h5>
+                            <p><strong>现象</strong>: 进入L0后经常回到Recovery</p>
+                            <p><strong>可能原因</strong>:</p>
+                            <ul>
+                                <li>BER过高(>10⁻⁸)</li>
+                                <li>温度漂移导致均衡失效</li>
+                                <li>电源电压波动</li>
+                                <li>EMI干扰</li>
+                            </ul>
+                            <p><strong>调试方法</strong>:</p>
+                            <ol>
+                                <li>长时间BER测试(≥1小时)</li>
+                                <li>温度循环测试(-40°C to 85°C)</li>
+                                <li>加强电源去耦，降低PDN阻抗</li>
+                                <li>EMI扫描，识别干扰源</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <h4>3.3 协议分析仪使用</h4>
+                    <div class="concept-box">
+                        <h5>PCIe协议分析工具</h5>
+                        <ul>
+                            <li><strong>Teledyne LeCroy</strong>: Summit系列</li>
+                            <li><strong>Keysight</strong>: U4301A系列</li>
+                            <li><strong>软件工具</strong>: PCIeye, PCIeView</li>
+                        </ul>
+
+                        <h5>关键调试功能</h5>
+                        <ol>
+                            <li><strong>LTSSM状态跟踪</strong>:
+                                <ul>
+                                    <li>实时显示状态机转换</li>
+                                    <li>记录每个状态的持续时间</li>
+                                    <li>标记超时或异常退出</li>
+                                </ul>
+                            </li>
+                            <li><strong>TLP/DLLP解码</strong>:
+                                <ul>
+                                    <li>完整的数据包解码</li>
+                                    <li>CRC校验</li>
+                                    <li>Ack/Nak跟踪</li>
+                                </ul>
+                            </li>
+                            <li><strong>均衡系数记录</strong>:
+                                <ul>
+                                    <li>记录Phase2/3协商过程</li>
+                                    <li>显示最终选择的预设</li>
+                                    <li>系数微调历史</li>
+                                </ul>
+                            </li>
+                            <li><strong>错误统计</strong>:
+                                <ul>
+                                    <li>符号错误计数</li>
+                                    <li>CRC错误计数</li>
+                                    <li>重训练次数</li>
+                                </ul>
+                            </li>
+                        </ol>
+
+                        <div class="example-box">
+                            <h5>典型调试案例</h5>
+                            <p><strong>问题</strong>: 链路偶尔训练失败</p>
+                            <p><strong>协议分析仪发现</strong>:</p>
+                            <ul>
+                                <li>Phase 2中，RX反复请求不同预设</li>
+                                <li>最终超时退出</li>
+                                <li>重新训练后成功(使用不同预设)</li>
+                            </ul>
+                            <p><strong>根因</strong>: TX预设P7在特定温度下性能劣化</p>
+                            <p><strong>解决</strong>: 修改BIOS，限制使用P1-P5预设</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-block">
+                    <h3>4. PCB设计精细要求</h3>
+
+                    <h4>4.1 差分对布线规则</h4>
+                    <div class="concept-box">
+                        <h5>阻抗控制</h5>
+                        <table class="reference-table">
+                            <thead>
+                                <tr>
+                                    <th>PCIe代</th>
+                                    <th>目标阻抗</th>
+                                    <th>容差</th>
+                                    <th>频率</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Gen 1/2</td>
+                                    <td>85Ω ± 7Ω</td>
+                                    <td>±8.2%</td>
+                                    <td>DC-2.5GHz</td>
+                                </tr>
+                                <tr>
+                                    <td>Gen 3</td>
+                                    <td>85Ω ± 7Ω</td>
+                                    <td>±8.2%</td>
+                                    <td>DC-4GHz</td>
+                                </tr>
+                                <tr>
+                                    <td>Gen 4</td>
+                                    <td>85Ω ± 6Ω</td>
+                                    <td>±7%</td>
+                                    <td>DC-8GHz</td>
+                                </tr>
+                                <tr>
+                                    <td>Gen 5</td>
+                                    <td>85Ω ± 5Ω</td>
+                                    <td>±5.9%</td>
+                                    <td>DC-16GHz</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h5>长度匹配要求</h5>
+                        <div class="formula-box">
+                            <p><strong>对内匹配</strong> (Within Pair):</p>
+                            <p>$|\Delta L_{P-N}| \leq 5 \text{ mil}$ (127 μm)</p>
+                            <p>对应时间偏斜: ~0.8 ps (在FR4上)</p>
+                        </div>
+
+                        <div class="formula-box">
+                            <p><strong>对间匹配</strong> (Lane-to-Lane):</p>
+                            <p>Gen 1/2: $|\Delta L_{lane}| \leq 500 \text{ mil}$ (12.7 mm)</p>
+                            <p>Gen 3+: $|\Delta L_{lane}| \leq 200 \text{ mil}$ (5.08 mm)</p>
+                            <p><em>推荐更严格: ±100 mil</em></p>
+                        </div>
+
+                        <h5>走线间距</h5>
+                        <ul>
+                            <li><strong>对内间距</strong>: 保持恒定，通常为走线宽度的3倍</li>
+                            <li><strong>对间间距</strong>:
+                                <ul>
+                                    <li>最小: 5× 走线宽度(减少串扰)</li>
+                                    <li>推荐: 10× 走线宽度(Gen3+)</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <h4>4.2 过孔设计</h4>
+                    <div class="concept-box">
+                        <h5>过孔引起的问题</h5>
+                        <ul>
+                            <li><strong>阻抗不连续</strong>: 过孔处阻抗降低(典型60-70Ω)</li>
+                            <li><strong>反射</strong>: 阻抗突变导致信号反射</li>
+                            <li><strong>串扰</strong>: 过孔桩增加耦合</li>
+                        </ul>
+
+                        <h5>优化方法</h5>
+                        <ol>
+                            <li><strong>反焊盘优化</strong>:
+                                <ul>
+                                    <li>增大反焊盘直径，降低寄生电容</li>
+                                    <li>推荐: 过孔外径 + 20 mil</li>
+                                </ul>
+                            </li>
+                            <li><strong>背钻(Back-drilling)</strong>:
+                                <ul>
+                                    <li>去除未使用的过孔桩</li>
+                                    <li>降低寄生电感和串扰</li>
+                                    <li>Gen 3+必需</li>
+                                </ul>
+                            </li>
+                            <li><strong>GND过孔</strong>:
+                                <ul>
+                                    <li>信号过孔周围布置GND过孔</li>
+                                    <li>距离: 15-20 mil</li>
+                                    <li>数量: 每个差分对至少2个</li>
+                                </ul>
+                            </li>
+                        </ol>
+
+                        <div class="formula-box">
+                            <p><strong>过孔寄生电感估算</strong>:</p>
+                            <p>$L_{via} \approx 5.08 \times h \times \left[\ln\left(\frac{4h}{d}\right) + 1\right] \text{ (nH)}$</p>
+                            <p>其中:</p>
+                            <ul>
+                                <li>$h$: 过孔长度 (mm)</li>
+                                <li>$d$: 过孔内径 (mm)</li>
+                            </ul>
+                            <p><em>典型值: 1.6mm板厚, 0.3mm内径 → L ≈ 1.1 nH</em></p>
+                        </div>
+                    </div>
+
+                    <h4>4.3 参考平面处理</h4>
+                    <div class="concept-box">
+                        <h5>参考平面连续性</h5>
+                        <p><strong>黄金法则</strong>: 差分对下方参考平面必须完整无分割</p>
+
+                        <h5>跨分割处理</h5>
+                        <p>如必须跨越平面分割:</p>
+                        <ol>
+                            <li><strong>缝合电容</strong>:
+                                <ul>
+                                    <li>在分割处放置0.1μF电容</li>
+                                    <li>就近信号走线放置</li>
+                                    <li>间距 <50 mil</li>
+                                </ul>
+                            </li>
+                            <li><strong>最小化跨越长度</strong>:
+                                <ul>
+                                    <li>垂直跨越，不要平行</li>
+                                    <li>跨越长度 < 200 mil</li>
+                                </ul>
+                            </li>
+                        </ol>
+
+                        <h5>换层设计</h5>
+                        <ul>
+                            <li><strong>优先</strong>: 在同一参考平面的层间换层
+                                <ul>
+                                    <li>如: L2↔L3 (GND在L1/L4)</li>
+                                </ul>
+                            </li>
+                            <li><strong>避免</strong>: 更换参考平面类型
+                                <ul>
+                                    <li>如: GND参考→VCC参考</li>
+                                </ul>
+                            </li>
+                            <li><strong>必须换参考时</strong>:
+                                <ul>
+                                    <li>使用缝合电容</li>
+                                    <li>电容距离过孔 <15 mil</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-block">
+                    <h3>5. 实战调试案例集</h3>
+
+                    <div class="example-box">
+                        <h4>案例1: Gen3 链路训练间歇性失败</h4>
+                        <p><strong>现象</strong>:</p>
+                        <ul>
+                            <li>PCIe x4 链路，Gen1/2正常</li>
+                            <li>Gen3训练成功率约70%</li>
+                            <li>温度敏感(低温更容易失败)</li>
+                        </ul>
+
+                        <p><strong>调试过程</strong>:</p>
+                        <ol>
+                            <li><strong>协议分析</strong>:
+                                <ul>
+                                    <li>发现Phase 2中，Lane 0偶尔无法找到合适预设</li>
+                                    <li>其他lane正常</li>
+                                </ul>
+                            </li>
+                            <li><strong>眼图测试</strong>:
+                                <ul>
+                                    <li>Lane 0 眼高比其他lane低约50mV</li>
+                                    <li>低温时差异更明显</li>
+                                </ul>
+                            </li>
+                            <li><strong>PCB检查</strong>:
+                                <ul>
+                                    <li>发现Lane 0走线经过电源分割</li>
+                                    <li>缺少缝合电容</li>
+                                </ul>
+                            </li>
+                        </ol>
+
+                        <p><strong>解决方案</strong>:</p>
+                        <ul>
+                            <li>在分割处增加3个0.1μF缝合电容</li>
+                            <li>重新测试: Gen3训练100%成功</li>
+                            <li>眼图改善: 眼高提升至正常水平</li>
+                        </ul>
+
+                        <p><strong>经验总结</strong>:</p>
+                        <ul>
+                            <li>❌ 永远不要让高速信号跨越参考平面分割</li>
+                            <li>✓ 逐lane测试，不要只看整体链路</li>
+                            <li>✓ 温度循环测试不可省略</li>
+                        </ul>
+                    </div>
+
+                    <div class="example-box">
+                        <h4>案例2: TX眼图不对称</h4>
+                        <p><strong>现象</strong>:</p>
+                        <ul>
+                            <li>TX眼图上升沿和下降沿不对称</li>
+                            <li>下降沿明显更慢</li>
+                            <li>影响高频性能</li>
+                        </ul>
+
+                        <p><strong>调试过程</strong>:</p>
+                        <ol>
+                            <li><strong>TDR测试</strong>:
+                                <ul>
+                                    <li>发现TX输出端D-信号阻抗偏低(75Ω vs 85Ω)</li>
+                                    <li>D+信号正常</li>
+                                </ul>
+                            </li>
+                            <li><strong>PCB X-ray检查</strong>:
+                                <ul>
+                                    <li>发现D-走线下方GND过孔过多</li>
+                                    <li>导致寄生电容增加</li>
+                                </ul>
+                            </li>
+                        </ol>
+
+                        <p><strong>解决方案</strong>:</p>
+                        <ul>
+                            <li>PCB改版: 移除D-走线下方多余GND过孔</li>
+                            <li>调整走线宽度补偿阻抗</li>
+                        </ul>
+
+                        <p><strong>测试结果</strong>:</p>
+                        <ul>
+                            <li>阻抗: 84Ω (D+和D-都达标)</li>
+                            <li>眼图对称性改善</li>
+                            <li>上升/下降时间差 <5%</li>
+                        </ul>
+
+                        <p><strong>经验总结</strong>:</p>
+                        <ul>
+                            <li>✓ TDR是诊断阻抗问题的利器</li>
+                            <li>✓ 注意差分对的对称性，包括过孔数量</li>
+                            <li>✓ GND过孔不是越多越好</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="reference-box">
+                    <h3>📚 参考资料</h3>
+                    <ul>
+                        <li><strong>PCI-SIG官方规范</strong>:
+                            <ul>
+                                <li>PCIe Base Specification 3.0/4.0/5.0</li>
+                                <li>PCIe CEM (Card Electromechanical) Specification</li>
+                                <li>PCIe PHY Interface Specification (PIPE)</li>
+                            </ul>
+                        </li>
+                        <li><strong>测试规范</strong>:
+                            <ul>
+                                <li>PCIe Electrical Compliance Test Specification</li>
+                                <li>PCIe Jitter Test Methodology</li>
+                            </ul>
+                        </li>
+                        <li><strong>设计指南</strong>:
+                            <ul>
+                                <li>Intel PCIe Design Guidelines</li>
+                                <li>AMD PCIe Design Guide</li>
+                                <li>Xilinx/Altera PCIe IP Core User Guide</li>
+                            </ul>
+                        </li>
+                    </ul>
+    
+<div class="section-block">
+    <h3>9. PCIe LTSSM 状态机完整详解 (11个状态)</h3>
+
+    <div class="intro-box">
+        <h4>📖 LTSSM 简介</h4>
+        <p><strong>LTSSM (Link Training and Status State Machine)</strong> 是 PCIe 链路初始化和管理的核心状态机，负责链路训练、速率协商、电源管理等关键功能。PCIe 规范定义了 11 个主状态和多个子状态。</p>
+    </div>
+
+    <h4>9.1 LTSSM 11 个主状态概览</h4>
+    <div class="concept-box">
+        <table class="reference-table">
+            <thead>
+                <tr>
+                    <th>状态</th>
+                    <th>英文名称</th>
+                    <th>主要功能</th>
+                    <th>典型停留时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Detect</strong></td>
+                    <td>检测态</td>
+                    <td>检测远端设备是否存在</td>
+                    <td>12 ms (Quiet 超时)</td>
+                </tr>
+                <tr>
+                    <td><strong>Polling</strong></td>
+                    <td>轮询态</td>
+                    <td>bit lock, symbol lock, lane polarity</td>
+                    <td>24 ms (超时)</td>
+                </tr>
+                <tr>
+                    <td><strong>Configuration</strong></td>
+                    <td>配置态</td>
+                    <td>Lane 数量协商、Link 编号分配</td>
+                    <td>48 ms (超时)</td>
+                </tr>
+                <tr>
+                    <td><strong>L0</strong></td>
+                    <td>正常工作态</td>
+                    <td>数据传输 (Active State)</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td><strong>L0s</strong></td>
+                    <td>快速低功耗态</td>
+                    <td>短暂空闲节能 (TX/RX 独立)</td>
+                    <td>&lt; 1 μs (恢复时间)</td>
+                </tr>
+                <tr>
+                    <td><strong>L1</strong></td>
+                    <td>低功耗待机态</td>
+                    <td>中等功耗节省</td>
+                    <td>2-4 μs (恢复时间)</td>
+                </tr>
+                <tr>
+                    <td><strong>L2</strong></td>
+                    <td>深度低功耗态</td>
+                    <td>最大功耗节省（需辅助电源）</td>
+                    <td>20-100 ms (唤醒时间)</td>
+                </tr>
+                <tr>
+                    <td><strong>Recovery</strong></td>
+                    <td>恢复态</td>
+                    <td>速率切换、Equalization</td>
+                    <td>~2 ms</td>
+                </tr>
+                <tr>
+                    <td><strong>Hot Reset</strong></td>
+                    <td>热复位态</td>
+                    <td>链路级热复位</td>
+                    <td>2 ms</td>
+                </tr>
+                <tr>
+                    <td><strong>Disabled</strong></td>
+                    <td>禁用态</td>
+                    <td>链路已禁用（软件命令）</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td><strong>Loopback</strong></td>
+                    <td>环回测试态</td>
+                    <td>Compliance 测试模式</td>
+                    <td>-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4>9.2 Detect 状态详解</h4>
+    <div class="concept-box">
+        <h5>状态目的</h5>
+        <p>通过检测远端接收端的负载电容来判断设备是否存在，避免无效的链路训练尝试。</p>
+
+        <h5>子状态</h5>
+        <table class="reference-table">
+            <thead>
+                <tr>
+                    <th>子状态</th>
+                    <th>操作</th>
+                    <th>判断条件</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Detect.Quiet</strong></td>
+                    <td>TX 输出高阻态 (High-Z)</td>
+                    <td>持续 12 ms</td>
+                </tr>
+                <tr>
+                    <td><strong>Detect.Active</strong></td>
+                    <td>TX 输出低频探测信号 (~100 MHz)</td>
+                    <td>测量 RX 端电压</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5>检测原理</h5>
+        <div class="formula-box">
+            <p><strong>电容检测电路</strong>:</p>
+            <p>$V_{RX} = V_{TX} \times \frac{Z_{RX}}{Z_{TX} + Z_{RX}}$</p>
+            <p>其中:</p>
+            <ul>
+                <li>$V_{TX}$: 发送端电压 (~3.3V)</li>
+                <li>$Z_{RX}$: 接收端阻抗 (典型 50Ω + 接收端电容)</li>
+                <li>$Z_{TX}$: 发送端输出阻抗 (典型 50Ω)</li>
+            </ul>
+            <p><strong>判断标准</strong>: 如果 $V_{RX}$ &gt; 600 mV，认为接收端存在</p>
+        </div>
+
+        <h5>状态转换</h5>
+        <ul>
+            <li>✅ <strong>检测到设备</strong> → 进入 <code>Polling</code> 状态</li>
+            <li>❌ <strong>未检测到设备</strong> → 停留在 <code>Detect.Quiet</code> (周期性重试)</li>
+        </ul>
+    </div>
+
+    <h4>9.3 Polling 状态详解</h4>
+    <div class="concept-box">
+        <h5>状态目的</h5>
+        <p>建立 bit-level 和 symbol-level 同步，确定 lane 极性，为后续配置做准备。</p>
+
+        <h5>子状态</h5>
+        <table class="reference-table">
+            <thead>
+                <tr>
+                    <th>子状态</th>
+                    <th>发送内容</th>
+                    <th>接收判断</th>
+                    <th>超时时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Polling.Active</strong></td>
+                    <td>TS1 Ordered Set (持续发送)</td>
+                    <td>等待接收 8 个连续 TS1/TS2</td>
+                    <td>24 ms</td>
+                </tr>
+                <tr>
+                    <td><strong>Polling.Configuration</strong></td>
+                    <td>TS2 Ordered Set</td>
+                    <td>接收 8 个连续 TS2</td>
+                    <td>48 ms</td>
+                </tr>
+                <tr>
+                    <td><strong>Polling.Compliance</strong></td>
+                    <td>进入 Compliance 模式</td>
+                    <td>用于测试</td>
+                    <td>-</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5>TS1/TS2 Ordered Set 结构</h5>
+        <div class="example-box">
+            <p><strong>TS1/TS2 组成</strong> (Gen 1/2, 16 Symbols):</p>
+            <pre>
+COM | Link# | Lane# | N_FTS | Data Rate | ... | Symbol 15
+ (1) |  (2) |  (2)  |  (1)  |    (1)    | ... |   (1)
+            </pre>
+            <ul>
+                <li><strong>COM</strong>: K28.5 - 用于 comma 检测和同步</li>
+                <li><strong>Link#</strong>: 链路编号 (PAD 或实际编号)</li>
+                <li><strong>Lane#</strong>: Lane 编号 (PAD 或实际编号)</li>
+                <li><strong>N_FTS</strong>: Fast Training Sequence 数量</li>
+                <li><strong>Data Rate</strong>: 支持的速率 (Gen 1/2/3/4/5/6)</li>
+            </ul>
+        </div>
+
+        <h5>Bit Lock 和 Symbol Lock</h5>
+        <ul>
+            <li><strong>Bit Lock</strong>: 时钟恢复电路 (CDR) 锁定到数据速率</li>
+            <li><strong>Symbol Lock</strong>: 检测到 8B/10B 的 comma 字符 (K28.5)，确定 10-bit symbol 边界</li>
+            <li><strong>Lane Polarity Detection</strong>: 如果 D+/D- 接反，自动翻转极性</li>
+        </ul>
+
+        <h5>状态转换</h5>
+        <ul>
+            <li>✅ <strong>接收到 8 个 TS2</strong> → 进入 <code>Configuration</code> 状态</li>
+            <li>⏱️ <strong>超时 (24 ms)</strong> → 返回 <code>Detect</code></li>
+        </ul>
+    </div>
+
+    <h4>9.4 Configuration 状态详解</h4>
+    <div class="concept-box">
+        <h5>状态目的</h5>
+        <p>协商链路宽度 (x1/x2/x4/x8/x16)，分配 Link 和 Lane 编号，准备进入 L0 工作态。</p>
+
+        <h5>子状态</h5>
+        <table class="reference-table">
+            <thead>
+                <tr>
+                    <th>子状态</th>
+                    <th>主要任务</th>
+                    <th>成功条件</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Configuration.Linkwidth.Start</strong></td>
+                    <td>开始 Link width 协商</td>
+                    <td>发送 TS1 (带 Link/Lane 编号)</td>
+                </tr>
+                <tr>
+                    <td><strong>Configuration.Linkwidth.Accept</strong></td>
+                    <td>接受协商的 Link width</td>
+                    <td>接收 8 个 TS1 (Link/Lane 匹配)</td>
+                </tr>
+                <tr>
+                    <td><strong>Configuration.Lanenum.Wait</strong></td>
+                    <td>等待 Lane 编号分配</td>
+                    <td>所有 Lane 编号一致</td>
+                </tr>
+                <tr>
+                    <td><strong>Configuration.Lanenum.Accept</strong></td>
+                    <td>确认 Lane 编号</td>
+                    <td>连续 8 个 TS2</td>
+                </tr>
+                <tr>
+                    <td><strong>Configuration.Complete</strong></td>
+                    <td>配置完成</td>
+                    <td>发送 16 个 IDLE 符号</td>
+                </tr>
+                <tr>
+                    <td><strong>Configuration.Idle</strong></td>
+                    <td>准备进入 L0</td>
+                    <td>接收 8 个 IDLE 符号</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5>Link Width 协商示例</h5>
+        <div class="example-box">
+            <h5>场景: x16 设备插入 x8 插槽</h5>
             <ol>
-                <li>使用高带宽示波器（≥20 GHz for Gen5）</li>
-                <li>连接差分探头到PCIe TX+和TX-信号</li>
-                <li>测量差分峰峰值电压: Vpp = |V(D+) - V(D-)|</li>
-                <li>测量共模电压: Vcm = (V(D+) + V(D-)) / 2</li>
-                <li>验证是否在规范范围内</li>
+                <li><strong>Device (Downstream Port)</strong>: 发送 TS1, 声明支持 x16</li>
+                <li><strong>Root Complex (Upstream Port)</strong>: 发送 TS1, 声明只能提供 x8</li>
+                <li><strong>协商结果</strong>: 取较小值，链路建立为 <strong>x8</strong></li>
+                <li><strong>Lane 0-7</strong>: 用于数据传输</li>
+                <li><strong>Lane 8-15</strong>: 未连接或未使用</li>
+            </ol>
+            <p><strong>软件可见</strong>: <code>lspci -vv</code> 显示 "LnkCap: x16, LnkSta: x8"</p>
+        </div>
+
+        <h5>状态转换</h5>
+        <ul>
+            <li>✅ <strong>配置成功</strong> → 进入 <code>L0</code> 状态 (正常工作)</li>
+            <li>❌ <strong>协商失败或超时</strong> → 返回 <code>Detect</code> 或 <code>Recovery</code></li>
+        </ul>
+    </div>
+
+    <h4>9.5 L0 状态 (正常工作态)</h4>
+    <div class="concept-box">
+        <h5>状态特征</h5>
+        <ul>
+            <li>✅ <strong>全速数据传输</strong>: TLP (Transaction Layer Packet) 和 DLLP 传输</li>
+            <li>✅ <strong>链路活跃</strong>: TX/RX 均处于活动状态</li>
+            <li>✅ <strong>功耗最高</strong>: 所有电路全开</li>
+        </ul>
+
+        <h5>L0 状态下的关键机制</h5>
+        <table class="reference-table">
+            <thead>
+                <tr>
+                    <th>机制</th>
+                    <th>作用</th>
+                    <th>实现方式</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>SKIP Ordered Set</strong></td>
+                    <td>时钟容差补偿</td>
+                    <td>每 1180-1538 Symbols 插入一次 (Gen 1/2)</td>
+                </tr>
+                <tr>
+                    <td><strong>FTS (Fast Training Sequence)</strong></td>
+                    <td>从 L0s 快速恢复</td>
+                    <td>发送 N_FTS 个 (通常 128-255 个)</td>
+                </tr>
+                <tr>
+                    <td><strong>Electrical Idle</strong></td>
+                    <td>进入 L0s/L1</td>
+                    <td>差分电压 &lt; 65 mV</td>
+                </tr>
+                <tr>
+                    <td><strong>ACK/NAK DLLP</strong></td>
+                    <td>链路层重传</td>
+                    <td>Seq# 和 CRC 校验</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5>L0 性能指标</h5>
+        <div class="formula-box">
+            <p><strong>有效带宽计算</strong>:</p>
+            <p>$Bandwidth_{effective} = Bandwidth_{raw} \times Efficiency$</p>
+            <p><strong>Gen 3.0 x16 示例</strong>:</p>
+            <ul>
+                <li>Raw Bandwidth: 8 GT/s × 16 lanes × 1 byte/Symbol = <strong>128 GB/s</strong></li>
+                <li>Encoding Overhead: 128b/130b = <strong>98.46%</strong></li>
+                <li>Protocol Overhead: ~10% (TLP header, DLLP, etc.)</li>
+                <li>Effective Bandwidth: 128 × 0.9846 × 0.9 ≈ <strong>113.4 GB/s</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <h4>9.6 L0s 状态 (快速低功耗态)</h4>
+    <div class="concept-box">
+        <h5>状态特征</h5>
+        <ul>
+            <li>⚡ <strong>快速进入</strong>: &lt; 1 μs</li>
+            <li>⚡ <strong>快速退出</strong>: &lt; 1 μs (通过 FTS 序列)</li>
+            <li>💾 <strong>功耗节省</strong>: 中等 (~30-50%)</li>
+            <li>🔀 <strong>独立控制</strong>: TX 和 RX 可独立进入 L0s</li>
+        </ul>
+
+        <h5>L0s 进入条件</h5>
+        <ol>
+            <li>链路空闲 (无 TLP 传输)</li>
+            <li>发送端进入 <strong>Electrical Idle</strong> (差分电压 &lt; 65 mV)</li>
+            <li>接收端检测到 Electrical Idle，进入 L0s</li>
+        </ol>
+
+        <h5>L0s 退出流程</h5>
+        <div class="example-box">
+            <h5>从 L0s 恢复到 L0</h5>
+            <ol>
+                <li><strong>发送端</strong>: 发送 N_FTS 个 FTS Ordered Sets (根据 Configuration 时协商的值)</li>
+                <li><strong>接收端</strong>: CDR 重新锁定到数据速率</li>
+                <li><strong>恢复完成</strong>: 开始传输 IDLE 或 TLP</li>
+            </ol>
+            <p><strong>典型恢复时间</strong>: 200-500 ns (取决于 N_FTS 值)</p>
+        </div>
+
+        <h5>L0s 适用场景</h5>
+        <ul>
+            <li>✅ <strong>突发流量</strong>: 网络数据包传输间隙</li>
+            <li>✅ <strong>低延迟要求</strong>: 需要快速唤醒的应用 (NVMe SSD)</li>
+            <li>❌ <strong>持续流量</strong>: 视频流、大文件传输（不适合进入 L0s）</li>
+        </ul>
+    </div>
+
+    <h4>9.7 L1 状态 (低功耗待机态)</h4>
+    <div class="concept-box">
+        <h5>状态特征</h5>
+        <ul>
+            <li>⏱️ <strong>进入时间</strong>: 数十 μs</li>
+            <li>⏱️ <strong>退出时间</strong>: 2-4 μs</li>
+            <li>💾 <strong>功耗节省</strong>: 显著 (~80-90%)</li>
+            <li>🔗 <strong>双向协商</strong>: 需要双方同意才能进入</li>
+        </ul>
+
+        <h5>L1 进入流程</h5>
+        <div class="example-box">
+            <ol>
+                <li><strong>Downstream Port</strong>: 发送 PM_Enter_L1 DLLP</li>
+                <li><strong>Upstream Port</strong>: 回应 PM_Enter_L1 DLLP (同意)</li>
+                <li><strong>双方</strong>: 停止传输 TLP，发送 EIOS (Electrical Idle Ordered Set)</li>
+                <li><strong>进入 L1</strong>: 链路进入 Electrical Idle，关闭大部分电路</li>
             </ol>
         </div>
 
-        <h4>1.2 预加重(De-emphasis)测试</h4>
-        <div class="concept-box">
-            <h5>预加重原理</h5>
-            <p>通过减小高频成分的幅度来补偿传输线的高频损耗，改善信号完整性。</p>
+        <h5>L1 子状态 (PCIe 4.0+)</h5>
+        <table class="reference-table">
+            <thead>
+                <tr>
+                    <th>子状态</th>
+                    <th>功耗</th>
+                    <th>退出时间</th>
+                    <th>说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>L1.1</strong></td>
+                    <td>低</td>
+                    <td>~10 μs</td>
+                    <td>保持 PLL 锁定，快速恢复</td>
+                </tr>
+                <tr>
+                    <td><strong>L1.2</strong></td>
+                    <td>极低</td>
+                    <td>~100 μs</td>
+                    <td>关闭 PLL，通过 CLKREQ# 唤醒</td>
+                </tr>
+            </tbody>
+        </table>
 
-            <div class="formula-box">
-                <p><strong>预加重比计算公式</strong>:</p>
-                <p>$De-emphasis (dB) = 20 \times \log_{10}\left(\frac{V_{low}}{V_{high}}\right)$</p>
-                <p>其中:</p>
+        <h5>L1 退出流程</h5>
+        <ol>
+            <li><strong>任一端</strong>: 退出 Electrical Idle，开始发送 FTS Ordered Sets</li>
+            <li><strong>接收端</strong>: 检测到 FTS，重新锁定 CDR</li>
+            <li><strong>链路训练</strong>: 发送 TS1/TS2 快速重训练 (简化流程)</li>
+            <li><strong>返回 L0</strong>: 开始正常数据传输</li>
+        </ol>
+    </div>
+
+    <h4>9.8 L2 状态 (深度低功耗态)</h4>
+    <div class="concept-box">
+        <h5>状态特征</h5>
+        <ul>
+            <li>💤 <strong>最低功耗</strong>: 主电源可关闭，仅保留辅助电源 (Vaux)</li>
+            <li>⏱️ <strong>长唤醒时间</strong>: 20-100 ms (需完整 LTSSM 重训练)</li>
+            <li>🔌 <strong>系统级节能</strong>: 配合 ACPI S3/S4 睡眠状态</li>
+        </ul>
+
+        <h5>L2 进入条件</h5>
+        <ul>
+            <li><strong>软件触发</strong>: OS 设置 PCIe 设备进入 D3hot/D3cold 电源状态</li>
+            <li><strong>硬件响应</strong>: 发送 PM_Enter_L23 DLLP</li>
+            <li><strong>确认</strong>: 收到 PM_Request_Ack DLLP</li>
+            <li><strong>关闭主电源</strong>: 进入 L2 (L3 Ready)</li>
+        </ul>
+
+        <h5>L2 唤醒流程 (Beacon 信号)</h5>
+        <div class="example-box">
+            <ol>
+                <li><strong>Downstream Port</strong>: 检测到唤醒事件（如 USB 键盘输入）</li>
+                <li><strong>发送 Beacon</strong>: 在 RX Lane 上发送低频 Beacon 信号 (~100 MHz)</li>
+                <li><strong>Root Complex</strong>: 检测到 Beacon，恢复 Vcc 主电源</li>
+                <li><strong>完整 LTSSM</strong>: 从 Detect → Polling → Configuration → L0</li>
+                <li><strong>恢复完成</strong>: 重新枚举设备，恢复软件状态</li>
+            </ol>
+            <p><strong>总唤醒时间</strong>: 通常 50-200 ms</p>
+        </div>
+    </div>
+
+    <h4>9.9 Recovery 状态详解</h4>
+    <div class="concept-box">
+        <h5>状态目的</h5>
+        <p>从 L0/L0s/L1 恢复链路，执行速率切换 (Gen 切换) 或均衡调整 (Equalization)，无需完整重新训练。</p>
+
+        <h5>子状态</h5>
+        <table class="reference-table">
+            <thead>
+                <tr>
+                    <th>子状态</th>
+                    <th>主要任务</th>
+                    <th>发送内容</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Recovery.RcvrLock</strong></td>
+                    <td>重新建立 bit lock</td>
+                    <td>TS1 Ordered Sets</td>
+                </tr>
+                <tr>
+                    <td><strong>Recovery.RcvrCfg</strong></td>
+                    <td>接收配置信息</td>
+                    <td>TS2 Ordered Sets</td>
+                </tr>
+                <tr>
+                    <td><strong>Recovery.Idle</strong></td>
+                    <td>准备返回 L0</td>
+                    <td>IDLE 符号</td>
+                </tr>
+                <tr>
+                    <td><strong>Recovery.Speed</strong></td>
+                    <td>速率切换 (Gen 1→2→3...)</td>
+                    <td>速率协商 TS</td>
+                </tr>
+                <tr>
+                    <td><strong>Recovery.Equalization</strong></td>
+                    <td>Gen 3+ 均衡调整</td>
+                    <td>EQ TS1/TS2</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5>Recovery 触发条件</h5>
+        <ul>
+            <li>🔄 <strong>从 L1 退出</strong></li>
+            <li>🔄 <strong>速率切换</strong>: Gen 1 → Gen 2 → Gen 3 ...</li>
+            <li>🔄 <strong>Equalization 请求</strong>: 改善信号质量</li>
+            <li>⚠️ <strong>错误恢复</strong>: 检测到 8B/10B 或 CRC 错误超过阈值</li>
+        </ul>
+
+        <h5>速率切换示例 (Gen 1 → Gen 3)</h5>
+        <div class="example-box">
+            <ol>
+                <li><strong>初始链路</strong>: 在 Gen 1 (2.5 GT/s) 下工作</li>
+                <li><strong>软件请求</strong>: 设置 Link Control 2 寄存器为 Gen 3</li>
+                <li><strong>进入 Recovery</strong>: 发送 TS1 (声明目标速率 Gen 3)</li>
+                <li><strong>双方协商</strong>: 交换 TS1/TS2，确认支持 Gen 3</li>
+                <li><strong>切换速率</strong>: 从 2.5 GT/s → 5.0 GT/s → 8.0 GT/s</li>
+                <li><strong>Equalization (Gen 3)</strong>: 执行 Phase 2/3 均衡</li>
+                <li><strong>返回 L0</strong>: 在 Gen 3 速率下工作</li>
+            </ol>
+            <p><strong>总耗时</strong>: ~2-5 ms</p>
+        </div>
+    </div>
+
+    <h4>9.10 Hot Reset 状态</h4>
+    <div class="concept-box">
+        <h5>状态特征</h5>
+        <ul>
+            <li>🔥 <strong>链路级复位</strong>: 不影响物理电源</li>
+            <li>⏱️ <strong>复位时间</strong>: 2 ms (TS1 持续发送)</li>
+            <li>🔄 <strong>重新初始化</strong>: 复位后返回 Detect 重新训练</li>
+        </ul>
+
+        <h5>触发方式</h5>
+        <ol>
+            <li><strong>软件触发</strong>: 写 Bridge Control 寄存器的 Secondary Bus Reset 位</li>
+            <li><strong>硬件响应</strong>: Downstream Port 在所有 Lane 上发送 TS1 (Hot Reset = 1) 持续 2 ms</li>
+            <li><strong>Upstream 设备</strong>: 检测到 Hot Reset，复位内部状态</li>
+            <li><strong>完成后</strong>: 返回 Detect → Polling → Configuration → L0</li>
+        </ol>
+
+        <h5>Hot Reset vs Cold Reset</h5>
+        <table class="reference-table">
+            <thead>
+                <tr>
+                    <th>对比项</th>
+                    <th>Hot Reset</th>
+                    <th>Cold Reset (PERST#)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>电源</strong></td>
+                    <td>保持供电</td>
+                    <td>可能断电重新上电</td>
+                </tr>
+                <tr>
+                    <td><strong>触发</strong></td>
+                    <td>软件命令</td>
+                    <td>硬件 PERST# 信号</td>
+                </tr>
+                <tr>
+                    <td><strong>时间</strong></td>
+                    <td>~2 ms</td>
+                    <td>~100 ms</td>
+                </tr>
+                <tr>
+                    <td><strong>用途</strong></td>
+                    <td>链路恢复、错误清除</td>
+                    <td>系统启动、硬件故障恢复</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4>9.11 Disabled 和 Loopback 状态</h4>
+    <div class="concept-box">
+        <h5>Disabled 状态</h5>
+        <ul>
+            <li><strong>进入方式</strong>: 软件设置 Link Control 寄存器 Link Disable 位</li>
+            <li><strong>状态表现</strong>: TX/RX 进入 Electrical Idle，链路完全禁用</li>
+            <li><strong>退出方式</strong>: 清除 Link Disable 位，返回 Detect 重新训练</li>
+            <li><strong>应用场景</strong>: 热插拔准备、故障隔离</li>
+        </ul>
+
+        <h5>Loopback 状态 (Compliance 测试)</h5>
+        <ul>
+            <li><strong>Loopback Master</strong>: 生成测试 pattern (如 LFSR-23)</li>
+            <li><strong>Loopback Slave</strong>: 将接收到的数据原样返回</li>
+            <li><strong>测试目的</strong>:
                 <ul>
-                    <li>$V_{high}$: 首个UI的幅度(未加重)</li>
-                    <li>$V_{low}$: 后续UI的幅度(已加重)</li>
+                    <li>验证 TX 输出波形（眼图、jitter）</li>
+                    <li>验证 RX 均衡能力</li>
+                    <li>BER (Bit Error Rate) 测试</li>
                 </ul>
-            </div>
+            </li>
+            <li><strong>进入方式</strong>:
+                <ul>
+                    <li>硬件: 短接主板上的特定跳线</li>
+                    <li>软件: 通过 Compliance 软件触发</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
 
-            <h5>PCIe各代预加重要求</h5>
-            <table>
+    <h4>9.12 LTSSM 状态转换图总结</h4>
+    <div class="concept-box">
+        <h5>主要状态转换路径</h5>
+        <pre class="code-block" style="background: #f5f5f5; padding: 15px; border-radius: 8px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.6;">
+┌─────────────────────────────────────────────────────────────────┐
+│                        PCIe LTSSM 状态机                         │
+└─────────────────────────────────────────────────────────────────┘
+
+  [系统上电]
+       │
+       ↓
+   ┌──────────┐    未检测到设备        ┌──────────┐
+   │  Detect  │ ←──────────────────────│  Detect  │ (循环检测)
+   └──────────┘                        └──────────┘
+       │ 检测到设备
+       ↓
+   ┌──────────┐    超时/失败
+   │ Polling  │ ──────────────→ [返回 Detect]
+   └──────────┘
+       │ Bit/Symbol Lock成功
+       ↓
+   ┌──────────┐    协商失败
+   │  Config  │ ──────────────→ [返回 Detect/Recovery]
+   └──────────┘
+       │ 配置完成
+       ↓
+   ┌──────────┐  ←───────────────────────────┐
+   │    L0    │  ← Recovery (速率切换/EQ)     │
+   │ (正常工作)│                              │
+   └──────────┘                               │
+       │   │   │                              │
+       │   │   └──→ [L0s] (快速低功耗) ──────┘
+       │   │
+       │   └──────→ [L1] (低功耗) ────→ Recovery → L0
+       │
+       └──────────→ [L2/L3] (深度低功耗) → [Beacon唤醒] → Detect
+
+   特殊状态:
+   • Hot Reset: 从任意状态进入，持续2ms后返回 Detect
+   • Disabled: 软件命令禁用链路
+   • Loopback: Compliance 测试模式
+        </pre>
+    </div>
+
+    <h4>9.13 LTSSM 调试技巧</h4>
+    <div class="warning-box">
+        <h5>⚠️ 常见 LTSSM 问题与排查</h5>
+        <table class="reference-table">
+            <thead>
+                <tr>
+                    <th>现象</th>
+                    <th>可能卡在的状态</th>
+                    <th>排查方向</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>设备无法枚举</td>
+                    <td>Detect / Polling</td>
+                    <td>检查 PERST# 时序、参考时钟、RX检测电路</td>
+                </tr>
+                <tr>
+                    <td>链路宽度降级 (x16→x8)</td>
+                    <td>Configuration</td>
+                    <td>检查 Lane 信号质量、PCB走线</td>
+                </tr>
+                <tr>
+                    <td>无法切换到 Gen 3</td>
+                    <td>Recovery.Speed</td>
+                    <td>检查 TX 预加重、RX 均衡设置</td>
+                </tr>
+                <tr>
+                    <td>频繁进入 Recovery</td>
+                    <td>L0 → Recovery (循环)</td>
+                    <td>信号完整性问题、CRC 错误率高</td>
+                </tr>
+                <tr>
+                    <td>无法从 L1 唤醒</td>
+                    <td>L1 → Recovery</td>
+                    <td>检查 CLKREQ# 信号、FTS 数量配置</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5>📊 LTSSM 监控工具</h5>
+        <ul>
+            <li><strong>lspci -vvv</strong>: 查看当前链路状态 (LnkSta 寄存器)</li>
+            <li><strong>Logic Analyzer</strong>: 抓取 LTSSM 状态转换时序</li>
+            <li><strong>PCIe Protocol Analyzer</strong>: 解析 TS1/TS2 Ordered Sets</li>
+            <li><strong>Scope</strong>: 监控 Electrical Idle 进入/退出波形</li>
+        </ul>
+    </div>
+</div>
+
+<div class="section-block">
+    <h3>10. PCIe Gen 6 (64 GT/s) PAM4 技术深度解析</h3>
+
+    <div class="intro-box">
+        <h4>🚀 PCIe 6.0 革命性变化</h4>
+        <p><strong>PCIe 6.0</strong> 是自 PCIe 1.0 以来最大的架构变革，引入 <strong>PAM4 (4-Level Pulse Amplitude Modulation)</strong> 信号调制取代传统 NRZ，在相同时钟频率下实现 <strong>2倍带宽提升</strong>，达到 <strong>64 GT/s</strong>。</p>
+    </div>
+
+    <h4>10.1 NRZ vs PAM4 对比</h4>
+    <div class="concept-box">
+        <h5>NRZ (Non-Return-to-Zero) - PCIe 1.0 ~ 5.0</h5>
+        <ul>
+            <li><strong>信号电平</strong>: 2 个 (高/低，表示 0/1)</li>
+            <li><strong>每个符号传输</strong>: 1 bit 信息</li>
+            <li><strong>简单可靠</strong>: 接收端判决容易，抗噪声能力强</li>
+            <li><strong>带宽限制</strong>: 32 GT/s (PCIe 5.0) 已接近物理极限</li>
+        </ul>
+
+        <h5>PAM4 (4-Level PAM) - PCIe 6.0</h5>
+        <ul>
+            <li><strong>信号电平</strong>: 4 个 (00, 01, 10, 11)</li>
+            <li><strong>每个符号传输</strong>: 2 bits 信息</li>
+            <li><strong>带宽翻倍</strong>: 32 GBaud × 2 bits/symbol = <strong>64 GT/s</strong></li>
+            <li><strong>挑战</strong>: 信噪比要求高，均衡复杂度增加</li>
+        </ul>
+
+        <table class="reference-table">
+            <thead>
+                <tr>
+                    <th>特性</th>
+                    <th>NRZ (PCIe 5.0)</th>
+                    <th>PAM4 (PCIe 6.0)</th>
+                    <th>提升</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>数据速率</strong></td>
+                    <td>32 GT/s</td>
+                    <td>64 GT/s</td>
+                    <td><strong>2×</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>符号速率 (Baud Rate)</strong></td>
+                    <td>32 GBaud</td>
+                    <td>32 GBaud</td>
+                    <td>不变</td>
+                </tr>
+                <tr>
+                    <td><strong>编码效率</strong></td>
+                    <td>128b/130b (98.46%)</td>
+                    <td>242b/256b + FEC (94.5%)</td>
+                    <td>-3.96%</td>
+                </tr>
+                <tr>
+                    <td><strong>x16 带宽</strong></td>
+                    <td>63 GB/s</td>
+                    <td><strong>128 GB/s</strong></td>
+                    <td><strong>2×</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>眼高 (Eye Height)</strong></td>
+                    <td>100% 摆幅</td>
+                    <td>33.3% 摆幅 (每级)</td>
+                    <td>-66.7%</td>
+                </tr>
+                <tr>
+                    <td><strong>SNR 要求</strong></td>
+                    <td>~18 dB</td>
+                    <td>~28 dB (+10 dB)</td>
+                    <td>更高</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4>10.2 PAM4 信号编码原理</h4>
+    <div class="concept-box">
+        <h5>PAM4 电平定义</h5>
+        <table class="reference-table">
+            <thead>
+                <tr>
+                    <th>符号值</th>
+                    <th>二进制</th>
+                    <th>电压电平</th>
+                    <th>归一化电平</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Level 0</strong></td>
+                    <td>00</td>
+                    <td>-0.9 V</td>
+                    <td>-3</td>
+                </tr>
+                <tr>
+                    <td><strong>Level 1</strong></td>
+                    <td>01</td>
+                    <td>-0.3 V</td>
+                    <td>-1</td>
+                </tr>
+                <tr>
+                    <td><strong>Level 2</strong></td>
+                    <td>10</td>
+                    <td>+0.3 V</td>
+                    <td>+1</td>
+                </tr>
+                <tr>
+                    <td><strong>Level 3</strong></td>
+                    <td>11</td>
+                    <td>+0.9 V</td>
+                    <td>+3</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="formula-box">
+            <p><strong>眼高计算</strong>:</p>
+            <p>$Eye_{height,\text{PAM4}} = \frac{V_{swing}}{3} = \frac{1.2V}{3} = 0.4V$</p>
+            <p><strong>相比 NRZ</strong>:</p>
+            <p>$Eye_{height,\text{NRZ}} = V_{swing} = 1.2V$</p>
+            <p><strong>眼高损失</strong>: PAM4 眼高仅为 NRZ 的 <strong>33.3%</strong> (损失 9.5 dB)</p>
+        </div>
+
+        <h5>Gray Coding (格雷码)</h5>
+        <p>PCIe 6.0 使用 Gray Coding 映射 PAM4 符号，确保相邻电平仅 1 bit 差异，降低误码率：</p>
+        <table class="reference-table">
+            <thead>
+                <tr>
+                    <th>数据 [MSB LSB]</th>
+                    <th>Gray Code</th>
+                    <th>PAM4 Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>00</td>
+                    <td>00</td>
+                    <td>Level 0 (-3)</td>
+                </tr>
+                <tr>
+                    <td>01</td>
+                    <td>01</td>
+                    <td>Level 1 (-1)</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>10</td>
+                    <td>Level 2 (+1)</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>11</td>
+                    <td>Level 3 (+3)</td>
+                </tr>
+            </tbody>
+        </table>
+        <p><strong>优势</strong>: Level 0↔1, 1↔2, 2↔3 的误判只导致 1-bit 错误（而非 2-bit）</p>
+    </div>
+
+    <h4>10.3 PCIe 6.0 FLIT 和 FEC</h4>
+    <div class="concept-box">
+        <h5>FLIT (Flow Control Unit) 模式</h5>
+        <p>PCIe 6.0 引入 <strong>FLIT 模式</strong> 取代传统的可变长度 TLP，每个 FLIT 固定 <strong>256 Bytes</strong>：</p>
+        <ul>
+            <li><strong>固定长度</strong>: 256 Bytes FLIT = 2048 bits</li>
+            <li><strong>FEC 开销</strong>: 每 242 bits 数据添加 14 bits FEC 校验</li>
+            <li><strong>CRC 移除</strong>: 不再需要独立的 CRC32 校验（FEC 已覆盖）</li>
+            <li><strong>流控简化</strong>: 固定长度简化流控和缓冲管理</li>
+        </ul>
+
+        <h5>FEC (Forward Error Correction) - CRC 循环冗余校验</h5>
+        <p>PCIe 6.0 采用 <strong>RS (Reed-Solomon) 类似的 FEC 编码</strong>：</p>
+        <div class="formula-box">
+            <p><strong>编码比例</strong>:</p>
+            <p>$\frac{Data}{Total} = \frac{242\ bits}{256\ bits} = 94.5\%$</p>
+            <p><strong>开销</strong>: 5.5% (vs NRZ 128b/130b 的 1.54%)</p>
+        </div>
+
+        <h5>FEC 纠错能力</h5>
+        <ul>
+            <li>✅ <strong>单比特纠错</strong>: 自动纠正 1-bit 错误</li>
+            <li>✅ <strong>多比特检测</strong>: 检测 2-3 bits 错误（无法纠正，触发重传）</li>
+            <li>📊 <strong>BER 改善</strong>: 从 10^-12 提升至 10^-17 (5 个数量级)</li>
+        </ul>
+
+        <div class="example-box">
+            <h5>FEC 实例: 单比特错误纠正</h5>
+            <pre>
+原始数据: 242 bits (payload)
+FEC 校验: 14 bits (parity)
+-------------------------
+传输过程: 1 bit 翻转 (噪声导致)
+接收端:   FEC 解码器自动识别并纠正错误
+结果:     无需重传，零延迟纠错 ✅
+            </pre>
+        </div>
+    </div>
+
+    <h4>10.4 PAM4 眼图测试</h4>
+    <div class="concept-box">
+        <h5>PAM4 眼图特征</h5>
+        <p>PAM4 有 <strong>3 个眼睛</strong> (Eye 0/1/2)，分别对应 3 个电平过渡区域：</p>
+        <pre class="code-block" style="background: #f5f5f5; padding: 15px; border-radius: 8px;">
+         Level 3 (+0.9V)  ━━━━━━━━━━━━━━━━━━  ← 最高电平
+                             ╱╲    ╱╲
+                            ╱  ╲  ╱  ╲
+         Level 2 (+0.3V)  ━╱    ╲╱    ╲━  ← Eye 2 (上眼)
+                          ╱      ╳      ╲
+                         ╱      ╱ ╲      ╲
+         Level 1 (-0.3V) ━━━━━━╱   ╲━━━━━  ← Eye 1 (中眼)
+                            ╱╲    ╱╲
+                           ╱  ╲  ╱  ╲
+         Level 0 (-0.9V)  ━╱    ╲╱    ╲━  ← Eye 0 (下眼)
+        </pre>
+
+        <h5>PAM4 眼图测试要求 (PCIe 6.0)</h5>
+        <table class="reference-table">
+            <thead>
+                <tr>
+                    <th>参数</th>
+                    <th>规范要求</th>
+                    <th>说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Eye Height (每个眼)</strong></td>
+                    <td>&gt; 25 mV (TP2)</td>
+                    <td>测试点 TP2 (接收端前)</td>
+                </tr>
+                <tr>
+                    <td><strong>Eye Width</strong></td>
+                    <td>&gt; 0.3 UI</td>
+                    <td>水平张开度</td>
+                </tr>
+                <tr>
+                    <td><strong>Outer Eye Height</strong></td>
+                    <td>&gt; 50 mV</td>
+                    <td>Eye 0 和 Eye 2 (外眼)</td>
+                </tr>
+                <tr>
+                    <td><strong>Inner Eye Height</strong></td>
+                    <td>&gt; 25 mV</td>
+                    <td>Eye 1 (内眼，最难通过)</td>
+                </tr>
+                <tr>
+                    <td><strong>Level Separation Mismatch</strong></td>
+                    <td>&lt; ±15%</td>
+                    <td>4 个电平间隔均匀度</td>
+                </tr>
+                <tr>
+                    <td><strong>Total Jitter (Tj)</strong></td>
+                    <td>&lt; 0.25 UI</td>
+                    <td>@ BER 10^-12</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5>示波器配置</h5>
+        <ul>
+            <li><strong>带宽</strong>: ≥ 70 GHz (PCIe 6.0 需 65 GHz 以上)</li>
+            <li><strong>采样率</strong>: ≥ 256 GSa/s</li>
+            <li><strong>PAM4 解码</strong>: 必须支持 PAM4 信号分析</li>
+            <li><strong>FEC 解码</strong>: 最好支持 PCIe 6.0 FEC 后处理</li>
+        </ul>
+    </div>
+
+    <h4>10.5 PAM4 均衡技术 (CTLE + DFE)</h4>
+    <div class="concept-box">
+        <h5>为何 PAM4 需要更强均衡？</h5>
+        <ul>
+            <li>📉 <strong>眼高缩减</strong>: PAM4 眼高仅 NRZ 的 1/3，对 ISI 敏感</li>
+            <li>📉 <strong>高频损耗</strong>: 32 GBaud 接近 PCB 材料极限 (~30 GHz)</li>
+            <li>📉 <strong>信噪比要求</strong>: 28 dB SNR 要求精确的 ISI 消除</li>
+        </ul>
+
+        <h5>CTLE (Continuous-Time Linear Equalization)</h5>
+        <p><strong>模拟前端均衡器</strong>，在 ADC 之前补偿高频损耗：</p>
+        <div class="formula-box">
+            <p><strong>CTLE 传递函数</strong>:</p>
+            <p>$H_{CTLE}(f) = A_{DC} \times \left(1 + \frac{f}{f_{z}}\right) / \left(1 + \frac{f}{f_{p}}\right)$</p>
+            <p>其中:</p>
+            <ul>
+                <li>$f_{z}$: 零点频率 (Boost 起点，典型 5 GHz)</li>
+                <li>$f_{p}$: 极点频率 (Boost 终点，典型 20 GHz)</li>
+                <li>$A_{DC}$: 直流增益</li>
+            </ul>
+            <p><strong>效果</strong>: 高频提升 +12 ~ +24 dB</p>
+        </div>
+
+        <h5>DFE (Decision Feedback Equalization)</h5>
+        <p><strong>数字反馈均衡器</strong>，消除后续 ISI（前一个符号对当前符号的影响）：</p>
+        <ul>
+            <li><strong>工作原理</strong>:
+                <ol>
+                    <li>判决当前符号值（Level 0/1/2/3）</li>
+                    <li>根据历史判决结果，预测当前 ISI 影响</li>
+                    <li>从当前接收信号中减去预测的 ISI</li>
+                    <li>重新判决，得到纠正后的符号</li>
+                </ol>
+            </li>
+            <li><strong>抽头数</strong>: PCIe 6.0 通常 8-16 个抽头</li>
+            <li><strong>自适应算法</strong>: LMS (Least Mean Square) 或 Sign-Sign LMS</li>
+        </ul>
+
+        <div class="example-box">
+            <h5>CTLE + DFE 联合均衡效果</h5>
+            <table class="reference-table">
                 <thead>
                     <tr>
-                        <th>PCIe代</th>
-                        <th>速率</th>
-                        <th>De-emphasis范围</th>
-                        <th>典型值</th>
+                        <th>均衡阶段</th>
+                        <th>眼高改善</th>
+                        <th>说明</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Gen 1</td>
-                        <td>2.5 GT/s</td>
-                        <td>-3.5 dB ± 1 dB</td>
-                        <td>-3.5 dB</td>
+                        <td><strong>无均衡</strong></td>
+                        <td>10 mV</td>
+                        <td>❌ 不满足 25 mV 要求</td>
                     </tr>
                     <tr>
-                        <td>Gen 2</td>
-                        <td>5.0 GT/s</td>
-                        <td>-3.5 dB ± 1 dB</td>
-                        <td>-3.5 dB</td>
+                        <td><strong>+CTLE</strong></td>
+                        <td>20 mV</td>
+                        <td>⚠️ 仍不足</td>
                     </tr>
                     <tr>
-                        <td>Gen 3</td>
-                        <td>8.0 GT/s</td>
-                        <td>-3.5 dB 或 -6.0 dB</td>
-                        <td>-3.5 dB</td>
-                    </tr>
-                    <tr>
-                        <td>Gen 4</td>
-                        <td>16.0 GT/s</td>
-                        <td>使用预加重+均衡</td>
-                        <td>-6.0 dB</td>
-                    </tr>
-                    <tr>
-                        <td>Gen 5</td>
-                        <td>32.0 GT/s</td>
-                        <td>使用3-tap FIR均衡</td>
-                        <td>自适应</td>
+                        <td><strong>+CTLE+DFE</strong></td>
+                        <td><strong>40 mV</strong></td>
+                        <td>✅ 满足要求 (裕量 60%)</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-
-        <h4>1.3 总抖动(Total Jitter)测试</h4>
-        <div class="concept-box">
-            <h5>抖动定义</h5>
-            <p>抖动是信号边沿相对于理想位置的时间偏移，分为确定性抖动(DJ)和随机抖动(RJ)。</p>
-
-            <div class="formula-box">
-                <p><strong>总抖动计算公式</strong>:</p>
-                <p>$TJ = DJ + n \times RJ$</p>
-                <p>其中:</p>
-                <ul>
-                    <li>$DJ$: 确定性抖动 (Deterministic Jitter)</li>
-                    <li>$RJ$: 随机抖动 (Random Jitter)</li>
-                    <li>$n$: 置信系数，对于 BER = 10⁻¹², n ≈ 14.069</li>
-                </ul>
-
-                <p><strong>PCIe各代抖动要求</strong>:</p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>PCIe代</th>
-                            <th>最大TJ</th>
-                            <th>UI周期</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Gen 1 (2.5 GT/s)</td>
-                            <td>0.30 UI</td>
-                            <td>400 ps</td>
-                        </tr>
-                        <tr>
-                            <td>Gen 2 (5.0 GT/s)</td>
-                            <td>0.28 UI</td>
-                            <td>200 ps</td>
-                        </tr>
-                        <tr>
-                            <td>Gen 3 (8.0 GT/s)</td>
-                            <td>0.25 UI</td>
-                            <td>125 ps</td>
-                        </tr>
-                        <tr>
-                            <td>Gen 4 (16.0 GT/s)</td>
-                            <td>0.20 UI</td>
-                            <td>62.5 ps</td>
-                        </tr>
-                        <tr>
-                            <td>Gen 5 (32.0 GT/s)</td>
-                            <td>0.15 UI</td>
-                            <td>31.25 ps</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <h4>1.4 均衡器技术</h4>
-        <div class="concept-box">
-            <h5>3-tap FIR均衡器</h5>
-            <p>Gen 4及以上使用3-tap有限冲击响应(FIR)均衡器来补偿传输损耗。</p>
-
-            <div class="formula-box">
-                <p><strong>3-tap FIR公式</strong>:</p>
-                <p>$V_{out}(n) = C_{-1} \times V_{in}(n-1) + C_0 \times V_{in}(n) + C_{+1} \times V_{in}(n+1)$</p>
-                <p>其中:</p>
-                <ul>
-                    <li>$C_{-1}$: 前置抽头系数 (Pre-cursor)</li>
-                    <li>$C_0$: 主抽头系数 (Main cursor)</li>
-                    <li>$C_{+1}$: 后置抽头系数 (Post-cursor)</li>
-                </ul>
-
-                <p><strong>系数约束</strong>:</p>
-                <ul>
-                    <li>$|C_{-1}| + |C_0| + |C_{+1}| = 1$ (归一化)</li>
-                    <li>$C_0$ 通常最大，保持信号主要能量</li>
-                    <li>典型值: $C_{-1} = 0.1, C_0 = 0.7, C_{+1} = 0.2$</li>
-                </ul>
-            </div>
-
-            <h5>CTLE (连续时间线性均衡器)</h5>
-            <p>接收端使用CTLE进行模拟域均衡，补偿高频损耗。</p>
-
-            <div class="formula-box">
-                <p><strong>CTLE频率响应</strong>:</p>
-                <p>$H_{CTLE}(f) = \frac{1 + j \cdot \frac{f}{f_{z}}}{1 + j \cdot \frac{f}{f_{p}}}$</p>
-                <p>其中:</p>
-                <ul>
-                    <li>$f_z$: 零点频率 (boost起始频率)</li>
-                    <li>$f_p$: 极点频率 (boost终止频率)</li>
-                    <li>增益: $20\log_{10}\left(\frac{f_p}{f_z}\right)$ dB</li>
-                </ul>
-            </div>
-        </div>
-
-        <h4>1.5 误码率(BER)测试</h4>
-        <div class="concept-box">
-            <h5>BER测试原理</h5>
-            <p>误码率(Bit Error Rate)是衡量链路质量的关键指标。</p>
-
-            <div class="formula-box">
-                <p><strong>BER计算公式</strong>:</p>
-                <p>$BER = \frac{\text{错误比特数}}{\text{总比特数}}$</p>
-
-                <p><strong>PCIe BER要求</strong>:</p>
-                <ul>
-                    <li>Gen 1-3: BER < 10⁻¹²</li>
-                    <li>Gen 4-5: BER < 10⁻¹²</li>
-                    <li>测试置信度: 需要测试 > 10¹³ bits</li>
-                </ul>
-
-                <p><strong>测试时间估算</strong>:</p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>速率</th>
-                            <th>测试比特数</th>
-                            <th>测试时间</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>2.5 GT/s (Gen 1)</td>
-                            <td>10¹³ bits</td>
-                            <td>~67 分钟</td>
-                        </tr>
-                        <tr>
-                            <td>8.0 GT/s (Gen 3)</td>
-                            <td>10¹³ bits</td>
-                            <td>~21 分钟</td>
-                        </tr>
-                        <tr>
-                            <td>16.0 GT/s (Gen 4)</td>
-                            <td>10¹³ bits</td>
-                            <td>~10 分钟</td>
-                        </tr>
-                        <tr>
-                            <td>32.0 GT/s (Gen 5)</td>
-                            <td>10¹³ bits</td>
-                            <td>~5 分钟</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
     </div>
 
+    <h4>10.6 PCIe 6.0 实战设计要点</h4>
+    <div class="warning-box">
+        <h5>⚠️ PCIe 6.0 设计挑战与解决方案</h5>
+
+        <h5>1. PCB 材料选择</h5>
+        <ul>
+            <li><strong>推荐材料</strong>: Megtron 6/7, Panasonic M7, Rogers RO4350B</li>
+            <li><strong>损耗要求</strong>: Df (Loss Tangent) &lt; 0.005 @ 10 GHz</li>
+            <li><strong>避免使用</strong>: FR-4 标准材料（Df ~0.02，损耗过大）</li>
+        </ul>
+
+        <h5>2. Via 优化</h5>
+        <table class="reference-table">
+            <thead>
+                <tr>
+                    <th>参数</th>
+                    <th>PCIe 5.0</th>
+                    <th>PCIe 6.0</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Via Stub</strong></td>
+                    <td>&lt; 10 mil</td>
+                    <td><strong>&lt; 5 mil (Back-drill 必需)</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Via 直径</strong></td>
+                    <td>8-10 mil</td>
+                    <td><strong>6-8 mil (Micro-via 推荐)</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Via 数量</strong></td>
+                    <td>&lt; 4 per trace</td>
+                    <td><strong>&lt; 2 per trace</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5>3. 均衡系数调优</h5>
+        <p>PCIe 6.0 均衡参数需根据具体通道损耗微调：</p>
+        <ul>
+            <li><strong>短通道 (&lt;6 inch)</strong>:
+                <ul>
+                    <li>TX De-emphasis: -6 dB</li>
+                    <li>RX CTLE: +6 dB</li>
+                    <li>RX DFE: 4 抽头</li>
+                </ul>
+            </li>
+            <li><strong>中通道 (6-12 inch)</strong>:
+                <ul>
+                    <li>TX De-emphasis: -9 dB</li>
+                    <li>RX CTLE: +12 dB</li>
+                    <li>RX DFE: 8 抽头</li>
+                </ul>
+            </li>
+            <li><strong>长通道 (&gt;12 inch)</strong>:
+                <ul>
+                    <li>TX De-emphasis: -12 dB</li>
+                    <li>RX CTLE: +18 dB</li>
+                    <li>RX DFE: 12-16 抽头</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h5>4. 测试验证流程</h5>
+        <ol>
+            <li><strong>S参数测试</strong>: 使用 VNA 测量插入损耗 (IL) &lt; -30 dB @ 32 GHz</li>
+            <li><strong>Eye 高度测试</strong>: 确认 3 个眼睛均 &gt; 25 mV</li>
+            <li><strong>Jitter 测试</strong>: Tj &lt; 0.25 UI @ BER 10^-12</li>
+            <li><strong>FEC 后 BER</strong>: 确认 &lt; 10^-17</li>
+            <li><strong>长时间稳定性</strong>: 48 小时 BER 监控</li>
+        </ol>
+    </div>
+
+    <h4>10.7 PCIe 6.0 vs 5.0 性能对比</h4>
+    <div class="concept-box">
+        <table class="reference-table">
+            <thead>
+                <tr>
+                    <th>配置</th>
+                    <th>PCIe 5.0</th>
+                    <th>PCIe 6.0</th>
+                    <th>提升比例</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>x1 带宽</strong></td>
+                    <td>3.94 GB/s</td>
+                    <td><strong>7.88 GB/s</strong></td>
+                    <td>2×</td>
+                </tr>
+                <tr>
+                    <td><strong>x4 带宽</strong></td>
+                    <td>15.75 GB/s</td>
+                    <td><strong>31.5 GB/s</strong></td>
+                    <td>2×</td>
+                </tr>
+                <tr>
+                    <td><strong>x8 带宽</strong></td>
+                    <td>31.5 GB/s</td>
+                    <td><strong>63 GB/s</strong></td>
+                    <td>2×</td>
+                </tr>
+                <tr>
+                    <td><strong>x16 带宽</strong></td>
+                    <td>63 GB/s</td>
+                    <td><strong>126 GB/s</strong></td>
+                    <td>2×</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5>应用场景</h5>
+        <ul>
+            <li><strong>AI/ML 加速卡</strong>: GPU 与 CPU 高速互连 (NVIDIA H100, AMD MI300)</li>
+            <li><strong>高性能 SSD</strong>: Gen 6 x4 = 31.5 GB/s (vs Gen 4 x4 = 7.88 GB/s)</li>
+            <li><strong>网络适配器</strong>: 400GbE / 800GbE 网卡</li>
+            <li><strong>数据中心</strong>: CXL 3.0 内存扩展</li>
+        </ul>
+    </div>
+</div>
+
+<div class="summary-box">
+    <h3>✅ PCIe 扩展内容总结</h3>
+    <p>本扩展章节深入讲解了 PCIe 的两大核心技术：</p>
+    <ul>
+        <li>✅ <strong>LTSSM 11 状态详解</strong>: 从 Detect 到 L2，涵盖链路训练、功耗管理、速率切换全流程</li>
+        <li>✅ <strong>PCIe 6.0 PAM4 技术</strong>: 信号调制原理、FEC 纠错、眼图测试、均衡设计</li>
+        <li>✅ <strong>实战设计要点</strong>: PCB 材料选择、Via 优化、均衡系数调优</li>
+        <li>✅ <strong>性能对比</strong>: Gen 5 vs Gen 6 带宽翻倍 (63→126 GB/s @ x16)</li>
+    </ul>
+    <p><strong>新增内容量</strong>: ~500 行专业技术详解</p>
+</div>
+
+            </div>
+            </div>
+`;
 `;
 
                         console.log('✅ [运行时修复] 内容替换完成！新内容长度:', highSpeedDeepDive.pcieTestingDeepDive.content.length, '字符');
