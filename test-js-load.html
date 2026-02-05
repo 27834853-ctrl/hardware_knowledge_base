@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>JS 文件加载测试</title>
+</head>
+<body>
+    <h1>测试 JS 文件内容长度</h1>
+    <div id="result"></div>
+
+    <script src="high-speed-deep-dive-20260205-fixed.js"></script>
+    <script>
+        setTimeout(() => {
+            const result = document.getElementById('result');
+            if (typeof highSpeedDeepDive !== 'undefined') {
+                const len = highSpeedDeepDive.pcieTestingDeepDive.content.length;
+                result.innerHTML = `
+                    <h2>✅ JS 文件加载成功</h2>
+                    <p><strong>pcieTestingDeepDive.content 长度:</strong> ${len} 字符</p>
+                    <p><strong>预期长度:</strong> 96000+ 字符</p>
+                    <p><strong>状态:</strong> ${len > 90000 ? '✅ 正确' : '❌ 异常（太短）'}</p>
+                    <hr>
+                    <h3>内容开头（前200字符）:</h3>
+                    <pre>${highSpeedDeepDive.pcieTestingDeepDive.content.substring(0, 200)}</pre>
+                    <hr>
+                    <h3>内容结尾（后200字符）:</h3>
+                    <pre>${highSpeedDeepDive.pcieTestingDeepDive.content.substring(len - 200)}</pre>
+                `;
+                console.log('pcieTestingDeepDive.content length:', len);
+            } else {
+                result.innerHTML = '<h2>❌ highSpeedDeepDive 未定义</h2>';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
