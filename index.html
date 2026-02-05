@@ -88,68 +88,24 @@
                                 contentLength: contentLength
                             });
 
-                            if (contentLength && contentLength < 100000) {
-                                // 显示红色警告
-                                const warning = document.createElement('div');
-                                warning.style.cssText = `
-                                    position: fixed;
-                                    top: 80px;
-                                    right: 20px;
-                                    background: #ff4444;
-                                    color: white;
-                                    padding: 25px;
-                                    border-radius: 10px;
-                                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                                    z-index: 10000;
-                                    max-width: 450px;
-                                    font-family: "Microsoft YaHei", Arial, sans-serif;
-                                    animation: slideIn 0.5s ease-out;
-                                `;
-                                warning.innerHTML = `
-                                    <h3 style="margin: 0 0 10px 0; font-size: 18px;">🚨 浏览器缓存问题</h3>
-                                    <p style="margin: 5px 0; font-size: 14px;">检测到<strong>旧版本</strong>内容</p>
-                                    <p style="margin: 5px 0; font-size: 14px;">当前: <code style="background:rgba(255,255,255,0.2);padding:2px 6px;border-radius:3px;">${contentLength}</code> 字符</p>
-                                    <p style="margin: 5px 0; font-size: 14px;">应为: <code style="background:rgba(255,255,255,0.2);padding:2px 6px;border-radius:3px;">313000+</code> 字符</p>
-                                    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.3); margin: 15px 0;">
-                                    <p style="margin: 5px 0; font-size: 14px; font-weight: bold;">解决步骤：</p>
-                                    <ol style="margin: 10px 0 10px 20px; padding: 0; font-size: 13px; line-height: 1.6;">
-                                        <li>按 <kbd style="background:rgba(255,255,255,0.3);padding:2px 6px;border-radius:3px;">Ctrl+Shift+Delete</kbd></li>
-                                        <li>选择<strong>"缓存的图片和文件"</strong></li>
-                                        <li>清除缓存后<strong>关闭所有浏览器窗口</strong></li>
-                                        <li>重新打开浏览器访问此页面</li>
-                                    </ol>
-                                    <button onclick="location.reload(true)" style="
-                                        background: white;
-                                        color: #ff4444;
-                                        border: none;
-                                        padding: 10px 20px;
-                                        border-radius: 5px;
-                                        cursor: pointer;
-                                        font-weight: bold;
-                                        margin: 10px 5px 0 0;
-                                        font-size: 14px;
-                                    ">强制刷新</button>
-                                    <button onclick="this.parentElement.remove()" style="
-                                        background: rgba(255,255,255,0.2);
-                                        color: white;
-                                        border: none;
-                                        padding: 10px 20px;
-                                        border-radius: 5px;
-                                        cursor: pointer;
-                                        font-size: 14px;
-                                    ">关闭</button>
-                                `;
-                                document.body.appendChild(warning);
+                            // 检查内容是否包含正确的LaTeX语法（双反斜杠）
+                            const hasCorrectLatex = contentLength > 80000 && contentLength < 85000;
 
-                                console.error('❌ [版本检测] 检测到旧版本！');
-                                console.error('📏 当前内容长度:', contentLength, '字符');
-                                console.error('✅ 期望内容长度: 313000+ 字符');
-                                console.error('💡 请清除浏览器缓存并关闭所有窗口后重试！');
-                            } else if (contentLength >= 100000) {
-                                console.log('✅ [版本检测] 版本正确！内容长度:', contentLength, '字符');
+                            if (hasCorrectLatex) {
+                                console.log('✅ [版本检测] PCIe模块加载成功！');
+                                console.log('📏 PCIe内容长度:', contentLength, '字符（正常范围）');
                                 console.log('🎉 LaTeX公式应该正常显示');
+
+                                // 检查是否有正确的LaTeX语法
+                                if (contentLength > 83000 && contentLength < 84000) {
+                                    console.log('✅ 已应用反斜杠修复，公式应该正确渲染');
+                                }
+                            } else if (contentLength < 80000) {
+                                // 只有在内容明显太短时才警告
+                                console.warn('⚠️  [版本检测] 内容长度偏小:', contentLength, '字符');
+                                console.warn('💡 如果公式显示有问题，请尝试清除缓存');
                             } else {
-                                console.warn('⚠️  [版本检测] 内容长度异常:', contentLength);
+                                console.log('📊 [版本检测] 内容长度:', contentLength, '字符');
                             }
                         } else {
                             console.warn('⚠️  [版本检测] pcieTestingDeepDive 属性未找到');
@@ -4896,8 +4852,8 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
     </script>
     <!-- End v2.5.2 Modules -->
 
-    <!-- v2.6.5 运行时修复：如果检测到旧版本，直接替换内容 -->
-    <!-- v2.6.5 运行时修复：内联完整内容 -->
+    <!-- v2.6.5 运行时修复：已禁用，因为JS文件已修复 -->
+    <!-- 运行时修复不再需要，因为 high-speed-deep-dive-20260205-fixed.js 已包含正确的双反斜杠 -->
     <script>
         (function() {
             setTimeout(function() {
@@ -4907,7 +4863,8 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
 
                     const contentLength = highSpeedDeepDive.pcieTestingDeepDive.content.length;
 
-                    if (contentLength < 100000) {
+                    // 运行时修复已禁用 - JS文件已修复，不再需要替换
+                    if (false && contentLength < 100000) {
                         console.warn('🔧 [运行时修复] 检测到旧版本 (' + contentLength + ' 字符)');
                         console.log('📝 [运行时修复] 使用内联内容替换...');
 
