@@ -129,7 +129,22 @@
 
             result.innerHTML = html;
 
-            // 等待 MathJax 渲染
+            // 触发 MathJax 渲染
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                MathJax.typesetPromise([result]).then(() => {
+                    console.log('✅ MathJax 手动渲染完成');
+                    checkFormulas();
+                }).catch((err) => {
+                    console.error('❌ MathJax 渲染失败:', err);
+                    checkFormulas();
+                });
+            } else {
+                console.warn('⚠️  MathJax 未加载，等待 3 秒后检查');
+                setTimeout(checkFormulas, 3000);
+            }
+        }, 1000);
+
+        function checkFormulas() {
             setTimeout(() => {
                 const formulas = document.querySelectorAll('.formula-box p');
                 let errorCount = 0;
@@ -163,9 +178,8 @@
 
                 console.log('\n=== LaTeX 公式测试完成 ===');
                 console.log('成功:', successCount, '失败:', errorCount);
-            }, 3000);
-
-        }, 1000);
+            }, 1000);
+        }
     </script>
 </body>
 </html>
