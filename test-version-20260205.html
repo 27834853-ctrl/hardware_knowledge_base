@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v2.6.5-FIXED-20260205 测试页面</title>
+    <!-- MathJax -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .test-box {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .formula-box {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧪 v2.6.5-FIXED-20260205 版本测试</h1>
+        <p>快速验证LaTeX公式和版本加载</p>
+    </div>
+
+    <div class="test-box">
+        <h2>📋 测试步骤</h2>
+        <ol>
+            <li>页面加载时自动测试文件加载和公式渲染</li>
+            <li>检查版本号、内容长度、LaTeX公式</li>
+            <li>结果会显示在下方</li>
+        </ol>
+        <div id="test-results"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>📊 版本信息</h2>
+        <div id="version-info"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>🧮 LaTeX 公式测试</h2>
+        <div class="formula-box">
+            <h3>测试1: 预加重比计算公式</h3>
+            <p id="formula1">$De-emphasis (dB) = 20 \times \log_{10}\left(\frac{V_{low}}{V_{high}}\right)$</p>
+        </div>
+
+        <div class="formula-box">
+            <h3>测试2: 总抖动计算</h3>
+            <p id="formula2">$TJ = DJ + n \times RJ$</p>
+        </div>
+
+        <div class="formula-box">
+            <h3>测试3: BER计算</h3>
+            <p id="formula3">$BER = \frac{\text{错误比特数}}{\text{总比特数}}$</p>
+        </div>
+
+        <div class="formula-box">
+            <h3>测试4: CTLE频率响应</h3>
+            <p id="formula4">$H_{CTLE}(f) = \frac{1 + j \cdot \frac{f}{f_{z}}}{1 + j \cdot \frac{f}{f_{p}}}$</p>
+        </div>
+
+        <div id="formula-results"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>🔍 从 high-speed-deep-dive-20260205-fixed.js 加载的实际内容</h2>
+        <div id="actual-content"></div>
+    </div>
+
+    <!-- 加载新版本文件 -->
+    <script>
+        const timestamp = new Date().getTime();
+        const random = Math.random().toString(36).substring(7);
+        const script = document.createElement('script');
+        script.src = `high-speed-deep-dive-20260205-fixed.js?t=${timestamp}&r=${random}`;
+        script.onload = function() {
+            console.log('✅ high-speed-deep-dive-20260205-fixed.js 加载完成');
+            runTests();
+        };
+        script.onerror = function() {
+            console.error('❌ 文件加载失败');
+            document.getElementById('test-results').innerHTML = '<div class="status error">❌ 文件加载失败！</div>';
+        };
+        document.head.appendChild(script);
+    </script>
+
+    <script>
+        function runTests() {
+            const resultsDiv = document.getElementById('test-results');
+            const versionDiv = document.getElementById('version-info');
+            const actualDiv = document.getElementById('actual-content');
+
+            let html = '<h3>🔍 测试结果</h3>';
+
+            // 测试1: 检查对象是否存在
+            if (typeof highSpeedDeepDive !== 'undefined') {
+                html += '<div class="status success">✅ highSpeedDeepDive 对象已加载</div>';
+
+                // 测试2: 检查 pcieTestingDeepDive
+                if (highSpeedDeepDive.pcieTestingDeepDive) {
+                    html += '<div class="status success">✅ pcieTestingDeepDive 属性存在</div>';
+
+                    // 测试3: 检查 content
+                    if (highSpeedDeepDive.pcieTestingDeepDive.content) {
+                        const contentLength = highSpeedDeepDive.pcieTestingDeepDive.content.length;
+                        html += `<div class="status ${contentLength > 100000 ? 'success' : 'error'}">`;
+                        html += contentLength > 100000 ? '✅' : '❌';
+                        html += ` 内容长度: <code>${contentLength}</code> 字符</div>`;
+
+                        if (contentLength > 100000) {
+                            html += '<div class="status success">🎉 版本正确！LaTeX公式应该已修复</div>';
+                        } else {
+                            html += '<div class="status error">⚠️  内容长度异常，可能仍是旧版本</div>';
+                        }
+
+                        // 显示版本信息
+                        versionDiv.innerHTML = `
+                            <div class="info">
+                                <p><strong>标题:</strong> ${highSpeedDeepDive.pcieTestingDeepDive.title || 'N/A'}</p>
+                                <p><strong>图标:</strong> ${highSpeedDeepDive.pcieTestingDeepDive.icon || 'N/A'}</p>
+                                <p><strong>内容长度:</strong> <code>${contentLength}</code> 字符</p>
+                                <p><strong>预期长度:</strong> <code>313000+</code> 字符</p>
+                            </div>
+                        `;
+
+                        // 提取并显示实际的预加重公式
+                        const match = highSpeedDeepDive.pcieTestingDeepDive.content.match(/De-emphasis[^$]*\$([^$]+)\$/);
+                        if (match) {
+                            actualDiv.innerHTML = `
+                                <div class="formula-box">
+                                    <h3>从文件中提取的预加重公式：</h3>
+                                    <p>$${match[1]}$</p>
+                                    <hr>
+                                    <p><strong>原始LaTeX代码：</strong></p>
+                                    <pre>${match[1]}</pre>
+                                    <p><strong>检查要点：</strong></p>
+                                    <ul>
+                                        <li>包含 <code>\\times</code>: ${match[1].includes('\\times') ? '✅ 是' : '❌ 否'}</li>
+                                        <li>包含 <code>\\log</code>: ${match[1].includes('\\log') ? '✅ 是' : '❌ 否'}</li>
+                                        <li>包含 <code>\\frac</code>: ${match[1].includes('\\frac') ? '✅ 是' : '❌ 否'}</li>
+                                        <li>包含 <code>\\left</code> 和 <code>\\right</code>: ${match[1].includes('\\left') && match[1].includes('\\right') ? '✅ 是' : '❌ 否'}</li>
+                                    </ul>
+                                </div>
+                            `;
+                        }
+                    } else {
+                        html += '<div class="status error">❌ pcieTestingDeepDive.content 不存在</div>';
+                    }
+                } else {
+                    html += '<div class="status error">❌ pcieTestingDeepDive 属性不存在</div>';
+                }
+            } else {
+                html += '<div class="status error">❌ highSpeedDeepDive 对象未定义</div>';
+            }
+
+            resultsDiv.innerHTML = html;
+
+            // 等待3秒后检查MathJax渲染
+            setTimeout(checkFormulas, 3000);
+        }
+
+        function checkFormulas() {
+            const formulaResults = document.getElementById('formula-results');
+            let html = '<h3>🔍 MathJax 渲染结果</h3>';
+
+            let successCount = 0;
+            let errorCount = 0;
+
+            for (let i = 1; i <= 4; i++) {
+                const el = document.getElementById('formula' + i);
+                const hasError = el.textContent.includes('Math input error');
+
+                if (hasError) {
+                    html += `<div class="status error">❌ 测试${i} 失败: Math input error</div>`;
+                    errorCount++;
+                } else {
+                    html += `<div class="status success">✅ 测试${i} 成功</div>`;
+                    successCount++;
+                }
+            }
+
+            html += `<div class="status info">📊 总结: ${successCount}/${successCount + errorCount} 个公式渲染成功</div>`;
+
+            if (errorCount === 0) {
+                html += '<div class="status success">🎉 所有公式渲染成功！问题已解决！</div>';
+            }
+
+            formulaResults.innerHTML = html;
+        }
+
+        // 控制台日志
+        console.log('=== v2.6.5-FIXED-20260205 测试页面 ===');
+        console.log('等待文件加载...');
+    </script>
+</body>
+</html>

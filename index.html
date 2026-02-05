@@ -65,9 +65,14 @@
 
                     // 检查是否加载了新版本
                     if (typeof highSpeedDeepDive !== 'undefined') {
-                        if (highSpeedDeepDive.pcieTestingDeepDive) {
-                            const contentLength = highSpeedDeepDive.pcieTestingDeepDive.length;
+                        if (highSpeedDeepDive.pcieTestingDeepDive && highSpeedDeepDive.pcieTestingDeepDive.content) {
+                            const contentLength = highSpeedDeepDive.pcieTestingDeepDive.content.length;
                             console.log('📊 [版本检测] PCIe内容长度:', contentLength, '字符');
+                            console.log('📦 [版本检测] 数据结构:', {
+                                hasTitle: !!highSpeedDeepDive.pcieTestingDeepDive.title,
+                                hasContent: !!highSpeedDeepDive.pcieTestingDeepDive.content,
+                                contentLength: contentLength
+                            });
 
                             if (contentLength && contentLength < 100000) {
                                 // 显示红色警告
