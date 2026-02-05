@@ -55,68 +55,91 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- v2.6.5 版本检测和缓存警告 -->
+    <!-- v2.6.5-FIXED-20260205 版本检测和缓存警告 -->
     <script>
         (function() {
-            // 检测版本的关键函数
+            // 版本检测 - 延迟5秒确保所有内容加载完成
             window.addEventListener('load', function() {
                 setTimeout(function() {
+                    console.log('🔍 [版本检测] 开始检测...');
+
                     // 检查是否加载了新版本
-                    if (typeof highSpeedDeepDive !== 'undefined' && highSpeedDeepDive.pcieTestingDeepDive) {
-                        const contentLength = highSpeedDeepDive.pcieTestingDeepDive.length;
-                        console.log('📊 [版本检测] 内容长度:', contentLength, '字符');
+                    if (typeof highSpeedDeepDive !== 'undefined') {
+                        if (highSpeedDeepDive.pcieTestingDeepDive) {
+                            const contentLength = highSpeedDeepDive.pcieTestingDeepDive.length;
+                            console.log('📊 [版本检测] PCIe内容长度:', contentLength, '字符');
 
-                        if (contentLength < 100000) {
-                            // 内容长度小于100k，说明是旧版本
-                            const warning = document.createElement('div');
-                            warning.style.cssText = `
-                                position: fixed;
-                                top: 20px;
-                                right: 20px;
-                                background: #ff4444;
-                                color: white;
-                                padding: 20px;
-                                border-radius: 10px;
-                                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                                z-index: 10000;
-                                max-width: 400px;
-                                font-family: "Microsoft YaHei", Arial, sans-serif;
-                            `;
-                            warning.innerHTML = `
-                                <h3 style="margin: 0 0 10px 0;">⚠️ 检测到旧版本</h3>
-                                <p style="margin: 5px 0;">内容长度: ${contentLength} 字符</p>
-                                <p style="margin: 5px 0;"><strong>应为: 313000+ 字符</strong></p>
-                                <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.3); margin: 10px 0;">
-                                <p style="margin: 5px 0; font-size: 14px;">请执行以下操作：</p>
-                                <ol style="margin: 10px 0 10px 20px; padding: 0; font-size: 14px;">
-                                    <li>完全关闭浏览器（所有窗口）</li>
-                                    <li>重新打开浏览器</li>
-                                    <li>再次访问此页面</li>
-                                </ol>
-                                <button onclick="this.parentElement.remove()" style="
-                                    background: white;
-                                    color: #ff4444;
-                                    border: none;
-                                    padding: 8px 16px;
-                                    border-radius: 5px;
-                                    cursor: pointer;
-                                    font-weight: bold;
-                                    margin-top: 10px;
-                                ">知道了</button>
-                            `;
-                            document.body.appendChild(warning);
+                            if (contentLength && contentLength < 100000) {
+                                // 显示红色警告
+                                const warning = document.createElement('div');
+                                warning.style.cssText = `
+                                    position: fixed;
+                                    top: 80px;
+                                    right: 20px;
+                                    background: #ff4444;
+                                    color: white;
+                                    padding: 25px;
+                                    border-radius: 10px;
+                                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                                    z-index: 10000;
+                                    max-width: 450px;
+                                    font-family: "Microsoft YaHei", Arial, sans-serif;
+                                    animation: slideIn 0.5s ease-out;
+                                `;
+                                warning.innerHTML = `
+                                    <h3 style="margin: 0 0 10px 0; font-size: 18px;">🚨 浏览器缓存问题</h3>
+                                    <p style="margin: 5px 0; font-size: 14px;">检测到<strong>旧版本</strong>内容</p>
+                                    <p style="margin: 5px 0; font-size: 14px;">当前: <code style="background:rgba(255,255,255,0.2);padding:2px 6px;border-radius:3px;">${contentLength}</code> 字符</p>
+                                    <p style="margin: 5px 0; font-size: 14px;">应为: <code style="background:rgba(255,255,255,0.2);padding:2px 6px;border-radius:3px;">313000+</code> 字符</p>
+                                    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.3); margin: 15px 0;">
+                                    <p style="margin: 5px 0; font-size: 14px; font-weight: bold;">解决步骤：</p>
+                                    <ol style="margin: 10px 0 10px 20px; padding: 0; font-size: 13px; line-height: 1.6;">
+                                        <li>按 <kbd style="background:rgba(255,255,255,0.3);padding:2px 6px;border-radius:3px;">Ctrl+Shift+Delete</kbd></li>
+                                        <li>选择<strong>"缓存的图片和文件"</strong></li>
+                                        <li>清除缓存后<strong>关闭所有浏览器窗口</strong></li>
+                                        <li>重新打开浏览器访问此页面</li>
+                                    </ol>
+                                    <button onclick="location.reload(true)" style="
+                                        background: white;
+                                        color: #ff4444;
+                                        border: none;
+                                        padding: 10px 20px;
+                                        border-radius: 5px;
+                                        cursor: pointer;
+                                        font-weight: bold;
+                                        margin: 10px 5px 0 0;
+                                        font-size: 14px;
+                                    ">强制刷新</button>
+                                    <button onclick="this.parentElement.remove()" style="
+                                        background: rgba(255,255,255,0.2);
+                                        color: white;
+                                        border: none;
+                                        padding: 10px 20px;
+                                        border-radius: 5px;
+                                        cursor: pointer;
+                                        font-size: 14px;
+                                    ">关闭</button>
+                                `;
+                                document.body.appendChild(warning);
 
-                            console.error('❌ [版本检测] 检测到旧版本缓存！');
-                            console.error('当前内容长度:', contentLength);
-                            console.error('期望内容长度: 313000+');
-                            console.error('请完全关闭浏览器后重新打开！');
+                                console.error('❌ [版本检测] 检测到旧版本！');
+                                console.error('📏 当前内容长度:', contentLength, '字符');
+                                console.error('✅ 期望内容长度: 313000+ 字符');
+                                console.error('💡 请清除浏览器缓存并关闭所有窗口后重试！');
+                            } else if (contentLength >= 100000) {
+                                console.log('✅ [版本检测] 版本正确！内容长度:', contentLength, '字符');
+                                console.log('🎉 LaTeX公式应该正常显示');
+                            } else {
+                                console.warn('⚠️  [版本检测] 内容长度异常:', contentLength);
+                            }
                         } else {
-                            console.log('✅ [版本检测] 版本正确，内容长度正常');
+                            console.warn('⚠️  [版本检测] pcieTestingDeepDive 属性未找到');
                         }
                     } else {
-                        console.warn('⚠️  [版本检测] highSpeedDeepDive 对象未找到，等待加载...');
+                        console.error('❌ [版本检测] highSpeedDeepDive 对象未定义！');
+                        console.error('这说明 high-speed-deep-dive-20260205-fixed.js 未成功加载');
                     }
-                }, 3000); // 等待3秒确保内容加载完成
+                }, 5000); // 延长到5秒
             });
         })();
     </script>
@@ -4826,16 +4849,17 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
     <script src="accessibility-enhancements.js"></script>
     <script src="additional-calculators.js"></script>
     <!-- End v2.5.1 Modules -->
-    <!-- v2.6.5 High-Speed Deep Dive Module - LaTeX Fixed Version (No Cache) -->
+    <!-- v2.6.5-FIXED-20260205 High-Speed Deep Dive Module -->
     <script>
-        // 强制加载新版本文件，使用全新文件名彻底绕过缓存
+        // 使用带日期的全新文件名，彻底绕过浏览器缓存
         (function() {
             const timestamp = new Date().getTime();
+            const random = Math.random().toString(36).substring(7);
             const scripts = [
-                `high-speed-deep-dive-v2.6.5-nocache.js?t=${timestamp}`,
-                `high-speed-content-loader.js?t=${timestamp}`,
-                `diagnostic.js?t=${timestamp}`,
-                `sw-register.js?t=${timestamp}`
+                `high-speed-deep-dive-20260205-fixed.js?t=${timestamp}&r=${random}`,
+                `high-speed-content-loader.js?t=${timestamp}&r=${random}`,
+                `diagnostic.js?t=${timestamp}&r=${random}`,
+                `sw-register.js?t=${timestamp}&r=${random}`
             ];
 
             scripts.forEach(src => {
@@ -4845,8 +4869,10 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
                 document.body.appendChild(script);
             });
 
-            console.log('📌 v2.6.5 - 使用全新文件名加载，绕过所有缓存:', new Date().toISOString());
-            console.log('📁 加载的文件:', scripts);
+            console.log('🚀 v2.6.5-FIXED-20260205 - 使用日期戳文件名，彻底绕过缓存');
+            console.log('📅 文件名: high-speed-deep-dive-20260205-fixed.js');
+            console.log('📁 加载时间:', new Date().toISOString());
+            console.log('💡 预期内容长度: 313000+ 字符 (非 83330)');
         })();
     </script>
     <!-- End v2.5.2 Modules -->
