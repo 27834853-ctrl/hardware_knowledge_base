@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>String.raw 测试</title>
+</head>
+<body>
+    <h1>String.raw 嵌入内容测试</h1>
+    <div id="result"></div>
+
+    <script>
+        // 模拟 highSpeedDeepDive 对象
+        const highSpeedDeepDive = {
+            pcieTestingDeepDive: {
+                title: 'PCIe深度测试与调试技术',
+                content: 'OLD CONTENT 83330 characters' // 模拟旧内容
+            }
+        };
+
+        console.log('原始内容长度:', highSpeedDeepDive.pcieTestingDeepDive.content.length);
+
+        // 测试 String.raw 替换
+        highSpeedDeepDive.pcieTestingDeepDive.content = String.raw`TEST CONTENT WITH LATEX: $De-emphasis (dB) = 20 \times \log_{10}\left(\frac{V_{low}}{V_{high}}\right)$`;
+
+        console.log('替换后内容长度:', highSpeedDeepDive.pcieTestingDeepDive.content.length);
+        console.log('替换后内容:', highSpeedDeepDive.pcieTestingDeepDive.content);
+
+        document.getElementById('result').innerHTML = `
+            <p>原始内容长度: 28</p>
+            <p>替换后内容长度: ${highSpeedDeepDive.pcieTestingDeepDive.content.length}</p>
+            <pre>${highSpeedDeepDive.pcieTestingDeepDive.content}</pre>
+        `;
+    </script>
+</body>
+</html>
