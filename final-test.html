@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最终测试 - LaTeX 公式验证</title>
+    <!-- MathJax 配置 -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .test-box {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        .formula-box {
+            background: #fff3cd;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #ffc107;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 LaTeX 公式最终测试</h1>
+        <p>直接从 JS 文件加载并测试 LaTeX 渲染</p>
+    </div>
+
+    <div id="result"></div>
+
+    <script src="high-speed-deep-dive-20260205-fixed.js"></script>
+    <script>
+        setTimeout(() => {
+            const result = document.getElementById('result');
+            let html = '';
+
+            // 测试 1: 检查 JS 文件加载
+            if (typeof highSpeedDeepDive === 'undefined') {
+                html += '<div class="test-box error"><h2>❌ JS 文件未加载</h2></div>';
+                result.innerHTML = html;
+                return;
+            }
+
+            html += '<div class="test-box success"><h2>✅ JS 文件已加载</h2></div>';
+
+            // 测试 2: 检查内容长度
+            const contentLength = highSpeedDeepDive.pcieTestingDeepDive.content.length;
+            html += `<div class="test-box ${contentLength > 80000 ? 'success' : 'error'}">`;
+            html += `<h2>${contentLength > 80000 ? '✅' : '❌'} 内容长度</h2>`;
+            html += `<p><strong>实际长度:</strong> ${contentLength} 字符</p>`;
+            html += `<p><strong>状态:</strong> ${contentLength > 80000 ? '正常' : '异常（太短）'}</p>`;
+            html += '</div>';
+
+            // 测试 3: 提取并渲染公式
+            const content = highSpeedDeepDive.pcieTestingDeepDive.content;
+
+            // 查找预加重公式
+            const deEmphasisMatch = content.match(/De-emphasis[^$]*\$([^$]+)\$/);
+            if (deEmphasisMatch) {
+                html += '<div class="test-box">';
+                html += '<h2>📐 预加重比计算公式</h2>';
+                html += '<div class="formula-box">';
+                html += '<p><strong>LaTeX 源代码:</strong></p>';
+                html += `<pre>${deEmphasisMatch[1]}</pre>`;
+                html += '<p><strong>渲染结果:</strong></p>';
+                html += `<p>$${deEmphasisMatch[1]}$</p>`;
+                html += '<p><strong>检查点:</strong></p>';
+                html += '<ul>';
+                html += `<li>包含 \\times: ${deEmphasisMatch[1].includes('\\times') ? '✅' : '❌'}</li>`;
+                html += `<li>包含 \\log: ${deEmphasisMatch[1].includes('\\log') ? '✅' : '❌'}</li>`;
+                html += `<li>包含 \\frac: ${deEmphasisMatch[1].includes('\\frac') ? '✅' : '❌'}</li>`;
+                html += `<li>包含 \\left 和 \\right: ${(deEmphasisMatch[1].includes('\\left') && deEmphasisMatch[1].includes('\\right')) ? '✅' : '❌'}</li>`;
+                html += '</ul>';
+                html += '</div>';
+                html += '</div>';
+            }
+
+            // 查找 BER 公式
+            const berMatch = content.match(/BER[^$]*\$([^$]+)\$/);
+            if (berMatch) {
+                html += '<div class="test-box">';
+                html += '<h2>📐 误码率 (BER) 公式</h2>';
+                html += '<div class="formula-box">';
+                html += `<p>$${berMatch[1]}$</p>`;
+                html += '</div>';
+                html += '</div>';
+            }
+
+            result.innerHTML = html;
+
+            // 等待 MathJax 渲染
+            setTimeout(() => {
+                const formulas = document.querySelectorAll('.formula-box p');
+                let errorCount = 0;
+                let successCount = 0;
+
+                formulas.forEach((formula, index) => {
+                    if (formula.textContent.includes('Math input error')) {
+                        console.error(`❌ 公式 ${index + 1} 渲染失败: Math input error`);
+                        errorCount++;
+                    } else if (formula.textContent.includes('$')) {
+                        console.warn(`⚠️  公式 ${index + 1} 未渲染`);
+                    } else {
+                        console.log(`✅ 公式 ${index + 1} 渲染成功`);
+                        successCount++;
+                    }
+                });
+
+                const summary = document.createElement('div');
+                summary.className = `test-box ${errorCount === 0 ? 'success' : 'error'}`;
+                summary.innerHTML = `
+                    <h2>${errorCount === 0 ? '🎉' : '❌'} 渲染总结</h2>
+                    <p><strong>成功:</strong> ${successCount} 个公式</p>
+                    <p><strong>失败:</strong> ${errorCount} 个公式</p>
+                    <p><strong>结论:</strong> ${errorCount === 0 ? 'LaTeX 公式全部正确！' : '仍有公式渲染错误'}</p>
+                `;
+                result.appendChild(summary);
+
+                console.log('\n=== LaTeX 公式测试完成 ===');
+                console.log('成功:', successCount, '失败:', errorCount);
+            }, 3000);
+
+        }, 1000);
+    </script>
+</body>
+</html>

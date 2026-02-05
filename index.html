@@ -7032,14 +7032,23 @@ FEC 校验: 14 bits (parity)
                         document.querySelectorAll('[style*="position: fixed"][style*="background: #ff4444"]').forEach(w => w.remove());
 
                         // 如果PCIe页面已打开，刷新显示
-                        const section = document.getElementById('high-speed-deep-dive-content');
+                        const section = document.getElementById('highSpeedDeepDiveContent');
                         if (section && section.innerHTML.length > 100) {
+                            console.log('🔄 [运行时修复] 检测到页面已打开，刷新内容...');
                             section.innerHTML = highSpeedDeepDive.pcieTestingDeepDive.content;
+
+                            // 强制 MathJax 重新渲染
                             if (window.MathJax && window.MathJax.typesetPromise) {
                                 MathJax.typesetPromise([section]).then(() => {
                                     console.log('🎉 [运行时修复] 内容已更新并重新渲染！');
+                                }).catch((err) => {
+                                    console.error('❌ [运行时修复] MathJax 渲染失败:', err);
                                 });
+                            } else {
+                                console.warn('⚠️  [运行时修复] MathJax 未加载，稍后会自动渲染');
                             }
+                        } else {
+                            console.log('💡 [运行时修复] PCIe页面未打开，内容已准备好供后续加载');
                         }
                     }
                 }
