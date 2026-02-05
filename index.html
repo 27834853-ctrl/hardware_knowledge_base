@@ -4762,13 +4762,28 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
     <script src="additional-calculators.js"></script>
     <!-- End v2.5.1 Modules -->
     <!-- v2.6.4 High-Speed Deep Dive Module - LaTeX Fixed Version -->
-    <script src="high-speed-deep-dive-v2.6.4.js"></script>
-    <!-- High-Speed Content Loader (独立加载器，确保功能可用) -->
-    <script src="high-speed-content-loader.js?v=2.6.4"></script>
-    <!-- Diagnostic Script for Debugging -->
-    <script src="diagnostic.js"></script>
+    <script>
+        // 动态加载JS文件，强制绕过缓存
+        (function() {
+            const timestamp = new Date().getTime();
+            const scripts = [
+                `high-speed-deep-dive-v2.6.4.js?t=${timestamp}`,
+                `high-speed-content-loader.js?t=${timestamp}`,
+                `diagnostic.js?t=${timestamp}`,
+                `sw-register.js?t=${timestamp}`
+            ];
+
+            scripts.forEach(src => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.async = false; // 保持加载顺序
+                document.body.appendChild(script);
+            });
+
+            console.log('📌 所有脚本已使用时间戳加载，绕过缓存:', new Date().toISOString());
+        })();
+    </script>
     <!-- End v2.5.2 Modules -->
-    <script src="sw-register.js"></script>
     <script src="share.js"></script>
     <script src="analytics.js"></script>
     <script src="feedback.js"></script>

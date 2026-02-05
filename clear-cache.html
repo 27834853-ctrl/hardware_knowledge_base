@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>清除缓存并重新加载</title>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-weight: bold;
+        }
+        .button:hover {
+            background: #f0f0f0;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 5px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 清除缓存工具</h1>
+        <p>此页面将帮助您清除浏览器缓存并重新加载正确的文件</p>
+
+        <div class="status" id="status">
+            <h3>检测到的问题：</h3>
+            <p>浏览器缓存了旧版本的 JavaScript 文件</p>
+            <p>LaTeX 公式文件已修复，但浏览器显示的是缓存版本</p>
+        </div>
+
+        <button class="button" onclick="clearAllCache()">清除所有缓存</button>
+        <button class="button" onclick="reloadWithoutCache()">强制重新加载</button>
+        <button class="button" onclick="openFreshIndex()">打开全新 Index</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // 清除所有可能的缓存
+        async function clearAllCache() {
+            const result = document.getElementById('result');
+            result.innerHTML = '<div class="status"><p>正在清除缓存...</p></div>';
+
+            try {
+                // 清除 Service Worker 缓存
+                if ('caches' in window) {
+                    const cacheNames = await caches.keys();
+                    await Promise.all(
+                        cacheNames.map(name => caches.delete(name))
+                    );
+                    console.log('✅ Service Worker 缓存已清除');
+                }
+
+                // 注销所有 Service Workers
+                if ('serviceWorker' in navigator) {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    await Promise.all(
+                        registrations.map(reg => reg.unregister())
+                    );
+                    console.log('✅ Service Workers 已注销');
+                }
+
+                // 清除 localStorage
+                localStorage.clear();
+                console.log('✅ localStorage 已清除');
+
+                // 清除 sessionStorage
+                sessionStorage.clear();
+                console.log('✅ sessionStorage 已清除');
+
+                result.innerHTML = `
+                    <div class="success">
+                        <h3>✅ 缓存清除成功！</h3>
+                        <p>已清除：</p>
+                        <ul style="text-align: left; display: inline-block;">
+                            <li>Service Worker 缓存</li>
+                            <li>所有注册的 Service Workers</li>
+                            <li>LocalStorage</li>
+                            <li>SessionStorage</li>
+                        </ul>
+                        <p><strong>现在请点击"打开全新 Index"按钮</strong></p>
+                    </div>
+                `;
+            } catch (error) {
+                result.innerHTML = `<div class="status"><p>❌ 清除缓存时出错: ${error.message}</p></div>`;
+            }
+        }
+
+        // 强制重新加载（绕过缓存）
+        function reloadWithoutCache() {
+            // 添加随机参数防止缓存
+            const timestamp = new Date().getTime();
+            window.location.href = `index.html?nocache=${timestamp}`;
+        }
+
+        // 打开带时间戳的新版本
+        function openFreshIndex() {
+            const timestamp = new Date().getTime();
+            // 在新标签页打开，带缓存破坏参数
+            window.open(`index.html?v=${timestamp}&refresh=true`, '_blank');
+        }
+
+        // 页面加载时自动检测
+        window.addEventListener('load', function() {
+            console.log('=== 缓存清除工具已加载 ===');
+            console.log('建议操作顺序：');
+            console.log('1. 点击"清除所有缓存"');
+            console.log('2. 等待成功提示');
+            console.log('3. 点击"打开全新 Index"');
+            console.log('4. 检查公式是否正确显示');
+        });
+    </script>
+</body>
+</html>
