@@ -95,7 +95,7 @@ const highSpeedDeepDive = {
 
                         <div class="formula-box">
                             <p><strong>预加重比计算公式</strong>:</p>
-                            <p>$De-emphasis (dB) = 20 \times \log_{10}\left(\frac{V_{low}}{V_{high}}\right)$</p>
+                            <p>$De-emphasis (dB) = 20 \\times \\log_{10}\\left(\\frac{V_{low}}{V_{high}}\\right)$</p>
                             <p>其中:</p>
                             <ul>
                                 <li>$V_{high}$: 首个UI的幅度(未加重)</li>
@@ -168,7 +168,7 @@ const highSpeedDeepDive = {
 
                         <div class="formula-box">
                             <p><strong>总抖动计算</strong>:</p>
-                            <p>$TJ = DJ + n \times RJ$</p>
+                            <p>$TJ = DJ + n \\times RJ$</p>
                             <p>其中 n 为置信系数，对于 BER = 10^{-12}，n ≈ 14.069</p>
                         </div>
 
@@ -245,12 +245,12 @@ const highSpeedDeepDive = {
 
                         <div class="formula-box">
                             <p><strong>3-tap FIR公式</strong>:</p>
-                            <p>$V_{out}(n) = C_{-1} \times V_{in}(n-1) + C_0 \times V_{in}(n) + C_{+1} \times V_{in}(n+1)$</p>
+                            <p>$V_{out}(n) = C_{-1} \\times V_{in}(n-1) + C_0 \\times V_{in}(n) + C_{+1} \\times V_{in}(n+1)$</p>
                             <p>约束条件:</p>
                             <ul>
                                 <li>$C_{-1} + C_0 + C_{+1} = 0$ (直流增益归一化)</li>
-                                <li>$|C_{-1}| \leq 0.25$, $|C_{+1}| \leq 0.25$ (PCIe 3.0)</li>
-                                <li>$C_0 \geq 0.5$</li>
+                                <li>$|C_{-1}| \\leq 0.25$, $|C_{+1}| \\leq 0.25$ (PCIe 3.0)</li>
+                                <li>$C_0 \\geq 0.5$</li>
                             </ul>
                         </div>
 
@@ -372,7 +372,7 @@ const highSpeedDeepDive = {
 
                         <div class="formula-box">
                             <p><strong>BER计算</strong>:</p>
-                            <p>$BER = \frac{\text{错误比特数}}{\text{总比特数}}$</p>
+                            <p>$BER = \\frac{\\text{错误比特数}}{\\text{总比特数}}$</p>
                             <p>置信度计算:</p>
                             <p>对于BER = 10⁻¹², 需要测试 > 10¹³ bits 才能有统计意义</p>
                         </div>
@@ -400,22 +400,22 @@ const highSpeedDeepDive = {
 
                         <h5>CTLE频率响应</h5>
                         <div class="formula-box">
-                            <p>$H_{CTLE}(f) = \frac{1 + j \cdot \frac{f}{f_{z}}}{1 + j \cdot \frac{f}{f_{p}}}$</p>
+                            <p>$H_{CTLE}(f) = \\frac{1 + j \\cdot \\frac{f}{f_{z}}}{1 + j \\cdot \\frac{f}{f_{p}}}$</p>
                             <p>其中:</p>
                             <ul>
                                 <li>$f_{z}$: 零点频率(boost起始)</li>
                                 <li>$f_{p}$: 极点频率(boost终止)</li>
-                                <li>增益: $20\log_{10}\left(\frac{f_p}{f_z}\right)$ dB</li>
+                                <li>增益: $20\\log_{10}\\left(\\frac{f_p}{f_z}\\right)$ dB</li>
                             </ul>
                         </div>
 
                         <h5>DFE工作原理</h5>
                         <div class="formula-box">
-                            <p>$y(n) = x(n) - \sum_{k=1}^{N} c_k \times \hat{y}(n-k)$</p>
+                            <p>$y(n) = x(n) - \\sum_{k=1}^{N} c_k \\times \\hat{y}(n-k)$</p>
                             <p>其中:</p>
                             <ul>
                                 <li>$x(n)$: 当前输入</li>
-                                <li>$\hat{y}(n-k)$: 前k个判决值</li>
+                                <li>$\\hat{y}(n-k)$: 前k个判决值</li>
                                 <li>$c_k$: DFE系数(自适应)</li>
                             </ul>
                         </div>
@@ -729,14 +729,14 @@ const highSpeedDeepDive = {
                         <h5>长度匹配要求</h5>
                         <div class="formula-box">
                             <p><strong>对内匹配</strong> (Within Pair):</p>
-                            <p>$|\Delta L_{P-N}| \leq 5 \text{ mil}$ (127 μm)</p>
+                            <p>$|\\Delta L_{P-N}| \\leq 5 \\text{ mil}$ (127 μm)</p>
                             <p>对应时间偏斜: ~0.8 ps (在FR4上)</p>
                         </div>
 
                         <div class="formula-box">
                             <p><strong>对间匹配</strong> (Lane-to-Lane):</p>
-                            <p>Gen 1/2: $|\Delta L_{lane}| \leq 500 \text{ mil}$ (12.7 mm)</p>
-                            <p>Gen 3+: $|\Delta L_{lane}| \leq 200 \text{ mil}$ (5.08 mm)</p>
+                            <p>Gen 1/2: $|\\Delta L_{lane}| \\leq 500 \\text{ mil}$ (12.7 mm)</p>
+                            <p>Gen 3+: $|\\Delta L_{lane}| \\leq 200 \\text{ mil}$ (5.08 mm)</p>
                             <p><em>推荐更严格: ±100 mil</em></p>
                         </div>
 
@@ -787,7 +787,7 @@ const highSpeedDeepDive = {
 
                         <div class="formula-box">
                             <p><strong>过孔寄生电感估算</strong>:</p>
-                            <p>$L_{via} \approx 5.08 \times h \times \left[\ln\left(\frac{4h}{d}\right) + 1\right] \text{ (nH)}$</p>
+                            <p>$L_{via} \\approx 5.08 \\times h \\times \\left[\\ln\\left(\\frac{4h}{d}\\right) + 1\\right] \\text{ (nH)}$</p>
                             <p>其中:</p>
                             <ul>
                                 <li>$h$: 过孔长度 (mm)</li>
@@ -1084,7 +1084,7 @@ const highSpeedDeepDive = {
         <h5>检测原理</h5>
         <div class="formula-box">
             <p><strong>电容检测电路</strong>:</p>
-            <p>$V_{RX} = V_{TX} \times \frac{Z_{RX}}{Z_{TX} + Z_{RX}}$</p>
+            <p>$V_{RX} = V_{TX} \\times \\frac{Z_{RX}}{Z_{TX} + Z_{RX}}$</p>
             <p>其中:</p>
             <ul>
                 <li>$V_{TX}$: 发送端电压 (~3.3V)</li>
@@ -1281,7 +1281,7 @@ COM | Link# | Lane# | N_FTS | Data Rate | ... | Symbol 15
         <h5>L0 性能指标</h5>
         <div class="formula-box">
             <p><strong>有效带宽计算</strong>:</p>
-            <p>$Bandwidth_{effective} = Bandwidth_{raw} \times Efficiency$</p>
+            <p>$Bandwidth_{effective} = Bandwidth_{raw} \\times Efficiency$</p>
             <p><strong>Gen 3.0 x16 示例</strong>:</p>
             <ul>
                 <li>Raw Bandwidth: 8 GT/s × 16 lanes × 1 byte/Symbol = <strong>128 GB/s</strong></li>
@@ -1772,9 +1772,9 @@ COM | Link# | Lane# | N_FTS | Data Rate | ... | Symbol 15
 
         <div class="formula-box">
             <p><strong>眼高计算</strong>:</p>
-            <p>$Eye_{height,\text{PAM4}} = \frac{V_{swing}}{3} = \frac{1.2V}{3} = 0.4V$</p>
+            <p>$Eye_{height,\\text{PAM4}} = \\frac{V_{swing}}{3} = \\frac{1.2V}{3} = 0.4V$</p>
             <p><strong>相比 NRZ</strong>:</p>
-            <p>$Eye_{height,\text{NRZ}} = V_{swing} = 1.2V$</p>
+            <p>$Eye_{height,\\text{NRZ}} = V_{swing} = 1.2V$</p>
             <p><strong>眼高损失</strong>: PAM4 眼高仅为 NRZ 的 <strong>33.3%</strong> (损失 9.5 dB)</p>
         </div>
 
@@ -1829,7 +1829,7 @@ COM | Link# | Lane# | N_FTS | Data Rate | ... | Symbol 15
         <p>PCIe 6.0 采用 <strong>RS (Reed-Solomon) 类似的 FEC 编码</strong>：</p>
         <div class="formula-box">
             <p><strong>编码比例</strong>:</p>
-            <p>$\frac{Data}{Total} = \frac{242\ bits}{256\ bits} = 94.5\%$</p>
+            <p>$\\frac{Data}{Total} = \\frac{242\\ bits}{256\\ bits} = 94.5\\%$</p>
             <p><strong>开销</strong>: 5.5% (vs NRZ 128b/130b 的 1.54%)</p>
         </div>
 
@@ -1935,7 +1935,7 @@ FEC 校验: 14 bits (parity)
         <p><strong>模拟前端均衡器</strong>，在 ADC 之前补偿高频损耗：</p>
         <div class="formula-box">
             <p><strong>CTLE 传递函数</strong>:</p>
-            <p>$H_{CTLE}(f) = A_{DC} \times \left(1 + \frac{f}{f_{z}}\right) / \left(1 + \frac{f}{f_{p}}\right)$</p>
+            <p>$H_{CTLE}(f) = A_{DC} \\times \\left(1 + \\frac{f}{f_{z}}\\right) / \\left(1 + \\frac{f}{f_{p}}\\right)$</p>
             <p>其中:</p>
             <ul>
                 <li>$f_{z}$: 零点频率 (Boost 起点，典型 5 GHz)</li>
@@ -2201,7 +2201,7 @@ FEC 校验: 14 bits (parity)
 
                         <div class="formula-box">
                             <p><strong>预加重计算</strong>:</p>
-                            <p>$De-emphasis (dB) = 20 \times \log_{10}\left(\frac{V_{cursor-1}}{V_{cursor}}\right)$</p>
+                            <p>$De-emphasis (dB) = 20 \\times \\log_{10}\\left(\\frac{V_{cursor-1}}{V_{cursor}}\\right)$</p>
                             <p>其中:</p>
                             <ul>
                                 <li>$V_{cursor}$: 主tap幅度</li>
@@ -2854,9 +2854,9 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
 
         <div class="formula-box">
             <p><strong>充电器效率计算</strong>:</p>
-            <p>$Efficiency = \frac{P_{out}}{P_{in}} = \frac{240W}{240W + P_{loss}}$</p>
+            <p>$Efficiency = \\frac{P_{out}}{P_{in}} = \\frac{240W}{240W + P_{loss}}$</p>
             <p>假设效率 94%:</p>
-            <p>$P_{loss} = \frac{240W}{0.94} - 240W = 15.3W$</p>
+            <p>$P_{loss} = \\frac{240W}{0.94} - 240W = 15.3W$</p>
             <p><strong>温升估算</strong>: 15.3W 损耗 → 外壳温升 ~40°C (需散热器)</p>
         </div>
     </div>
@@ -2944,7 +2944,7 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
 
                         <div class="formula-box">
                             <p><strong>UI (Unit Interval)计算</strong>:</p>
-                            <p>$UI = \frac{1}{Data\ Rate}$</p>
+                            <p>$UI = \\frac{1}{Data\\ Rate}$</p>
                             <p>示例: 2.5 Gbps → UI = 400 ps</p>
                         </div>
                     </div>
@@ -3107,7 +3107,7 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
                         <h5>带宽计算验证</h5>
                         <div class="formula-box">
                             <p><strong>CSI-2所需带宽计算</strong>:</p>
-                            <p>$Bandwidth = \frac{Width \times Height \times FPS \times BPP}{Lanes \times Efficiency}$</p>
+                            <p>$Bandwidth = \\frac{Width \\times Height \\times FPS \\times BPP}{Lanes \\times Efficiency}$</p>
                             <p>其中:</p>
                             <ul>
                                 <li>BPP: Bits Per Pixel (如RAW10 = 10, YUV422 = 16)</li>
@@ -3116,7 +3116,7 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
                             <p><strong>示例</strong>:</p>
                             <ul>
                                 <li>4K60, RAW10, 4-lane:</li>
-                                <li>$BW = \frac{3840 \times 2160 \times 60 \times 10}{4 \times 0.8} = 1.55\ Gbps/lane$</li>
+                                <li>$BW = \\frac{3840 \\times 2160 \\times 60 \\times 10}{4 \\times 0.8} = 1.55\\ Gbps/lane$</li>
                                 <li>选择2.5 Gbps D-PHY ✓</li>
                             </ul>
                         </div>
@@ -3180,7 +3180,7 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
 
                         <div class="formula-box">
                             <p><strong>数据率计算</strong>:</p>
-                            <p>$Data\ Rate = Symbol\ Rate \times \log_2(7) = Symbol\ Rate \times 2.28$</p>
+                            <p>$Data\\ Rate = Symbol\\ Rate \\times \\log_2(7) = Symbol\\ Rate \\times 2.28$</p>
                             <p>示例: 2.5 Gsps → 5.7 Gbps</p>
                         </div>
                     </div>
@@ -3308,7 +3308,7 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
 
         <div class="formula-box">
             <p><strong>编码效率</strong>:</p>
-            <p>$\log_2(6) ≈ 2.585\ bits/symbol$</p>
+            <p>$\\log_2(6) ≈ 2.585\\ bits/symbol$</p>
             <p>相比 D-PHY (1 bit/symbol)，编码效率提升 <strong>2.58 倍</strong></p>
         </div>
     </div>
@@ -3518,7 +3518,7 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
         <h5>带宽计算示例</h5>
         <div class="formula-box">
             <p><strong>8K@30fps RAW12 所需带宽</strong>:</p>
-            <p>$Bandwidth = 7680 \times 4320 \times 30 \times 12 / 8 = 14.93\ Gbps$</p>
+            <p>$Bandwidth = 7680 \\times 4320 \\times 30 \\times 12 / 8 = 14.93\\ Gbps$</p>
             <p><strong>CSI-2 v4.0 配置</strong>: 4 Lanes @ 4.5 Gbps = <strong>18 Gbps</strong> ✅</p>
             <p><strong>裕量</strong>: (18 - 14.93) / 14.93 = <strong>20.6%</strong></p>
         </div>
@@ -3580,9 +3580,9 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
         <h5>带宽计算示例</h5>
         <div class="formula-box">
             <p><strong>8K@60Hz RGB888 (无压缩)</strong>:</p>
-            <p>$Bandwidth = 7680 \times 4320 \times 60 \times 3 \times 8 = 47.78\ Gbps$</p>
+            <p>$Bandwidth = 7680 \\times 4320 \\times 60 \\times 3 \\times 8 = 47.78\\ Gbps$</p>
             <p><strong>DSC 3:1 压缩后</strong>:</p>
-            <p>$Bandwidth_{compressed} = 47.78 / 3 = 15.93\ Gbps$</p>
+            <p>$Bandwidth_{compressed} = 47.78 / 3 = 15.93\\ Gbps$</p>
             <p>可用 <strong>DSI-2 v2.0 4L@4.5Gbps = 18 Gbps</strong> 传输 ✅</p>
         </div>
 
@@ -3737,11 +3737,11 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
 
         <div class="formula-box">
             <p><strong>带宽计算公式</strong>:</p>
-            <p>$Bandwidth\ (GB/s) = \frac{Data\ Rate\ (MT/s) \times Bus\ Width\ (bits)}{8 \times 1000}$</p>
+            <p>$Bandwidth\\ (GB/s) = \\frac{Data\\ Rate\\ (MT/s) \\times Bus\\ Width\\ (bits)}{8 \\times 1000}$</p>
             <p><strong>示例 (LPDDR5X @ 8533 MT/s, 16-bit 通道)</strong>:</p>
-            <p>$Bandwidth = \frac{8533 \times 16}{8 \times 1000} = \frac{136528}{8000} = 17.066\ GB/s$ (单通道)</p>
-            <p>双通道 (32-bit): $17.066 \times 2 = 34.132\ GB/s$</p>
-            <p>四通道 (64-bit): $17.066 \times 4 = 68.264\ GB/s$</p>
+            <p>$Bandwidth = \\frac{8533 \\times 16}{8 \\times 1000} = \\frac{136528}{8000} = 17.066\\ GB/s$ (单通道)</p>
+            <p>双通道 (32-bit): $17.066 \\times 2 = 34.132\\ GB/s$</p>
+            <p>四通道 (64-bit): $17.066 \\times 4 = 68.264\\ GB/s$</p>
         </div>
     </div>
 
@@ -3929,10 +3929,10 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
 
         <div class="formula-box">
             <p><strong>WCK 与数据速率关系</strong>:</p>
-            <p>$Data\ Rate = WCK\ Frequency \times 2$</p>
+            <p>$Data\\ Rate = WCK\\ Frequency \\times 2$</p>
             <p>因为 WCK 是双沿采样 (DDR)，每个 WCK 周期传输 2 bits</p>
             <p><strong>示例 (8533 MT/s)</strong>:</p>
-            <p>$WCK\ Frequency = \frac{8533\ MT/s}{2} = 4266.5\ MHz$</p>
+            <p>$WCK\\ Frequency = \\frac{8533\\ MT/s}{2} = 4266.5\\ MHz$</p>
         </div>
 
         <h5>WCK Always-On vs Fast-Wake 模式</h5>
@@ -4111,7 +4111,7 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
                 <li>Bank: BA[1:0] (2 bits, 4 Banks per BG)</li>
                 <li>Column Address: C[9:0] (10 bits, 1024 columns)</li>
             </ul>
-            <p>总容量: $128K \times 8 \times 4 \times 1024 \times 16\ bits = 16\ Gb$</p>
+            <p>总容量: $128K \\times 8 \\times 4 \\times 1024 \\times 16\\ bits = 16\\ Gb$</p>
         </div>
     </div>
 
@@ -4418,7 +4418,7 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
         <div class="formula-box">
             <p><strong>Write Leveling 目标</strong>:</p>
             <p>调整 DQS 延迟，使得在 DRAM 端:</p>
-            <p>$DQS\ edge \approx CK\ edge \pm 0.25 \times t_{CK}$</p>
+            <p>$DQS\\ edge \\approx CK\\ edge \\pm 0.25 \\times t_{CK}$</p>
             <p>即 DQS 边沿与 CK 边沿对齐，或相差 1/4 周期 (90度相位差)</p>
         </div>
 
@@ -4554,7 +4554,7 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
         <div class="formula-box">
             <p><strong>Read Training 目标</strong>:</p>
             <p>对于每个 DQ bit，调整 RX 采样延迟，使得:</p>
-            <p>$t_{sample} = t_{DQS\_edge} + 0.5 \times t_{UI}$</p>
+            <p>$t_{sample} = t_{DQS\\_edge} + 0.5 \\times t_{UI}$</p>
             <p>即在 DQS 边沿后半个 UI 的位置采样 (眼图中心)</p>
         </div>
 
@@ -4704,7 +4704,7 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
         <div class="formula-box">
             <p><strong>WCK2CK 相位关系 (4:1 模式)</strong>:</p>
             <p>在 DRAM 内部，理想情况下:</p>
-            <p>$WCK\_rising\_edge[0, 4, 8, 12, ...] \approx CK\_rising\_edge[0, 1, 2, 3, ...]$</p>
+            <p>$WCK\\_rising\\_edge[0, 4, 8, 12, ...] \\approx CK\\_rising\\_edge[0, 1, 2, 3, ...]$</p>
             <p>即每 4 个 WCK 上升沿对应 1 个 CK 上升沿</p>
             <p>Training 的目标是找到这个对应关系并锁定</p>
         </div>
@@ -4908,10 +4908,10 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
         <div class="formula-box">
             <p><strong>功耗计算 (WCK Always-On vs Fast-Wake)</strong>:</p>
             <p>假设工作周期 (Duty Cycle) = 10% (即 90% 时间空闲)</p>
-            <p>Always-On 平均功耗: $P_{avg} = P_{WCK} \times 100\% = 100\ mW$ (假设)</p>
-            <p>Fast-Wake 平均功耗: $P_{avg} = P_{WCK} \times 10\% + P_{idle} \times 90\%$</p>
-            <p>$= 100 \times 0.1 + 5 \times 0.9 = 10 + 4.5 = 14.5\ mW$</p>
-            <p><strong>功耗节省</strong>: $(100 - 14.5) / 100 = 85.5\%$ ✅</p>
+            <p>Always-On 平均功耗: $P_{avg} = P_{WCK} \\times 100\\% = 100\\ mW$ (假设)</p>
+            <p>Fast-Wake 平均功耗: $P_{avg} = P_{WCK} \\times 10\\% + P_{idle} \\times 90\\%$</p>
+            <p>$= 100 \\times 0.1 + 5 \\times 0.9 = 10 + 4.5 = 14.5\\ mW$</p>
+            <p><strong>功耗节省</strong>: $(100 - 14.5) / 100 = 85.5\\%$ ✅</p>
         </div>
     </div>
 
@@ -5255,8 +5255,8 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
         <div class="formula-box">
             <p><strong>ODT 选择原则</strong>:</p>
             <p>理想 ODT 阻值应接近 PCB trace 阻抗:</p>
-            <p>$R_{ODT} \approx Z_0\ (PCB\ trace\ impedance)$</p>
-            <p>对于 LPDDR5X DQ: $Z_0 = 40\Omega$ (single-ended), 因此 ODT-40Ω 最理想</p>
+            <p>$R_{ODT} \\approx Z_0\\ (PCB\\ trace\\ impedance)$</p>
+            <p>对于 LPDDR5X DQ: $Z_0 = 40\\Omega$ (single-ended), 因此 ODT-40Ω 最理想</p>
             <p>但实际需要平衡功耗，长走线常用 ODT-48Ω 或 60Ω</p>
         </div>
     </div>
@@ -5403,10 +5403,10 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
 
         <div class="formula-box">
             <p><strong>时延与走线长度换算</strong>:</p>
-            <p>对于 FR4 PCB (相对介电常数 $\varepsilon_r = 4.2$):</p>
-            <p>$t_{delay} = \frac{L}{v} = \frac{L}{c / \sqrt{\varepsilon_r}} = \frac{L \sqrt{\varepsilon_r}}{c}$</p>
-            <p>其中 $c = 3 \times 10^8\ m/s$ (光速)</p>
-            <p>简化: $t_{delay}\ (ps) \approx 6.7 \times L\ (mm)$</p>
+            <p>对于 FR4 PCB (相对介电常数 $\\varepsilon_r = 4.2$):</p>
+            <p>$t_{delay} = \\frac{L}{v} = \\frac{L}{c / \\sqrt{\\varepsilon_r}} = \\frac{L \\sqrt{\\varepsilon_r}}{c}$</p>
+            <p>其中 $c = 3 \\times 10^8\\ m/s$ (光速)</p>
+            <p>简化: $t_{delay}\\ (ps) \\approx 6.7 \\times L\\ (mm)$</p>
             <p>例如: 10 mm 走线长度差异 → 67 ps 时延差异</p>
         </div>
 
@@ -5777,7 +5777,7 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
 
                         <div class="formula-box">
                             <p><strong>128b/132b 编码效率</strong>:</p>
-                            <p>$Efficiency = \frac{128}{132} = 97.0%$</p>
+                            <p>$Efficiency = \\frac{128}{132} = 97.0%$</p>
                             <p>相比 HBR3 的 8b/10b (80% 效率)，提升 <strong>21.25%</strong></p>
                         </div>
                     </div>
@@ -6025,8 +6025,8 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
 
         <div class="formula-box">
             <p><strong>UHBR20 带宽计算</strong>:</p>
-            <p>$Bandwidth_{raw} = 4 \ lanes \times 20 \ Gbps = 80 \ Gbps$</p>
-            <p>$Bandwidth_{effective} = 80 \times \frac{128}{132} = 77.58 \ Gbps$</p>
+            <p>$Bandwidth_{raw} = 4 \\ lanes \\times 20 \\ Gbps = 80 \\ Gbps$</p>
+            <p>$Bandwidth_{effective} = 80 \\times \\frac{128}{132} = 77.58 \\ Gbps$</p>
             <p><strong>支持分辨率</strong>: 16K@60Hz (RGB 8-bit) 需要 ~75 Gbps ✅</p>
         </div>
     </div>
@@ -6121,7 +6121,7 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
         <div class="formula-box">
             <p><strong>VRR 范围计算</strong>:</p>
             <p>$V_{total} = V_{active} + V_{blanking}$</p>
-            <p>$Refresh\,Rate = \frac{Pixel\,Clock}{H_{total} \times V_{total}}$</p>
+            <p>$Refresh\\,Rate = \\frac{Pixel\\,Clock}{H_{total} \\times V_{total}}$</p>
             <p><strong>示例</strong>: 4K@60Hz (V_total = 2250) → 调整 V_total 到 2250-4500 实现 30-60Hz VRR</p>
         </div>
 
@@ -6201,9 +6201,9 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
         <div class="formula-box">
             <p><strong>DSC 带宽节省计算</strong>:</p>
             <p><strong>8K@60Hz RGB 10-bit (无压缩)</strong>:</p>
-            <p>$BW = 7680 \times 4320 \times 60 \times 3 \times 10 / 8 = 59.72\,Gbps$</p>
+            <p>$BW = 7680 \\times 4320 \\times 60 \\times 3 \\times 10 / 8 = 59.72\\,Gbps$</p>
             <p><strong>DSC 3:1 压缩后</strong>:</p>
-            <p>$BW_{compressed} = 59.72 / 3 = 19.91\,Gbps$</p>
+            <p>$BW_{compressed} = 59.72 / 3 = 19.91\\,Gbps$</p>
             <p>可用 <strong>DP 2.1 UHBR10 (38.69 Gbps)</strong> 传输 ✅</p>
         </div>
 
@@ -6359,9 +6359,9 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
 
                         <div class="formula-box">
                             <p><strong>FRL 带宽计算 (FRL 6)</strong>:</p>
-                            <p>$Bandwidth = 4 lanes \times 12 Gbps/lane = 48 Gbps$</p>
+                            <p>$Bandwidth = 4 lanes \\times 12 Gbps/lane = 48 Gbps$</p>
                             <p><strong>有效带宽</strong>:</p>
-                            <p>$Effective = 48 \times 0.889 = 42.67 Gbps$</p>
+                            <p>$Effective = 48 \\times 0.889 = 42.67 Gbps$</p>
                             <p>可传输 <strong>4K@120Hz RGB 12-bit</strong> (~39 Gbps) ✅</p>
                         </div>
                     </div>
@@ -6535,8 +6535,8 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
 
                         <div class="formula-box">
                             <p><strong>VRR 延迟改善</strong>:</p>
-                            <p>固定 60Hz 最大延迟: $\frac{1}{60} = 16.67 ms$</p>
-                            <p>VRR 120Hz 最大延迟: $\frac{1}{120} = 8.33 ms$</p>
+                            <p>固定 60Hz 最大延迟: $\\frac{1}{60} = 16.67 ms$</p>
+                            <p>VRR 120Hz 最大延迟: $\\frac{1}{120} = 8.33 ms$</p>
                             <p><strong>延迟降低</strong>: 50% ✅</p>
                         </div>
                     </div>
@@ -6692,9 +6692,9 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
         <div class="formula-box">
             <p><strong>HDMI FRL 6 + DSC 带宽计算</strong>:</p>
             <p><strong>10K@60Hz RGB 10-bit (无压缩)</strong>:</p>
-            <p>$BW = 10240 \times 4320 \times 60 \times 3 \times 10 / 8 = 95.37\,Gbps$</p>
+            <p>$BW = 10240 \\times 4320 \\times 60 \\times 3 \\times 10 / 8 = 95.37\\,Gbps$</p>
             <p><strong>DSC 3:1 压缩后</strong>:</p>
-            <p>$BW_{compressed} = 95.37 / 3 = 31.79\,Gbps$</p>
+            <p>$BW_{compressed} = 95.37 / 3 = 31.79\\,Gbps$</p>
             <p>可用 <strong>HDMI 2.1a FRL 6 (42.67 Gbps 有效)</strong> 传输 ✅</p>
         </div>
 
@@ -6777,7 +6777,7 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
         <div class="formula-box">
             <p><strong>eARC 带宽计算</strong>:</p>
             <p><strong>Dolby Atmos TrueHD 7.1.4 (无损)</strong>:</p>
-            <p>$BW = 192\,kHz \times 24\,bit \times 12\,ch = 55.3\,Mbps$</p>
+            <p>$BW = 192\\,kHz \\times 24\\,bit \\times 12\\,ch = 55.3\\,Mbps$</p>
             <p><strong>eARC 37 Mbps 传输</strong>:</p>
             <p>需要 <strong>MLP 无损压缩</strong> (1.5:1) → 36.9 Mbps ✅</p>
         </div>
@@ -6826,7 +6826,7 @@ PDO 7: 48V @ 5A (240W) - EPR AVS 48V ✅
 
         <div class="formula-box">
             <p><strong>VRR 刷新率计算</strong>:</p>
-            <p>$Refresh\,Rate = \frac{Pixel\,Clock}{H_{total} \times (V_{active} + V_{blank})}$</p>
+            <p>$Refresh\\,Rate = \\frac{Pixel\\,Clock}{H_{total} \\times (V_{active} + V_{blank})}$</p>
             <p><strong>示例</strong>: 4K@120Hz</p>
             <ul>
                 <li>固定 H_total = 4400, V_active = 2160</li>
