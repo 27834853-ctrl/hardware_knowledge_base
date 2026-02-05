@@ -4900,106 +4900,59 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
     <script>
         (function() {
             // 等待6秒，确保所有脚本加载完成
-            setTimeout(function() {
+            setTimeout(async function() {
                 if (typeof highSpeedDeepDive !== 'undefined' &&
                     highSpeedDeepDive.pcieTestingDeepDive &&
                     highSpeedDeepDive.pcieTestingDeepDive.content) {
 
                     const contentLength = highSpeedDeepDive.pcieTestingDeepDive.content.length;
 
-                    // 如果检测到旧版本（83330字符），直接用正确内容替换
+                    // 如果检测到旧版本，从 index-fixed-inline.html 加载正确内容
                     if (contentLength < 100000) {
-                        console.warn('🔧 [运行时修复] 检测到旧版本内容，正在替换为正确版本...');
+                        console.warn('🔧 [运行时修复] 检测到旧版本 (' + contentLength + ' 字符)');
+                        console.log('📥 [运行时修复] 正在从 index-fixed-inline.html 加载正确内容...');
 
-                        // 直接替换为正确的内容
-                        highSpeedDeepDive.pcieTestingDeepDive.content = `
-                            <div class="deep-dive-container">
-                                <h2><i class="fas fa-microscope"></i> PCIe深度测试与调试技术</h2>
+                        try {
+                            // 从 index-fixed-inline.html 加载完整内容
+                            const response = await fetch('index-fixed-inline.html');
+                            const html = await response.text();
 
-                                <h4>1.2 预加重(De-emphasis)测试</h4>
-                                <div class="concept-box">
-                                    <h5>预加重原理</h5>
-                                    <p>通过减小高频成分的幅度来补偿传输线的高频损耗，改善信号完整性。</p>
+                            // 使用 DOMParser 解析HTML
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(html, 'text/html');
+                            const contentSection = doc.querySelector('.content-section');
 
-                                    <div class="formula-box">
-                                        <p><strong>预加重比计算公式</strong>:</p>
-                                        <p>$De-emphasis (dB) = 20 \\\\times \\\\log_{10}\\\\left(\\\\frac{V_{low}}{V_{high}}\\\\right)$</p>
-                                        <p>其中:</p>
-                                        <ul>
-                                            <li>$V_{high}$: 首个UI的幅度(未加重)</li>
-                                            <li>$V_{low}$: 后续UI的幅度(已加重)</li>
-                                        </ul>
-                                    </div>
-                                </div>
+                            if (contentSection) {
+                                // 直接使用从 index-fixed-inline.html 提取的内容
+                                highSpeedDeepDive.pcieTestingDeepDive.content = contentSection.innerHTML;
 
-                                <h4>1.3 总抖动(Total Jitter)测试</h4>
-                                <div class="concept-box">
-                                    <h5>抖动定义</h5>
-                                    <p>抖动是信号边沿相对于理想位置的时间偏移。</p>
+                                console.log('✅ [运行时修复] 内容替换完成！新内容长度:', highSpeedDeepDive.pcieTestingDeepDive.content.length, '字符');
+                                console.log('💡 [提示] 请重新点击"PCIe Gen 1-6 深度测试"查看修复后的内容');
 
-                                    <div class="formula-box">
-                                        <p><strong>总抖动计算公式</strong>:</p>
-                                        <p>$TJ = DJ + n \\\\times RJ$</p>
-                                        <p>其中:</p>
-                                        <ul>
-                                            <li>$DJ$: 确定性抖动 (Deterministic Jitter)</li>
-                                            <li>$RJ$: 随机抖动 (Random Jitter)</li>
-                                            <li>$n$: 置信系数，对于 BER = 10⁻¹², n ≈ 14.069</li>
-                                        </ul>
-                                    </div>
-                                </div>
+                                // 移除红色警告框
+                                const warnings = document.querySelectorAll('[style*="position: fixed"][style*="background: #ff4444"]');
+                                warnings.forEach(w => w.remove());
+                                console.log('🗑️  [运行时修复] 已移除警告框');
 
-                                <h4>1.4 3-tap FIR均衡器</h4>
-                                <div class="concept-box">
-                                    <div class="formula-box">
-                                        <p><strong>3-tap FIR公式</strong>:</p>
-                                        <p>$V_{out}(n) = C_{-1} \\\\times V_{in}(n-1) + C_0 \\\\times V_{in}(n) + C_{+1} \\\\times V_{in}(n+1)$</p>
-                                    </div>
-                                </div>
-
-                                <h4>1.5 CTLE均衡器</h4>
-                                <div class="concept-box">
-                                    <div class="formula-box">
-                                        <p><strong>CTLE频率响应</strong>:</p>
-                                        <p>$H_{CTLE}(f) = \\\\frac{1 + j \\\\cdot \\\\frac{f}{f_{z}}}{1 + j \\\\cdot \\\\frac{f}{f_{p}}}$</p>
-                                        <p>增益: $20\\\\log_{10}\\\\left(\\\\frac{f_p}{f_z}\\\\right)$ dB</p>
-                                    </div>
-                                </div>
-
-                                <h4>1.6 误码率(BER)测试</h4>
-                                <div class="concept-box">
-                                    <div class="formula-box">
-                                        <p><strong>BER计算公式</strong>:</p>
-                                        <p>$BER = \\\\frac{\\\\text{错误比特数}}{\\\\text{总比特数}}$</p>
-                                        <p>PCIe要求: BER < 10⁻¹²</p>
-                                    </div>
-                                </div>
-
-                                <div class="success-banner" style="background: #d4edda; color: #155724; padding: 20px; margin: 20px 0; border-radius: 8px;">
-                                    <h3 style="margin: 0;">✅ 内容已通过运行时修复</h3>
-                                    <p style="margin: 10px 0;">检测到浏览器加载了旧版本缓存，已自动替换为正确内容</p>
-                                    <p style="margin: 5px 0;">如果公式显示正确，说明修复成功</p>
-                                </div>
-                            </div>
-                        `;
-
-                        console.log('✅ [运行时修复] 内容替换完成！新内容长度:', highSpeedDeepDive.pcieTestingDeepDive.content.length);
-                        console.log('💡 [提示] 如果您已经打开了PCIe页面，请重新点击"PCIe Gen 1-6 深度测试"查看修复后的内容');
-
-                        // 移除红色警告框
-                        const warnings = document.querySelectorAll('[style*="position: fixed"][style*="background: #ff4444"]');
-                        warnings.forEach(w => w.remove());
-
-                        // 如果当前正在显示PCIe内容，重新渲染
-                        const deepDiveSection = document.getElementById('high-speed-deep-dive-content');
-                        if (deepDiveSection && deepDiveSection.innerHTML.length > 0) {
-                            deepDiveSection.innerHTML = highSpeedDeepDive.pcieTestingDeepDive.content;
-                            // 触发MathJax重新渲染
-                            if (window.MathJax && window.MathJax.typesetPromise) {
-                                MathJax.typesetPromise([deepDiveSection]).catch(err => console.error('MathJax渲染错误:', err));
+                                // 如果PCIe页面已打开，自动刷新
+                                const deepDiveSection = document.getElementById('high-speed-deep-dive-content');
+                                if (deepDiveSection && deepDiveSection.innerHTML.length > 100) {
+                                    deepDiveSection.innerHTML = highSpeedDeepDive.pcieTestingDeepDive.content;
+                                    // 触发MathJax重新渲染
+                                    if (window.MathJax && window.MathJax.typesetPromise) {
+                                        await MathJax.typesetPromise([deepDiveSection]);
+                                        console.log('🎉 [运行时修复] PCIe内容已自动更新并重新渲染！');
+                                    }
+                                }
+                            } else {
+                                console.error('❌ [运行时修复] 无法找到 .content-section');
                             }
-                            console.log('🎉 [运行时修复] PCIe内容已自动更新并重新渲染！');
+                        } catch (error) {
+                            console.error('❌ [运行时修复] 加载失败:', error);
+                            console.log('💡 [建议] 请直接打开 index-fixed-inline.html');
                         }
+                    } else {
+                        console.log('✅ [版本检测] 内容长度正常:', contentLength, '字符');
                     }
                 }
             }, 6000);
