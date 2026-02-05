@@ -136,13 +136,17 @@
                 let successCount = 0;
 
                 formulas.forEach((formula, index) => {
-                    if (formula.textContent.includes('Math input error')) {
+                    const text = formula.textContent;
+                    if (text.includes('Math input error')) {
                         console.error(`❌ 公式 ${index + 1} 渲染失败: Math input error`);
+                        console.error(`   内容: ${text.substring(0, 100)}`);
                         errorCount++;
-                    } else if (formula.textContent.includes('$')) {
+                    } else if (text.includes('$')) {
                         console.warn(`⚠️  公式 ${index + 1} 未渲染`);
+                        console.warn(`   内容: ${text.substring(0, 100)}`);
                     } else {
                         console.log(`✅ 公式 ${index + 1} 渲染成功`);
+                        console.log(`   内容: ${text.substring(0, 100)}`);
                         successCount++;
                     }
                 });
