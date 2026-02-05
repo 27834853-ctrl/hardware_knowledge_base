@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>MathJax 渲染测试</title>
+    <!-- MathJax 配置 -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady().then(() => {
+                        console.log('✅ MathJax 渲染完成');
+                        checkFormulas();
+                    });
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: "Microsoft YaHei", Arial, sans-serif; padding: 20px; }
+        .test-box { background: #f0f0f0; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>MathJax LaTeX 渲染测试</h1>
+
+    <div class="test-box">
+        <h3>测试 1: 预加重比计算公式</h3>
+        <p id="formula1">$De-emphasis (dB) = 20 \times \log_{10}\left(\frac{V_{low}}{V_{high}}\right)$</p>
+    </div>
+
+    <div class="test-box">
+        <h3>测试 2: 总抖动</h3>
+        <p id="formula2">$TJ = DJ + n \times RJ$</p>
+    </div>
+
+    <div class="test-box">
+        <h3>测试 3: BER</h3>
+        <p id="formula3">$BER = \frac{\text{错误比特数}}{\text{总比特数}}$</p>
+    </div>
+
+    <div class="test-box">
+        <h3>测试 4: 3-tap FIR</h3>
+        <p id="formula4">$V_{out}(n) = C_{-1} \times V_{in}(n-1) + C_0 \times V_{in}(n) + C_{+1} \times V_{in}(n+1)$</p>
+    </div>
+
+    <div class="test-box">
+        <h3>测试 5: CTLE</h3>
+        <p id="formula5">$H_{CTLE}(f) = \frac{1 + j \cdot \frac{f}{f_{z}}}{1 + j \cdot \frac{f}{f_{p}}}$</p>
+    </div>
+
+    <div id="result" style="margin-top: 20px;"></div>
+
+    <script>
+        function checkFormulas() {
+            const result = document.getElementById('result');
+            let html = '<h2>渲染结果</h2>';
+            let errors = 0;
+
+            for (let i = 1; i <= 5; i++) {
+                const el = document.getElementById('formula' + i);
+                const hasError = el.textContent.includes('Math input error');
+                const hasLatex = el.textContent.includes('$');
+
+                if (hasError) {
+                    html += `<div class="test-box error">❌ 测试 ${i}: Math input error</div>`;
+                    errors++;
+                } else if (hasLatex) {
+                    html += `<div class="test-box error">⚠️  测试 ${i}: 未渲染（仍显示LaTeX源代码）</div>`;
+                    errors++;
+                } else {
+                    html += `<div class="test-box success">✅ 测试 ${i}: 渲染成功</div>`;
+                }
+            }
+
+            html += `<div class="test-box ${errors === 0 ? 'success' : 'error'}">`;
+            html += `<strong>总结</strong>: ${5 - errors}/5 个公式渲染成功`;
+            html += '</div>';
+
+            result.innerHTML = html;
+        }
+
+        // 等待 MathJax 加载
+        setTimeout(() => {
+            if (typeof MathJax === 'undefined') {
+                document.getElementById('result').innerHTML = '<div class="test-box error">❌ MathJax 未加载</div>';
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
