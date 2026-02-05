@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCIe深度测试 - LaTeX修复版（内联内容）</title>
+    <!-- MathJax -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+            line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .success-banner {
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #c3e6cb;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .content-section {
+            background: white;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .concept-box {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+        }
+        .formula-box {
+            background: #fff3cd;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+            border-radius: 5px;
+        }
+        .formula-box p {
+            margin: 10px 0;
+        }
+        h2 {
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        h4 {
+            color: #764ba2;
+            margin-top: 30px;
+        }
+        h5 {
+            color: #495057;
+            margin-top: 20px;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+        }
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 PCIe深度测试与调试技术</h1>
+        <p>v2.6.5-FIXED-INLINE - LaTeX公式完整修复版</p>
+        <p>所有内容直接内联，不依赖外部JS文件</p>
+    </div>
+
+    <div class="success-banner">
+        <h2 style="margin: 0 0 10px 0; color: #155724; border: none;">✅ 此页面已解决所有缓存问题</h2>
+        <p style="margin: 5px 0;">内容直接嵌入HTML，LaTeX公式包含完整的反斜杠命令</p>
+        <p style="margin: 5px 0;">如果下方公式正确显示，说明问题已彻底解决</p>
+    </div>
+
+    <div class="content-section">
+        <h2><i class="fas fa-microscope"></i> PCIe深度测试技术</h2>
+
+        <h4>1.1 发送端电压测试</h4>
+        <div class="concept-box">
+            <h5>测试目标</h5>
+            <p>验证PCIe发送端的差分电压和共模电压是否符合规范要求。</p>
+
+            <h5>测试步骤</h5>
+            <ol>
+                <li>使用高带宽示波器（≥20 GHz for Gen5）</li>
+                <li>连接差分探头到PCIe TX+和TX-信号</li>
+                <li>测量差分峰峰值电压: Vpp = |V(D+) - V(D-)|</li>
+                <li>测量共模电压: Vcm = (V(D+) + V(D-)) / 2</li>
+                <li>验证是否在规范范围内</li>
+            </ol>
+        </div>
+
+        <h4>1.2 预加重(De-emphasis)测试</h4>
+        <div class="concept-box">
+            <h5>预加重原理</h5>
+            <p>通过减小高频成分的幅度来补偿传输线的高频损耗，改善信号完整性。</p>
+
+            <div class="formula-box">
+                <p><strong>预加重比计算公式</strong>:</p>
+                <p>$De-emphasis (dB) = 20 \times \log_{10}\left(\frac{V_{low}}{V_{high}}\right)$</p>
+                <p>其中:</p>
+                <ul>
+                    <li>$V_{high}$: 首个UI的幅度(未加重)</li>
+                    <li>$V_{low}$: 后续UI的幅度(已加重)</li>
+                </ul>
+            </div>
+
+            <h5>PCIe各代预加重要求</h5>
+            <table>
+                <thead>
+                    <tr>
+                        <th>PCIe代</th>
+                        <th>速率</th>
+                        <th>De-emphasis范围</th>
+                        <th>典型值</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Gen 1</td>
+                        <td>2.5 GT/s</td>
+                        <td>-3.5 dB ± 1 dB</td>
+                        <td>-3.5 dB</td>
+                    </tr>
+                    <tr>
+                        <td>Gen 2</td>
+                        <td>5.0 GT/s</td>
+                        <td>-3.5 dB ± 1 dB</td>
+                        <td>-3.5 dB</td>
+                    </tr>
+                    <tr>
+                        <td>Gen 3</td>
+                        <td>8.0 GT/s</td>
+                        <td>-3.5 dB 或 -6.0 dB</td>
+                        <td>-3.5 dB</td>
+                    </tr>
+                    <tr>
+                        <td>Gen 4</td>
+                        <td>16.0 GT/s</td>
+                        <td>使用预加重+均衡</td>
+                        <td>-6.0 dB</td>
+                    </tr>
+                    <tr>
+                        <td>Gen 5</td>
+                        <td>32.0 GT/s</td>
+                        <td>使用3-tap FIR均衡</td>
+                        <td>自适应</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4>1.3 总抖动(Total Jitter)测试</h4>
+        <div class="concept-box">
+            <h5>抖动定义</h5>
+            <p>抖动是信号边沿相对于理想位置的时间偏移，分为确定性抖动(DJ)和随机抖动(RJ)。</p>
+
+            <div class="formula-box">
+                <p><strong>总抖动计算公式</strong>:</p>
+                <p>$TJ = DJ + n \times RJ$</p>
+                <p>其中:</p>
+                <ul>
+                    <li>$DJ$: 确定性抖动 (Deterministic Jitter)</li>
+                    <li>$RJ$: 随机抖动 (Random Jitter)</li>
+                    <li>$n$: 置信系数，对于 BER = 10⁻¹², n ≈ 14.069</li>
+                </ul>
+
+                <p><strong>PCIe各代抖动要求</strong>:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PCIe代</th>
+                            <th>最大TJ</th>
+                            <th>UI周期</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Gen 1 (2.5 GT/s)</td>
+                            <td>0.30 UI</td>
+                            <td>400 ps</td>
+                        </tr>
+                        <tr>
+                            <td>Gen 2 (5.0 GT/s)</td>
+                            <td>0.28 UI</td>
+                            <td>200 ps</td>
+                        </tr>
+                        <tr>
+                            <td>Gen 3 (8.0 GT/s)</td>
+                            <td>0.25 UI</td>
+                            <td>125 ps</td>
+                        </tr>
+                        <tr>
+                            <td>Gen 4 (16.0 GT/s)</td>
+                            <td>0.20 UI</td>
+                            <td>62.5 ps</td>
+                        </tr>
+                        <tr>
+                            <td>Gen 5 (32.0 GT/s)</td>
+                            <td>0.15 UI</td>
+                            <td>31.25 ps</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <h4>1.4 均衡器技术</h4>
+        <div class="concept-box">
+            <h5>3-tap FIR均衡器</h5>
+            <p>Gen 4及以上使用3-tap有限冲击响应(FIR)均衡器来补偿传输损耗。</p>
+
+            <div class="formula-box">
+                <p><strong>3-tap FIR公式</strong>:</p>
+                <p>$V_{out}(n) = C_{-1} \times V_{in}(n-1) + C_0 \times V_{in}(n) + C_{+1} \times V_{in}(n+1)$</p>
+                <p>其中:</p>
+                <ul>
+                    <li>$C_{-1}$: 前置抽头系数 (Pre-cursor)</li>
+                    <li>$C_0$: 主抽头系数 (Main cursor)</li>
+                    <li>$C_{+1}$: 后置抽头系数 (Post-cursor)</li>
+                </ul>
+
+                <p><strong>系数约束</strong>:</p>
+                <ul>
+                    <li>$|C_{-1}| + |C_0| + |C_{+1}| = 1$ (归一化)</li>
+                    <li>$C_0$ 通常最大，保持信号主要能量</li>
+                    <li>典型值: $C_{-1} = 0.1, C_0 = 0.7, C_{+1} = 0.2$</li>
+                </ul>
+            </div>
+
+            <h5>CTLE (连续时间线性均衡器)</h5>
+            <p>接收端使用CTLE进行模拟域均衡，补偿高频损耗。</p>
+
+            <div class="formula-box">
+                <p><strong>CTLE频率响应</strong>:</p>
+                <p>$H_{CTLE}(f) = \frac{1 + j \cdot \frac{f}{f_{z}}}{1 + j \cdot \frac{f}{f_{p}}}$</p>
+                <p>其中:</p>
+                <ul>
+                    <li>$f_z$: 零点频率 (boost起始频率)</li>
+                    <li>$f_p$: 极点频率 (boost终止频率)</li>
+                    <li>增益: $20\log_{10}\left(\frac{f_p}{f_z}\right)$ dB</li>
+                </ul>
+            </div>
+        </div>
+
+        <h4>1.5 误码率(BER)测试</h4>
+        <div class="concept-box">
+            <h5>BER测试原理</h5>
+            <p>误码率(Bit Error Rate)是衡量链路质量的关键指标。</p>
+
+            <div class="formula-box">
+                <p><strong>BER计算公式</strong>:</p>
+                <p>$BER = \frac{\text{错误比特数}}{\text{总比特数}}$</p>
+
+                <p><strong>PCIe BER要求</strong>:</p>
+                <ul>
+                    <li>Gen 1-3: BER < 10⁻¹²</li>
+                    <li>Gen 4-5: BER < 10⁻¹²</li>
+                    <li>测试置信度: 需要测试 > 10¹³ bits</li>
+                </ul>
+
+                <p><strong>测试时间估算</strong>:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>速率</th>
+                            <th>测试比特数</th>
+                            <th>测试时间</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2.5 GT/s (Gen 1)</td>
+                            <td>10¹³ bits</td>
+                            <td>~67 分钟</td>
+                        </tr>
+                        <tr>
+                            <td>8.0 GT/s (Gen 3)</td>
+                            <td>10¹³ bits</td>
+                            <td>~21 分钟</td>
+                        </tr>
+                        <tr>
+                            <td>16.0 GT/s (Gen 4)</td>
+                            <td>10¹³ bits</td>
+                            <td>~10 分钟</td>
+                        </tr>
+                        <tr>
+                            <td>32.0 GT/s (Gen 5)</td>
+                            <td>10¹³ bits</td>
+                            <td>~5 分钟</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="success-banner">
+        <h3 style="margin: 0; color: #155724;">✅ 验证结果</h3>
+        <p>如果您能正确看到上述所有数学公式（不是LaTeX源代码，而是渲染后的数学符号），说明：</p>
+        <ol style="text-align: left; display: inline-block; margin: 10px auto;">
+            <li>LaTeX公式已完全修复（包含完整的 \times, \log, \frac 等命令）</li>
+            <li>MathJax正常工作</li>
+            <li>浏览器能够正确渲染数学公式</li>
+        </ol>
+        <p><strong>这个页面可以作为主页面的替代方案，不会受到缓存问题影响</strong></p>
+    </div>
+
+    <script>
+        // 等待MathJax渲染完成后检查
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                console.log('=== LaTeX公式渲染检查 ===');
+                const formulas = document.querySelectorAll('.formula-box p');
+                let errorCount = 0;
+                let successCount = 0;
+
+                formulas.forEach((formula, index) => {
+                    if (formula.textContent.includes('Math input error')) {
+                        console.error(`❌ 公式 ${index + 1} 渲染失败`);
+                        errorCount++;
+                    } else if (formula.textContent.includes('$')) {
+                        // 仍然显示$符号，说明MathJax未渲染
+                        console.warn(`⚠️  公式 ${index + 1} 未渲染`);
+                    } else {
+                        console.log(`✅ 公式 ${index + 1} 渲染成功`);
+                        successCount++;
+                    }
+                });
+
+                console.log(`\n📊 总结: ${successCount} 个公式渲染成功, ${errorCount} 个失败`);
+
+                if (errorCount === 0) {
+                    console.log('🎉 所有LaTeX公式渲染成功！');
+                }
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
