@@ -55,6 +55,71 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- v2.6.5 版本检测和缓存警告 -->
+    <script>
+        (function() {
+            // 检测版本的关键函数
+            window.addEventListener('load', function() {
+                setTimeout(function() {
+                    // 检查是否加载了新版本
+                    if (typeof highSpeedDeepDive !== 'undefined' && highSpeedDeepDive.pcieTestingDeepDive) {
+                        const contentLength = highSpeedDeepDive.pcieTestingDeepDive.length;
+                        console.log('📊 [版本检测] 内容长度:', contentLength, '字符');
+
+                        if (contentLength < 100000) {
+                            // 内容长度小于100k，说明是旧版本
+                            const warning = document.createElement('div');
+                            warning.style.cssText = `
+                                position: fixed;
+                                top: 20px;
+                                right: 20px;
+                                background: #ff4444;
+                                color: white;
+                                padding: 20px;
+                                border-radius: 10px;
+                                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                                z-index: 10000;
+                                max-width: 400px;
+                                font-family: "Microsoft YaHei", Arial, sans-serif;
+                            `;
+                            warning.innerHTML = `
+                                <h3 style="margin: 0 0 10px 0;">⚠️ 检测到旧版本</h3>
+                                <p style="margin: 5px 0;">内容长度: ${contentLength} 字符</p>
+                                <p style="margin: 5px 0;"><strong>应为: 313000+ 字符</strong></p>
+                                <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.3); margin: 10px 0;">
+                                <p style="margin: 5px 0; font-size: 14px;">请执行以下操作：</p>
+                                <ol style="margin: 10px 0 10px 20px; padding: 0; font-size: 14px;">
+                                    <li>完全关闭浏览器（所有窗口）</li>
+                                    <li>重新打开浏览器</li>
+                                    <li>再次访问此页面</li>
+                                </ol>
+                                <button onclick="this.parentElement.remove()" style="
+                                    background: white;
+                                    color: #ff4444;
+                                    border: none;
+                                    padding: 8px 16px;
+                                    border-radius: 5px;
+                                    cursor: pointer;
+                                    font-weight: bold;
+                                    margin-top: 10px;
+                                ">知道了</button>
+                            `;
+                            document.body.appendChild(warning);
+
+                            console.error('❌ [版本检测] 检测到旧版本缓存！');
+                            console.error('当前内容长度:', contentLength);
+                            console.error('期望内容长度: 313000+');
+                            console.error('请完全关闭浏览器后重新打开！');
+                        } else {
+                            console.log('✅ [版本检测] 版本正确，内容长度正常');
+                        }
+                    } else {
+                        console.warn('⚠️  [版本检测] highSpeedDeepDive 对象未找到，等待加载...');
+                    }
+                }, 3000); // 等待3秒确保内容加载完成
+            });
+        })();
+    </script>
     <!-- 导航栏 -->
     <header class="main-header">
         <nav class="navbar">

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaTeX修复验证 - v2.6.5</title>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .instruction {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .button:hover {
+            background: #5568d3;
+        }
+        .button-danger {
+            background: #dc3545;
+        }
+        .button-danger:hover {
+            background: #c82333;
+        }
+        .status {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .step {
+            background: #e7f3ff;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #667eea;
+            border-radius: 3px;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 LaTeX 修复验证工具 v2.6.5</h1>
+        <p>一键验证公式是否正确显示</p>
+    </div>
+
+    <div class="instruction">
+        <h2>📋 验证步骤</h2>
+
+        <div class="step">
+            <h3>步骤 1: 完全关闭浏览器</h3>
+            <p>⚠️ <strong>重要</strong>：必须关闭所有浏览器窗口（包括其他标签页）</p>
+            <button class="button button-danger" onclick="alert('请手动关闭所有浏览器窗口，然后重新打开此文件！')">
+                提醒：关闭所有窗口
+            </button>
+        </div>
+
+        <div class="step">
+            <h3>步骤 2: 重新打开浏览器并访问验证页面</h3>
+            <p>在完全关闭浏览器后，重新打开浏览器，然后：</p>
+            <button class="button" onclick="openIndexWithCache()">
+                打开 index.html（带缓存破坏）
+            </button>
+        </div>
+
+        <div class="step">
+            <h3>步骤 3: 检查版本和内容长度</h3>
+            <p>打开浏览器控制台（按 F12），查找以下日志：</p>
+            <button class="button" onclick="checkVersion()">
+                执行版本检测
+            </button>
+            <div id="version-result"></div>
+        </div>
+
+        <div class="step">
+            <h3>步骤 4: 检查 LaTeX 公式</h3>
+            <p>点击左侧菜单的 <strong>"PCIe Gen 1-6 深度测试"</strong>，查看公式是否正确显示</p>
+            <button class="button" onclick="showExpectedFormulas()">
+                显示预期公式
+            </button>
+            <div id="formula-result"></div>
+        </div>
+    </div>
+
+    <div class="instruction">
+        <h2>🔍 快速诊断</h2>
+        <div class="center">
+            <button class="button" onclick="runDiagnostic()">
+                运行完整诊断
+            </button>
+        </div>
+        <div id="diagnostic-result"></div>
+    </div>
+
+    <div class="instruction">
+        <h2>❓ 常见问题</h2>
+        <details>
+            <summary style="cursor: pointer; font-weight: bold; padding: 10px;">
+                Q: 为什么必须关闭所有浏览器窗口？
+            </summary>
+            <p>浏览器在内存中缓存了旧版本的 JavaScript 文件。只有完全关闭浏览器，才能清除内存缓存。</p>
+        </details>
+
+        <details>
+            <summary style="cursor: pointer; font-weight: bold; padding: 10px;">
+                Q: 如何确认加载了新版本？
+            </summary>
+            <p>按 F12 打开控制台，查找包含 <code>v2.6.5</code> 的日志信息。</p>
+        </details>
+
+        <details>
+            <summary style="cursor: pointer; font-weight: bold; padding: 10px;">
+                Q: 内容长度应该是多少？
+            </summary>
+            <p>新版本内容长度约为 <strong>313000+ 字符</strong>。如果显示 <code>83330</code>，说明仍是旧版本。</p>
+        </details>
+    </div>
+
+    <script>
+        function openIndexWithCache() {
+            const timestamp = new Date().getTime();
+            const random = Math.random().toString(36).substring(7);
+            const url = `index.html?v=${timestamp}&nocache=${random}&force=true`;
+
+            const result = document.getElementById('version-result');
+            result.innerHTML = `
+                <div class="status success">
+                    <p>✅ 正在打开 index.html...</p>
+                    <p>URL: <code>${url}</code></p>
+                    <p>打开后请按 F12 检查控制台日志</p>
+                </div>
+            `;
+
+            setTimeout(() => {
+                window.location.href = url;
+            }, 1000);
+        }
+
+        function checkVersion() {
+            const result = document.getElementById('version-result');
+            result.innerHTML = `
+                <div class="status warning">
+                    <h4>📊 请在 index.html 的控制台中检查：</h4>
+                    <pre>✅ 应该看到：
+📌 v2.6.5 - 使用全新文件名加载
+📁 加载的文件: ["high-speed-deep-dive-v2.6.5-nocache.js?t=...", ...]
+[showHighSpeedContent] 开始显示内容，长度: 313000+
+
+❌ 不应该看到：
+长度: 83330  <-- 这是旧版本</pre>
+                </div>
+            `;
+        }
+
+        function showExpectedFormulas() {
+            const result = document.getElementById('formula-result');
+            result.innerHTML = `
+                <div class="status success">
+                    <h4>✅ 正确的公式应该显示为：</h4>
+                    <ol style="text-align: left;">
+                        <li><strong>预加重比</strong>: De-emphasis (dB) = 20 × log₁₀(V_low/V_high)</li>
+                        <li><strong>总抖动</strong>: TJ = DJ + n × RJ</li>
+                        <li><strong>3-tap FIR</strong>: V_out(n) = C₋₁ × V_in(n-1) + C₀ × V_in(n) + C₊₁ × V_in(n+1)</li>
+                        <li><strong>BER</strong>: BER = 错误比特数 / 总比特数</li>
+                        <li><strong>CTLE</strong>: H_CTLE(f) = (1 + j·f/f_z) / (1 + j·f/f_p)</li>
+                    </ol>
+                    <h4>❌ 如果看到以下内容说明有问题：</h4>
+                    <ul style="text-align: left; color: #721c24;">
+                        <li>Math input error</li>
+                        <li>20 imes log (缺少反斜杠)</li>
+                        <li>rac{V_{low (缺少反斜杠)</li>
+                    </ul>
+                </div>
+            `;
+        }
+
+        function runDiagnostic() {
+            const result = document.getElementById('diagnostic-result');
+            const timestamp = new Date().getTime();
+
+            let html = '<div class="status">';
+            html += '<h3>🔍 诊断报告</h3>';
+            html += `<p>检测时间: ${new Date().toLocaleString('zh-CN')}</p>`;
+            html += '<hr>';
+
+            // 检查 localStorage
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                html += '<p>✅ localStorage 可用</p>';
+            } catch(e) {
+                html += '<p>❌ localStorage 不可用</p>';
+            }
+
+            // 检查协议
+            html += `<p>📍 当前协议: <code>${window.location.protocol}</code></p>`;
+            if (window.location.protocol === 'file:') {
+                html += '<p>⚠️  使用 file:// 协议，ServiceWorker 不可用（这是正常的）</p>';
+            }
+
+            // 提供建议
+            html += '<hr><h4>💡 建议操作：</h4>';
+            html += '<ol style="text-align: left;">';
+            html += '<li>完全关闭浏览器（所有窗口）</li>';
+            html += '<li>重新打开浏览器</li>';
+            html += '<li>点击上方"打开 index.html"按钮</li>';
+            html += '<li>按 F12 检查控制台中的版本信息</li>';
+            html += '</ol>';
+
+            html += '</div>';
+            result.innerHTML = html;
+        }
+
+        // 页面加载时自动提示
+        window.addEventListener('load', function() {
+            console.log('=== LaTeX 修复验证工具 v2.6.5 ===');
+            console.log('如果您是第一次打开此页面，请：');
+            console.log('1. 关闭所有浏览器窗口');
+            console.log('2. 重新打开浏览器');
+            console.log('3. 打开此文件并点击"打开 index.html"按钮');
+        });
+    </script>
+</body>
+</html>
