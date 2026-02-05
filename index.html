@@ -4761,13 +4761,13 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
     <script src="accessibility-enhancements.js"></script>
     <script src="additional-calculators.js"></script>
     <!-- End v2.5.1 Modules -->
-    <!-- v2.6.4 High-Speed Deep Dive Module - LaTeX Fixed Version -->
+    <!-- v2.6.5 High-Speed Deep Dive Module - LaTeX Fixed Version (No Cache) -->
     <script>
-        // 动态加载JS文件，强制绕过缓存
+        // 强制加载新版本文件，使用全新文件名彻底绕过缓存
         (function() {
             const timestamp = new Date().getTime();
             const scripts = [
-                `high-speed-deep-dive-v2.6.4.js?t=${timestamp}`,
+                `high-speed-deep-dive-v2.6.5-nocache.js?t=${timestamp}`,
                 `high-speed-content-loader.js?t=${timestamp}`,
                 `diagnostic.js?t=${timestamp}`,
                 `sw-register.js?t=${timestamp}`
@@ -4780,7 +4780,8 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
                 document.body.appendChild(script);
             });
 
-            console.log('📌 所有脚本已使用时间戳加载，绕过缓存:', new Date().toISOString());
+            console.log('📌 v2.6.5 - 使用全新文件名加载，绕过所有缓存:', new Date().toISOString());
+            console.log('📁 加载的文件:', scripts);
         })();
     </script>
     <!-- End v2.5.2 Modules -->

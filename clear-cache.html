@@ -127,8 +127,27 @@
         // 打开带时间戳的新版本
         function openFreshIndex() {
             const timestamp = new Date().getTime();
-            // 在新标签页打开，带缓存破坏参数
-            window.open(`index.html?v=${timestamp}&refresh=true`, '_blank');
+            const url = `index.html?v=${timestamp}&refresh=true&nocache=${Math.random()}`;
+
+            // 显示提示信息
+            const result = document.getElementById('result');
+            result.innerHTML = `
+                <div class="success">
+                    <h3>🚀 正在打开新版本...</h3>
+                    <p>请在新窗口中检查以下内容：</p>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>打开浏览器控制台 (F12)</li>
+                        <li>查找 "v2.6.5" 日志信息</li>
+                        <li>查找内容长度应该约为 313000+ 字符（而非 83330）</li>
+                        <li>检查 LaTeX 公式是否正确显示</li>
+                    </ul>
+                    <p><strong>预期公式示例：</strong></p>
+                    <p>De-emphasis (dB) = 20 × log₁₀(V_low/V_high)</p>
+                </div>
+            `;
+
+            // 在新标签页打开
+            window.open(url, '_blank');
         }
 
         // 页面加载时自动检测
