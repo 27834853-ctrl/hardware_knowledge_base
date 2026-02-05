@@ -4897,70 +4897,264 @@ $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47</pre>
     <!-- End v2.5.2 Modules -->
 
     <!-- v2.6.5 运行时修复：如果检测到旧版本，直接替换内容 -->
+    <!-- v2.6.5 运行时修复：内联完整内容 -->
     <script>
         (function() {
-            // 等待6秒，确保所有脚本加载完成
-            setTimeout(async function() {
+            setTimeout(function() {
                 if (typeof highSpeedDeepDive !== 'undefined' &&
                     highSpeedDeepDive.pcieTestingDeepDive &&
                     highSpeedDeepDive.pcieTestingDeepDive.content) {
 
                     const contentLength = highSpeedDeepDive.pcieTestingDeepDive.content.length;
 
-                    // 如果检测到旧版本，从 index-fixed-inline.html 加载正确内容
                     if (contentLength < 100000) {
                         console.warn('🔧 [运行时修复] 检测到旧版本 (' + contentLength + ' 字符)');
-                        console.log('📥 [运行时修复] 正在从 index-fixed-inline.html 加载正确内容...');
+                        console.log('📝 [运行时修复] 使用内联内容替换...');
 
-                        try {
-                            // 从 index-fixed-inline.html 加载完整内容
-                            const response = await fetch('index-fixed-inline.html');
-                            const html = await response.text();
+                        // 使用模板字符串直接嵌入HTML内容
+                        highSpeedDeepDive.pcieTestingDeepDive.content = String.raw`
+    <div class="content-section">
+        <h2><i class="fas fa-microscope"></i> PCIe深度测试技术</h2>
 
-                            // 使用 DOMParser 解析HTML
-                            const parser = new DOMParser();
-                            const doc = parser.parseFromString(html, 'text/html');
-                            const contentSection = doc.querySelector('.content-section');
+        <h4>1.1 发送端电压测试</h4>
+        <div class="concept-box">
+            <h5>测试目标</h5>
+            <p>验证PCIe发送端的差分电压和共模电压是否符合规范要求。</p>
 
-                            if (contentSection) {
-                                // 直接使用从 index-fixed-inline.html 提取的内容
-                                highSpeedDeepDive.pcieTestingDeepDive.content = contentSection.innerHTML;
+            <h5>测试步骤</h5>
+            <ol>
+                <li>使用高带宽示波器（≥20 GHz for Gen5）</li>
+                <li>连接差分探头到PCIe TX+和TX-信号</li>
+                <li>测量差分峰峰值电压: Vpp = |V(D+) - V(D-)|</li>
+                <li>测量共模电压: Vcm = (V(D+) + V(D-)) / 2</li>
+                <li>验证是否在规范范围内</li>
+            </ol>
+        </div>
 
-                                console.log('✅ [运行时修复] 内容替换完成！新内容长度:', highSpeedDeepDive.pcieTestingDeepDive.content.length, '字符');
-                                console.log('💡 [提示] 请重新点击"PCIe Gen 1-6 深度测试"查看修复后的内容');
+        <h4>1.2 预加重(De-emphasis)测试</h4>
+        <div class="concept-box">
+            <h5>预加重原理</h5>
+            <p>通过减小高频成分的幅度来补偿传输线的高频损耗，改善信号完整性。</p>
 
-                                // 移除红色警告框
-                                const warnings = document.querySelectorAll('[style*="position: fixed"][style*="background: #ff4444"]');
-                                warnings.forEach(w => w.remove());
-                                console.log('🗑️  [运行时修复] 已移除警告框');
+            <div class="formula-box">
+                <p><strong>预加重比计算公式</strong>:</p>
+                <p>$De-emphasis (dB) = 20 \times \log_{10}\left(\frac{V_{low}}{V_{high}}\right)$</p>
+                <p>其中:</p>
+                <ul>
+                    <li>$V_{high}$: 首个UI的幅度(未加重)</li>
+                    <li>$V_{low}$: 后续UI的幅度(已加重)</li>
+                </ul>
+            </div>
 
-                                // 如果PCIe页面已打开，自动刷新
-                                const deepDiveSection = document.getElementById('high-speed-deep-dive-content');
-                                if (deepDiveSection && deepDiveSection.innerHTML.length > 100) {
-                                    deepDiveSection.innerHTML = highSpeedDeepDive.pcieTestingDeepDive.content;
-                                    // 触发MathJax重新渲染
-                                    if (window.MathJax && window.MathJax.typesetPromise) {
-                                        await MathJax.typesetPromise([deepDiveSection]);
-                                        console.log('🎉 [运行时修复] PCIe内容已自动更新并重新渲染！');
-                                    }
-                                }
-                            } else {
-                                console.error('❌ [运行时修复] 无法找到 .content-section');
+            <h5>PCIe各代预加重要求</h5>
+            <table>
+                <thead>
+                    <tr>
+                        <th>PCIe代</th>
+                        <th>速率</th>
+                        <th>De-emphasis范围</th>
+                        <th>典型值</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Gen 1</td>
+                        <td>2.5 GT/s</td>
+                        <td>-3.5 dB ± 1 dB</td>
+                        <td>-3.5 dB</td>
+                    </tr>
+                    <tr>
+                        <td>Gen 2</td>
+                        <td>5.0 GT/s</td>
+                        <td>-3.5 dB ± 1 dB</td>
+                        <td>-3.5 dB</td>
+                    </tr>
+                    <tr>
+                        <td>Gen 3</td>
+                        <td>8.0 GT/s</td>
+                        <td>-3.5 dB 或 -6.0 dB</td>
+                        <td>-3.5 dB</td>
+                    </tr>
+                    <tr>
+                        <td>Gen 4</td>
+                        <td>16.0 GT/s</td>
+                        <td>使用预加重+均衡</td>
+                        <td>-6.0 dB</td>
+                    </tr>
+                    <tr>
+                        <td>Gen 5</td>
+                        <td>32.0 GT/s</td>
+                        <td>使用3-tap FIR均衡</td>
+                        <td>自适应</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4>1.3 总抖动(Total Jitter)测试</h4>
+        <div class="concept-box">
+            <h5>抖动定义</h5>
+            <p>抖动是信号边沿相对于理想位置的时间偏移，分为确定性抖动(DJ)和随机抖动(RJ)。</p>
+
+            <div class="formula-box">
+                <p><strong>总抖动计算公式</strong>:</p>
+                <p>$TJ = DJ + n \times RJ$</p>
+                <p>其中:</p>
+                <ul>
+                    <li>$DJ$: 确定性抖动 (Deterministic Jitter)</li>
+                    <li>$RJ$: 随机抖动 (Random Jitter)</li>
+                    <li>$n$: 置信系数，对于 BER = 10⁻¹², n ≈ 14.069</li>
+                </ul>
+
+                <p><strong>PCIe各代抖动要求</strong>:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PCIe代</th>
+                            <th>最大TJ</th>
+                            <th>UI周期</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Gen 1 (2.5 GT/s)</td>
+                            <td>0.30 UI</td>
+                            <td>400 ps</td>
+                        </tr>
+                        <tr>
+                            <td>Gen 2 (5.0 GT/s)</td>
+                            <td>0.28 UI</td>
+                            <td>200 ps</td>
+                        </tr>
+                        <tr>
+                            <td>Gen 3 (8.0 GT/s)</td>
+                            <td>0.25 UI</td>
+                            <td>125 ps</td>
+                        </tr>
+                        <tr>
+                            <td>Gen 4 (16.0 GT/s)</td>
+                            <td>0.20 UI</td>
+                            <td>62.5 ps</td>
+                        </tr>
+                        <tr>
+                            <td>Gen 5 (32.0 GT/s)</td>
+                            <td>0.15 UI</td>
+                            <td>31.25 ps</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <h4>1.4 均衡器技术</h4>
+        <div class="concept-box">
+            <h5>3-tap FIR均衡器</h5>
+            <p>Gen 4及以上使用3-tap有限冲击响应(FIR)均衡器来补偿传输损耗。</p>
+
+            <div class="formula-box">
+                <p><strong>3-tap FIR公式</strong>:</p>
+                <p>$V_{out}(n) = C_{-1} \times V_{in}(n-1) + C_0 \times V_{in}(n) + C_{+1} \times V_{in}(n+1)$</p>
+                <p>其中:</p>
+                <ul>
+                    <li>$C_{-1}$: 前置抽头系数 (Pre-cursor)</li>
+                    <li>$C_0$: 主抽头系数 (Main cursor)</li>
+                    <li>$C_{+1}$: 后置抽头系数 (Post-cursor)</li>
+                </ul>
+
+                <p><strong>系数约束</strong>:</p>
+                <ul>
+                    <li>$|C_{-1}| + |C_0| + |C_{+1}| = 1$ (归一化)</li>
+                    <li>$C_0$ 通常最大，保持信号主要能量</li>
+                    <li>典型值: $C_{-1} = 0.1, C_0 = 0.7, C_{+1} = 0.2$</li>
+                </ul>
+            </div>
+
+            <h5>CTLE (连续时间线性均衡器)</h5>
+            <p>接收端使用CTLE进行模拟域均衡，补偿高频损耗。</p>
+
+            <div class="formula-box">
+                <p><strong>CTLE频率响应</strong>:</p>
+                <p>$H_{CTLE}(f) = \frac{1 + j \cdot \frac{f}{f_{z}}}{1 + j \cdot \frac{f}{f_{p}}}$</p>
+                <p>其中:</p>
+                <ul>
+                    <li>$f_z$: 零点频率 (boost起始频率)</li>
+                    <li>$f_p$: 极点频率 (boost终止频率)</li>
+                    <li>增益: $20\log_{10}\left(\frac{f_p}{f_z}\right)$ dB</li>
+                </ul>
+            </div>
+        </div>
+
+        <h4>1.5 误码率(BER)测试</h4>
+        <div class="concept-box">
+            <h5>BER测试原理</h5>
+            <p>误码率(Bit Error Rate)是衡量链路质量的关键指标。</p>
+
+            <div class="formula-box">
+                <p><strong>BER计算公式</strong>:</p>
+                <p>$BER = \frac{\text{错误比特数}}{\text{总比特数}}$</p>
+
+                <p><strong>PCIe BER要求</strong>:</p>
+                <ul>
+                    <li>Gen 1-3: BER < 10⁻¹²</li>
+                    <li>Gen 4-5: BER < 10⁻¹²</li>
+                    <li>测试置信度: 需要测试 > 10¹³ bits</li>
+                </ul>
+
+                <p><strong>测试时间估算</strong>:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>速率</th>
+                            <th>测试比特数</th>
+                            <th>测试时间</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2.5 GT/s (Gen 1)</td>
+                            <td>10¹³ bits</td>
+                            <td>~67 分钟</td>
+                        </tr>
+                        <tr>
+                            <td>8.0 GT/s (Gen 3)</td>
+                            <td>10¹³ bits</td>
+                            <td>~21 分钟</td>
+                        </tr>
+                        <tr>
+                            <td>16.0 GT/s (Gen 4)</td>
+                            <td>10¹³ bits</td>
+                            <td>~10 分钟</td>
+                        </tr>
+                        <tr>
+                            <td>32.0 GT/s (Gen 5)</td>
+                            <td>10¹³ bits</td>
+                            <td>~5 分钟</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+`;
+
+                        console.log('✅ [运行时修复] 内容替换完成！新内容长度:', highSpeedDeepDive.pcieTestingDeepDive.content.length, '字符');
+
+                        // 移除警告框
+                        document.querySelectorAll('[style*="position: fixed"][style*="background: #ff4444"]').forEach(w => w.remove());
+
+                        // 如果PCIe页面已打开，刷新显示
+                        const section = document.getElementById('high-speed-deep-dive-content');
+                        if (section && section.innerHTML.length > 100) {
+                            section.innerHTML = highSpeedDeepDive.pcieTestingDeepDive.content;
+                            if (window.MathJax && window.MathJax.typesetPromise) {
+                                MathJax.typesetPromise([section]).then(() => {
+                                    console.log('🎉 [运行时修复] 内容已更新并重新渲染！');
+                                });
                             }
-                        } catch (error) {
-                            console.error('❌ [运行时修复] 加载失败:', error);
-                            console.log('💡 [建议] 请直接打开 index-fixed-inline.html');
                         }
-                    } else {
-                        console.log('✅ [版本检测] 内容长度正常:', contentLength, '字符');
                     }
                 }
             }, 6000);
         })();
     </script>
-
-    <script src="share.js"></script>
-    <script src="analytics.js"></script>
-    <script src="feedback.js"></script>
-</body>
-</html>
