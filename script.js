@@ -1739,18 +1739,39 @@ function showHighSpeedContent(contentKey) {
         block: 'nearest'
     });
 
-    // 重新渲染MathJax公式
-    if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
-        MathJax.typesetPromise([contentArea]).catch((err) => {
-            console.warn('MathJax渲染失败:', err);
-        });
-    }
-
     // 添加fade-in动画
     contentArea.style.animation = 'none';
     setTimeout(() => {
         contentArea.style.animation = 'fadeIn 0.5s ease-in';
     }, 10);
+
+    // 强制重新渲染MathJax公式（延迟确保DOM更新完成）
+    setTimeout(() => {
+        console.log('🔄 [showHighSpeedContent] 触发 MathJax 重新渲染...');
+
+        if (window.renderMathJax) {
+            // 使用全局渲染函数
+            window.renderMathJax(contentArea);
+        } else if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+            // 降级方案：直接调用 MathJax
+            MathJax.typesetPromise([contentArea])
+                .then(() => {
+                    console.log('✅ [showHighSpeedContent] MathJax 渲染完成');
+                })
+                .catch((err) => {
+                    console.error('❌ [showHighSpeedContent] MathJax 渲染失败:', err);
+                });
+        } else {
+            console.warn('⚠️ [showHighSpeedContent] MathJax 尚未加载，等待后重试...');
+            // 等待 MathJax 加载完成后重试
+            window.addEventListener('mathjax-ready', () => {
+                console.log('🔄 [showHighSpeedContent] MathJax 已就绪，重新渲染...');
+                if (window.renderMathJax) {
+                    window.renderMathJax(contentArea);
+                }
+            }, { once: true });
+        }
+    }, 100); // 延迟100ms确保DOM完全更新
 
     // 显示通知
     showNotification(`已加载: ${content.title}`, 'success');
